@@ -1,0 +1,2 @@
+"raster::extract(x = proj, y = month_md[c(\"lon\", \"lat\")])"
+"1" 0.0426190304325833
