@@ -17,7 +17,7 @@ years <- 2011:2017
 fp_md <- "./calanus_data/Data/Databases/zooplankton_covar_data"
 fp_covars <- "./Env_Covars"
 # Must be full filepath to use rmarkdown::render(); see line 51
-fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions"
+fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/Models"
 
 # ---- Initialize data formatting options ----
 format_data <- FALSE

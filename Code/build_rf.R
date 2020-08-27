@@ -83,7 +83,8 @@ build_gam <- function(version, fp_md, species, fp_covars, env_covars, years, pro
     
     # -------- Project model onto covariates --------
     proj <- raster::predict(covars, rf_sdm, filename = file.path(fp_out, species, version, "RFs", "Projections", paste0("proj_", proj_year, "_", i)), progress = "text",
-                            overwrite = TRUE)
+                            overwrite = TRUE,
+                            format = "GTif")
     # Convert proj to data frame
     proj_df <- as.data.frame(proj, xy = TRUE)
     # Add column names

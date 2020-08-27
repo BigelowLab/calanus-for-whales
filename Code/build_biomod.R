@@ -234,7 +234,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
                                             binary.meth = 'ROC',
                                             compress = 'xz',
                                             build.clamping.mask = FALSE,
-                                            output.format = '.grd')
+                                            output.format = '.tif')
       
       # Build ensemble forecast
       myBiomodEF <- BIOMOD_EnsembleForecasting(EM.output = biomodEM,
@@ -307,7 +307,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
                                    binary.meth = 'ROC',
                                    compress = 'xz',
                                    build.clamping.mask = TRUE,
-                                   output.format = '.grd')
+                                   output.format = '.tif')
       
       
       # Load ensemble forecast as raster
@@ -376,7 +376,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
                                    binary.meth = 'ROC',
                                    compress = 'xz',
                                    build.clamping.mask = TRUE,
-                                   output.format = '.grd')
+                                   output.format = '.tif')
       
       
       # Load ensemble forecast as raster
@@ -444,7 +444,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
                                    binary.meth = 'ROC',
                                    compress = 'xz',
                                    build.clamping.mask = TRUE,
-                                   output.format = '.grd')
+                                   output.format = '.tif')
       
       
       # Load ensemble forecast as raster
@@ -502,11 +502,6 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       
     }
   }
-  
-  # ---- Move projection files ----
-  from <- file.path(paste0(species, version))
-  to <- file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version))
-  ff::file.move(from, to)
   
 }
 

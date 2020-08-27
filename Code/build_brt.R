@@ -185,7 +185,8 @@ build_brt <- function(version, fp_md, fp_covars, env_covars, years, fp_out,
       # -------- Project model onto covariates --------
       proj <- raster::predict(covars, brt_sdm,
                               filename = file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
-                              overwrite = TRUE)
+                              overwrite = TRUE,
+                              format = "GTif")
       
       # Zero out projections below 1000m
       proj[bat >= 1000] <- 0
