@@ -3,13 +3,13 @@
 # Purpose: Example configuration file to run zooplankton models and summarize output.
 
 # ---- Source necessary scripts ----
-source("./calanus_for_whales/Code/build_gam.R")
-source("./calanus_for_whales/Code/build_brt.R")
-source("./calanus_for_whales/Code/build_biomod.R")
-source("./calanus_for_whales/Code/build_climatology.R")
-source("./calanus_for_whales/Code/build_biomod_climatology.R")
-source("./calanus_for_whales/Code/compile_evals.R")
-source("./calanus_for_whales/Code/plot_regions.R")
+source("./calanus-for-whales/Code/build_gam.R")
+source("./calanus-for-whales/Code/build_brt.R")
+source("./calanus-for-whales/Code/build_biomod.R")
+source("./calanus-for-whales/Code/build_climatology.R")
+source("./calanus-for-whales/Code/build_biomod_climatology.R")
+source("./calanus-for-whales/Code/compile_evals.R")
+source("./calanus-for-whales/Code/plot_regions.R")
 
 # ---- Initialize parameters ----
 version <- "v0.2.3"
@@ -22,7 +22,7 @@ years <- 2000:2017
 fp_md <- "./calanus_data/Data/Databases/zooplankton_covar_data"
 fp_covars <- "./Env_Covars"
 # Must be full filepath to use rmarkdown::render(); see line 51
-fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/calanus_for_whales/Versions"
+fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions"
 
 # ---- Initialize data formatting options ----
 format_data <- FALSE
@@ -58,8 +58,8 @@ compile_evals(version = version, fp_out = fp_out, years = years, species = speci
 plot_regions(version = version, fp_out = fp_out, species = species)
 
 # ---- Render model summary ----
-rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus_for_whales/Code/build_summary.Rmd", 
-                  output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus_for_whales/Versions", species, version, paste0(version, ".html")),
+rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
+                  output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", species, version, paste0(version, ".html")),
                   params = list(set_title = version,
                                 fp_out = fp_out,
                                 species = species,

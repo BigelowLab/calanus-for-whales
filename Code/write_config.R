@@ -17,7 +17,7 @@ years <- 2011:2017
 fp_md <- "./calanus_data/Data/Databases/zooplankton_covar_data"
 fp_covars <- "./Env_Covars"
 # Must be full filepath to use rmarkdown::render(); see line 51
-fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/calanus_for_whales/Versions"
+fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions"
 
 # ---- Initialize data formatting options ----
 format_data <- FALSE
@@ -29,7 +29,7 @@ x <- list(version = version, species = species, env_covars = env_covars, anomaly
          fp_out = fp_out, format_data = format_data, fp_zpd = fp_zpd)
 
 # ---- Write yaml ----
-write_yaml(x, file.path("./calanus_for_whales/Versions", paste0(version, ".yaml")))
+write_yaml(x, file.path("./calanus-for-whales/Versions", paste0(version, ".yaml")))
 
 
 
