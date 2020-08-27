@@ -1,0 +1,226 @@
+---
+title: "VERSIONS"
+author: "Camille"
+date: "7/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## V0.0.0
+
+- CHL, BOTT, SST, and BAT
+- BRTs and GAMs
+- Predictions are too high and don't line up with actual data very well
+- RMSE around 2.9
+
+## V0.0.1
+
+- CHL, BOTT, SST, BAT, and interaction between BOTT and SST
+- Captured interaction using a tensor (mgcv::ti())
+- Predictions are too high, still doesn't line up perfectly with actual data
+- RMSE around 2.6
+
+## V0.0.2
+
+- CHL, wind, SST, SSS, uv
+
+## V0.0.3
+
+- Lagged sst (1 month), chl, sss, uv, wind
+- Plotted points over predictions, line up well
+- high abundances in all months so doesn't catch seasonality
+- Some months don't have low abundance data so model doesn't know what unsuitable habitat looks like
+
+## V0.0.4
+
+- Zeroed out covariates below 1000m
+- lagged SST, sss, logged CHL
+
+## V0.0.5
+
+- Incorporate data from NOAA COPEPOD database
+- lagged SST, wind, sss, logged chl
+- 1 month sst lag
+- 2017 projection: model run from 2000-2017
+- 2009 projection: model run from 2000-2009
+
+## V0.0.6 
+
+- Use only ECOMON data converted from per 10m2 to per m2
+- lagged SST, wind, sss, logged chl
+- 1 month sst lag
+- 2010 projection: model run from 2000:2009
+- 2017 projection: model run from 2000:2017
+
+## V0.0.07
+
+- Use only CPR data on and off the shelf in per m3
+- lagged sst, wind, sss, logged chl
+- 1 month sst lag
+- 2010 projection: model run from 2000:2009
+- 2017 projection: model run from 2000:2017
+
+## V0.0.8
+
+- Translated ECOMON data from per 10m2 to per m2
+- Added in Runge data
+- Projected off the shelf as well
+- lagged sst, wind, sss, logged chl
+- 1 month sst lag
+- 2010 projection: model run from 2000:2009
+- 2017 projection: model run from 2000:2016
+
+## V0.0.9
+
+- Seasonal models 
+- ECOMON and Runge data
+- Projected off the shelf as well
+- lagged sst, wind, sss, logged chl
+- 1 month sst lag
+- 2010 projection: model run from 2000:2009
+
+## V0.1.0
+
+- Seasonal models 
+- CPR datasets
+- Projected off the shelf as well
+- lagged sst, wind, sss, logged chl
+- 1 month sst lag
+- 2010 projection: model run from 2000:2009
+
+## V0.1.1
+
+- Montly models
+- CPR datasets
+- Projected onto full domain
+- lagged sst, wind, sss, logged integrated chlorophyll
+- 1 month sst lag
+- 2010 projection: model run from 2000 to 2009
+- *ISSUE WITH PREVIOUS MODELS*: only logged chl and bathymetry for model, not projections; error corrected in this version
+
+## V0.1.2
+
+- Monthly models
+- EcoMon and Runge datasets
+- Projected onto full domain
+- lagged sst, wind, sss, logged integrated chlorophyll
+- 1 month sst lag
+- 2010 projection: model run from 2000 to 2009
+
+## V0.1.3
+
+- Monthly models
+- CPR datasets
+- Projected onto full domain
+- lagged sst, wind, sss, logged integrated chlorophyll, slope
+- 1 month sst lag
+- 2010 projection: model run from 2000 to 2009
+
+## V0.1.4
+
+- Monthly models
+- CPR datasets
+- Projected onto full domain
+- lagged sst, wind, sss, logged integrated chlorophyll, distance to shore
+- 1 month sst lag
+- 2010 projection: model run from 2000 to 2009
+
+## V0.1.5
+
+- Monthly models
+- Anomalies from all datasets
+  - Subtract mean, divide by standard deviation
+- Projected onto full domain
+- lagged sst, wind, sss, logged integrated chlorophyll, distance to shore
+- 1 month sst lag
+- 2010 projection: model run from 2000 to 2009
+
+## V0.1.6
+
+- *Official version 1*
+- Monthly abundance models
+- GAMs only
+- Hindcasting mode, averaged into climatology
+- On-shelf only
+- Lagged sst, wind, sss, logged integrated chlorophyl
+- 1 month sst lag
+- Projections from 2000 through 2017
+- Used all datasets, datasets not comparable, results invalid!!
+
+## V0.1.7
+
+- Monthly anomaly models
+- Lagged sst, wind, sss, logged integrated chlorophyl
+- 1 month sst lag
+
+## V0.1.8
+
+- Monthly anomaly models
+- Lagged sst, wind, sss, logged integrated chlorophyl, logged bathymetry
+- 1 month sst lag
+
+## V0.1.9
+
+- Centropages
+- Monthly abundance models
+- Lagged sst, wind, sss, logged integrated chlorophyl
+- 1 month sst lag
+- Used all datasets, datasets not comparable, results invalid
+
+## V0.2.0
+
+- Pseudocalanus
+- Monthly abundance models
+- Lagged sst, wind, sss, logged integrated chlorophyl
+- 1 month sst lag
+- Used all datasets, datasets not comparable, results invalid
+
+## V0.2.1
+
+- Centropages
+- Monthly abundance models
+- sst, wind, sss, logged chlorophyl, logged bathymetry
+- CPR datasets
+
+## V0.2.2
+
+- Pseudocalanus
+- Monthly abundance models
+- sst, wind, sss, logged chlorophyl, logged bathymetry
+- CPR datasets
+
+## V0.2.3
+
+- Calanus finmarchicus
+- Monthly abundance models
+- Hindcasting mode, averaged into climatology
+- On-shelf only
+- Lagged sst, wind, sss, logged integrated chlorophyl
+- 1 month sst lag
+- Projections from 2000 through 2017
+- CPR datasets
+- Redo of V0.1.6 official version 1
+
+## V0.2.4
+
+- Calanus finmarchicus
+- Monthly anomaly models
+- Hindcasting mode, averaged into climatology
+- Lagged sst, wind, sss, logged integrated chlorophyl, slope
+- 1 month sst lag
+- Projections from 2000 through 2017
+- CPR datasets
+
+## V0.2.5
+
+- Calanus finmarchicus
+- Monthly anomaly models
+- Hindcasting mode, averaged into climatology
+- Lagged sst, wind, sss, logged integrated chlorophyl, distance to shore
+- 1 month sst lag
+- Projections from 2000 through 2017
+- CPR datasets
