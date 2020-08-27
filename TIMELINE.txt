@@ -1,0 +1,16 @@
+TIMELINE
+
+Week of June 1:
+- Look through Calanus data
+- Begin compiling into database
+- Select preliminary covariate layers
+- Select spatiotemporal resolution
+- Create flowchart for lab meeting
+
+Week of June 15:
+- Complete calanus database
+- Complete formatting covariate layers with Calanus data
+- Begin building model
+
+Week of June 22:
+- Preliminary model up and running

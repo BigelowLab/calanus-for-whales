@@ -1,0 +1,43 @@
+NOTES:
+
+EcoMon —
+
+Runge data —
+
+- Outliers in longitude column
+	- Most are negative but then there are 2 positive 40s throwing things off
+	- Mistake?
+
+V0.0.0
+
+- CHL, BOTT, SST, and BAT
+- BRTs and GAMs
+- Predictions are too high and don't line up with actual data very well
+- RMSE around 2.9
+
+V0.0.1
+
+- CHL, BOTT, SST, BAT, and interaction between BOTT and SST
+- Captured interaction using a tensor (mgcv::ti())
+- Predictions are too high, still doesn't line up perfectly with actual data
+- RMSE around 2.6
+
+V0.0.2
+
+- CHL, wind, SST, SSS, uv
+
+V0.0.3
+
+- Lagged sst (1 month), chl, sss, uv, wind
+- Plotted points over predictions, line up well
+- high abundances in all months so doesn't catch seasonality
+- Some months don't have low abundance data so model doesn't know what unsuitable habitat looks like
+
+V0.0.4
+
+- Zeroed out covariates below 1000m
+
+V0.0.5
+
+- Incorporate data from NOAA COPEPOD database
+- lagged SST, wind, sss, logged chl
