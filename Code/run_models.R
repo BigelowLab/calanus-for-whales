@@ -2,6 +2,8 @@
 # 18 August, 2020
 # Purpose: Code to run zooplankton models and summarize output.
 
+library(yaml)
+
 # ---- Source necessary scripts ----
 source("./calanus-for-whales/Code/build_gam.R")
 source("./calanus-for-whales/Code/build_brt.R")

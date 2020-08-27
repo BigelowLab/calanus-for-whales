@@ -9,6 +9,7 @@ require(dismo)
 require(randomForest)
 library(viridis)
 library(ggplot2)
+library(rgdal)
 
 # -------- Source outside files --------
 # Source data formatting function
@@ -84,7 +85,7 @@ build_gam <- function(version, fp_md, species, fp_covars, env_covars, years, pro
     # -------- Project model onto covariates --------
     proj <- raster::predict(covars, rf_sdm, filename = file.path(fp_out, species, version, "RFs", "Projections", paste0("proj_", proj_year, "_", i)), progress = "text",
                             overwrite = TRUE,
-                            format = "GTif")
+                            format = "GTiff")
     # Convert proj to data frame
     proj_df <- as.data.frame(proj, xy = TRUE)
     # Add column names

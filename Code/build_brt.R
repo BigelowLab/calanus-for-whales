@@ -15,6 +15,7 @@ require(maps)
 require(ggplot2)
 require(stats)
 require(devtools)
+require(rgdal)
 
 # -------- Source outside files --------
 # Source data formatting function
@@ -186,7 +187,7 @@ build_brt <- function(version, fp_md, fp_covars, env_covars, years, fp_out,
       proj <- raster::predict(covars, brt_sdm,
                               filename = file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "GTif")
+                              format = "GTiff")
       
       # Zero out projections below 1000m
       proj[bat >= 1000] <- 0

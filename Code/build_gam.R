@@ -9,6 +9,7 @@ require(dismo)
 require(mgcv)
 library(viridis)
 library(ggplot2)
+library(rgdal)
 
 # -------- Source outside files --------
 # Source data formatting function
@@ -175,7 +176,7 @@ build_gam <- function(version, fp_md, fp_covars, env_covars, years, fp_out,
       # -------- Project model onto covariates --------
       proj <- raster::predict(covars, gam_sdm, filename = file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "GTif")
+                              format = "GTiff")
       # Zero out projections below 1000m
       if (species == "cfin") {
         proj[bat >= 1000] <- 0

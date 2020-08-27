@@ -15,13 +15,12 @@ require(ggplot2)
 require(stats)
 require(biomod2)
 require(ff)
-library(rgdal)
 
 # -------- Source outside files --------
 # Source data formatting function
-source("./calanus-for-whales/Code/format_model_data.R")
+source("./calanus_for_whales/Code/format_model_data.R")
 # Source covariate loading function
-source("./calanus-for-whales/Code/load_covars.R")
+source("./calanus_for_whales/Code/load_covars.R")
 # Source data binding function
 source("./calanus_data/Code/bind_years.R")
 
@@ -111,8 +110,6 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
   
   # -------- Load world map data --------
   worldmap <- ggplot2::map_data("world")
-  
-  modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
   for (i in years) {
@@ -267,8 +264,8 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
              y = "") +
         # Add world map data
         geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(ensemble_proj_df$x)), round(max(ensemble_proj_df$x))), 
-                       ylim = c(round(min(ensemble_proj_df$y)), round(max(ensemble_proj_df$y))),
+        coord_quickmap(xlim = c(round(min(proj_df$x)), round(max(proj_df$x))), 
+                       ylim = c(round(min(proj_df$y)), round(max(proj_df$y))),
                        expand = TRUE) +
         # Remove grid lines
         theme_bw() +
@@ -336,8 +333,8 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
              y = "") +
         # Add world map data
         geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(gam_proj_df$x)), round(max(gam_proj_df$x))), 
-                       ylim = c(round(min(gam_proj_df$y)), round(max(gam_proj_df$y))),
+        coord_quickmap(xlim = c(round(min(proj_df$x)), round(max(proj_df$x))), 
+                       ylim = c(round(min(proj_df$y)), round(max(proj_df$y))),
                        expand = TRUE) +
         # Remove grid lines
         theme_bw() +
@@ -405,8 +402,8 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
              y = "") +
         # Add world map data
         geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(brt_proj_df$x)), round(max(brt_proj_df$x))), 
-                       ylim = c(round(min(brt_proj_df$y)), round(max(brt_proj_df$y))),
+        coord_quickmap(xlim = c(round(min(proj_df$x)), round(max(proj_df$x))), 
+                       ylim = c(round(min(proj_df$y)), round(max(proj_df$y))),
                        expand = TRUE) +
         # Remove grid lines
         theme_bw() +
@@ -473,8 +470,8 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
              y = "") +
         # Add world map data
         geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(rf_proj_df$x)), round(max(rf_proj_df$x))), 
-                       ylim = c(round(min(rf_proj_df$y)), round(max(rf_proj_df$y))),
+        coord_quickmap(xlim = c(round(min(proj_df$x)), round(max(proj_df$x))), 
+                       ylim = c(round(min(proj_df$y)), round(max(proj_df$y))),
                        expand = TRUE) +
         # Remove grid lines
         theme_bw() +
@@ -505,6 +502,11 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       
     }
   }
+  
+  # ---- Move projection files ----
+  from <- file.path(paste0(species, version))
+  to <- file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version))
+  ff::file.move(from, to)
   
 }
 
