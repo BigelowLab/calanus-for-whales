@@ -18,9 +18,9 @@ require(devtools)
 
 # -------- Source outside files --------
 # Source data formatting function
-source("./calanus_for_whales/Code/format_model_data.R")
+source("./calanus-for-whales/Code/format_model_data.R")
 # Source covariate loading function
-source("./calanus_for_whales/Code/load_covars.R")
+source("./calanus-for-whales/Code/load_covars.R")
 # Source data binding function
 source("./calanus_data/Code/bind_years.R")
 

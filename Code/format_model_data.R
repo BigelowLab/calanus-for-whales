@@ -10,7 +10,7 @@ library(readr)
 
 # -------- Source outside function --------
 # Source function to load covariates
-source("./calanus_for_whales/Code/load_covars.R")
+source("./calanus-for-whales/Code/load_covars.R")
 
 # -------- Format data function --------
 #'@param fp_data <chr> file path to zooplankton database
