@@ -229,7 +229,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
 
 ## Regions 
 
-THe study area was divided into three regions, the MAB, GBK, and GOM.  For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted.  So far, this has only been done for the mgcv GAMs and gbm BRTs. 
+The study area was divided into three regions, the MAB, GBK, and GOM.  For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted.  So far, this has only been done for the mgcv GAMs and gbm BRTs. 
 
 ### GAM regions
 

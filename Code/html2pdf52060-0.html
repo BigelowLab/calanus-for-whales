@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Camille Ross" />
+
+
+<title>v0.2.3</title>
+
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/navigation-1.1/tabsets.js"></script>
+<link href="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/highlightjs/default.css" rel="stylesheet" />
+<script src="/Library/Frameworks/R.framework/Versions/3.6/Resources/library/rmarkdown/rmd/h/highlightjs/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">v0.2.3</h1>
+<h4 class="author"><em>Camille Ross</em></h4>
+<h4 class="date"><em>8/17/2020</em></h4>
+
+</div>
+
+
+<section id="summary" class="level2">
+<h2>Summary</h2>
+<p>Model <code>v0.2.3</code> was created using <code>wind, lag_sst, int_chl, sss</code> for <code>cfin</code>. The models were averaged into climatologies with one climatology per month. Evaluations were compiled from the climatological averages and plotted. Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George’s Bank (GBK), and the Gulf of Maine (GOM). Actual versus predicted abundance values were plotted for each region.</p>
+</section>
+<section id="climatologies" class="level2">
+<h2>Climatologies</h2>
+<section id="gam-climatology" class="level3">
+<h3>GAM Climatology</h3>
+<p>The generalized additive models (GAMs) were run using the mgcv package and were used to model <code>cfin</code> abundances.</p>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/display_GAM-1.png" width="672" /></p>
+<p><strong>Figure 1.</strong> Monthly climatological GAM projections. The climatology was created by averaging together the projections from 2000 to 2017.</p>
+</section>
+<section id="brt-climatology" class="level3">
+<h3>BRT Climatology</h3>
+<p>The boosted regression tree (BRT) models were run using the gbm package and used to model <code>cfin</code> abundances.</p>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/display_BRT-1.png" width="672" /></p>
+<p><strong>Figure 2.</strong> Monthly climatological BRT projections. The climatology was created by averaging together the projections from 2000 to 2017.</p>
+</section>
+<section id="biomod-ensemble-climatology" class="level3">
+<h3>Biomod Ensemble Climatology</h3>
+<p>The ensemble models were created using the biomod2 package. The ensembles consist of BRTs, GAMs, and random forests (RFs). The ensembles were used to model the right whale feeding threshold, with any abundance greater than 1,000 <code>cfin</code> per <span class="math inline">\(m^3\)</span> counted as a presence and anything below that threshold counted as an absence.</p>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/display_ensemble-1.png" width="672" /></p>
+<p><strong>Figure 3.</strong> Monthly climatological ensemble projections of GAMs, BRTs, and random forests (RFs). The climatology was created by averaging together the projections from 2000 to 2017.</p>
+</section>
+<section id="biomod-gam-climatology" class="level3">
+<h3>Biomod GAM Climatology</h3>
+<p>The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than 1,000 <code>cfin</code> per <span class="math inline">\(m^3\)</span> counted as a presence and anything below that threshold counted as an absence.</p>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/display_biomod_gam-1.png" width="672" /></p>
+<p><strong>Figure 4.</strong> Monthly climatological GAM projections produced using Biomod2. The climatology was created by averaging together the projections from 2000 to 2017.</p>
+</section>
+</section>
+<section id="evaluations" class="level2">
+<h2>Evaluations</h2>
+<p>Evaluation metrics differed based on the metrics available in each modeling package and compatible with each model object. For the mgcv GAMs, Aikaike’s Information Criterion (AIC), the root mean squared error (RMSE), and the R squared (RSQ) value when comparing the actual and predicted abundances were computed. For the BRTs produced using the gbm package, RMSE and RSQ were computed. For the biomod2 ensembles and GAMs, the area under the receiver operator characteristic curve (AUC) and the true skill statistic (TSS) were computed.</p>
+<section id="gam-evaluations" class="level3">
+<h3>GAM evaluations</h3>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/gam_evals-1.png" width="672" /></p>
+<p><strong>Figure 5.</strong> Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.</p>
+</section>
+<section id="brt-evaluations" class="level3">
+<h3>BRT evaluations</h3>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/brt_evals-1.png" width="672" /></p>
+<p><strong>Figure 6.</strong> Model evaluations on a monthly time scale using a.) RMSE and b.) R2.</p>
+</section>
+<section id="biomod-ensemble-evaluations" class="level3">
+<h3>Biomod ensemble evaluations</h3>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/ensemble_evals-1.png" width="672" /></p>
+<p><strong>Figure 7.</strong> Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS</p>
+</section>
+<section id="biomod-gam-evaluations" class="level3">
+<h3>Biomod GAM evaluations</h3>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/gam_biomod_evals-1.png" width="672" /></p>
+<p><strong>Figure 8.</strong> Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS</p>
+</section>
+</section>
+<section id="regions" class="level2">
+<h2>Regions</h2>
+<p>THe study area was divided into three regions, the MAB, GBK, and GOM. For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted. So far, this has only been done for the mgcv GAMs and gbm BRTs.</p>
+<section id="gam-regions" class="level3">
+<h3>GAM regions</h3>
+<section id="climatological-average" class="level4">
+<h4>Climatological average</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/gam_clim-1.png" width="672" /></p>
+<p><strong>Figure 9.</strong> Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+<section id="monthly-average-time-series" class="level4">
+<h4>Monthly average time series</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/gam_monthly-1.png" width="672" /></p>
+<p><strong>Figure 10.</strong> Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+<section id="monthly-average-time-series-1" class="level4">
+<h4>Monthly average time series</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/gam_annual-1.png" width="672" /></p>
+<p><strong>Figure 11.</strong> Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+</section>
+<section id="brt-regions" class="level3">
+<h3>BRT regions</h3>
+<section id="climatological-average-1" class="level4">
+<h4>Climatological average</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/brt_clim-1.png" width="672" /></p>
+<p><strong>Figure 12.</strong> Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+<section id="monthly-average-time-series-2" class="level4">
+<h4>Monthly average time series</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/brt_monthly-1.png" width="672" /></p>
+<p><strong>Figure 13.</strong> Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+<section id="monthly-average-time-series-3" class="level4">
+<h4>Monthly average time series</h4>
+<p><img src="/Users/camille/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions/v0.2.3/v0.2.3_files/figure-html/brt_annual-1.png" width="672" /></p>
+<p><strong>Figure 14.</strong> Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George’s Bank, and c.) the Gulf of Maine. The predicted values come from the projections.</p>
+</section>
+</section>
+</section>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
