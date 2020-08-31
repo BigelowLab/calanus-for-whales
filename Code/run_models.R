@@ -48,7 +48,7 @@ plot_regions(version = config$version, fp_out = config$fp_out, species = config$
 # ---- Render model summary ----
 rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
                   output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", version, paste0(version, ".html")),
-                  params = list(set_title = vconfig$ersion,
+                  params = list(set_title = config$version,
                                 fp_out = config$fp_out,
                                 species = config$species,
                                 version = config$version,
