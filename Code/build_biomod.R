@@ -124,7 +124,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       # -------- Isolate month data --------
       trainingData <- month_md %>% dplyr::filter(month == j) 
       # -------- Select presence or absence based on right whale feeding index of mininmum of 1000 --------
-      trainingData$pa <- if_else(trainingData$abund < 1000, 0, 1)
+      trainingData$pa <- if_else(trainingData$abund < 40000, 0, 1)
       
       if (nrow(trainingData) < 100 | length(unique(trainingData$pa)) != 2) {
         next

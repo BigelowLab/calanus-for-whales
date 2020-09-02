@@ -14,7 +14,7 @@ source("./calanus-for-whales/Code/compile_evals.R")
 source("./calanus-for-whales/Code/plot_regions.R")
 
 # ---- Read in config file ----
-config <- read_yaml("./calanus-for-whales/Versions/v0.2.3.yaml")
+config <- read_yaml("./calanus-for-whales/Versions/v0.2.4.yaml")
 
 # ---- Build GAM ----
 build_gam(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_covars, env_covars = config$env_covars, 

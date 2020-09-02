@@ -7,11 +7,11 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.3"
+version <- "v0.2.4"
 species <- c("cfin", "ctyp", "pseudo")[1]
 env_covars <- c("wind", "lag_sst", "int_chl", "sss")
 anomaly <- FALSE
-years <- 2011:2017
+years <- 2000:2017
 
 # ---- Initialize relative filepaths ----
 fp_md <- "./calanus_data/Data/Databases/zooplankton_covar_data"
