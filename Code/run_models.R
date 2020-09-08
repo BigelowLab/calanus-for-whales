@@ -4,6 +4,8 @@
 
 library(yaml)
 
+setwd("~/Desktop/Calanus_Project/projects/calanus4whales")
+
 # ---- Source necessary scripts ----
 source("./calanus-for-whales/Code/build_gam.R")
 source("./calanus-for-whales/Code/build_brt.R")
