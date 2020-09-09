@@ -36,7 +36,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
 build_biomod <- function(version, fp_md, fp_covars, env_covars, 
-                         years, fp_out, species, 
+                         years, fp_out, species, threshold, 
                          format_data, fp_zpd) {
   
   # -------- Create output directories --------
@@ -115,7 +115,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in years) {
+  for (i in 2013:2017) {
     # ------- Loop over months --------
     for (j in 1:12) {
       # -------- Isolate month data --------
@@ -124,7 +124,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       # -------- Isolate month data --------
       trainingData <- month_md %>% dplyr::filter(month == j) 
       # -------- Select presence or absence based on right whale feeding index of mininmum of 1000 --------
-      trainingData$pa <- if_else(trainingData$abund < 40000, 0, 1)
+      trainingData$pa <- if_else(trainingData$abund < threshold, 0, 1)
       
       if (nrow(trainingData) < 100 | length(unique(trainingData$pa)) != 2) {
         next

@@ -30,7 +30,7 @@ build_brt(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_
 
 # ---- Build Biomod2 models ----
 build_biomod(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-             years = config$years, fp_out = config$fp_out, species = config$species, 
+             years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold,
              format_data = config$format_data, fp_zpd = config$fp_zpd)
 
 # ---- Build climatology ----
