@@ -43,16 +43,16 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
     
     # -------- Test if projection exists --------
     for (year in 2000:2017) {
-      if (paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & i == 1) {
-          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
-          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
+          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
         } else {
-          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
           gam_proj <- raster::stack(gam_proj, gam_temp)
           
-          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
           brt_proj <- raster::stack(brt_proj, brt_temp)
         }
       }
@@ -61,9 +61,9 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
     gam_clim <- calc(gam_proj, fun = mean, na.rm = TRUE)
     brt_clim <- calc(brt_proj, fun = mean, na.rm = TRUE)
       
-    raster::writeRaster(x = gam_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".grd")),
+    raster::writeRaster(x = gam_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif")),
                         overwrite = TRUE)
-    raster::writeRaster(x = brt_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".grd")),
+    raster::writeRaster(x = brt_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".tif")),
                         overwrite = TRUE)
     
     # Zero out projections below 1000m

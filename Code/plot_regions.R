@@ -90,23 +90,23 @@ plot_regions <- function(version, fp_out, species = "cfin") {
   
   for (i in 1:12) {
     # -------- Test if projection exists --------
-    if (paste0("gam_proj_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "Climatologies", "Projections")) &
-        paste0("brt_proj_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "Climatologies", "Projections"))) {
+    if (paste0("gam_proj_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "Climatologies", "Projections")) &
+        paste0("brt_proj_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "Climatologies", "Projections"))) {
       if (i == 1) {
-        gam_proj_df <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".grd"))) %>%
+        gam_proj_df <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
         
-        brt_proj_df <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".grd"))) %>%
+        brt_proj_df <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
       } else {
-        gam_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".grd"))) %>%
+        gam_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
         gam_proj_df <- rbind(gam_proj_df, gam_proj)
         
-        brt_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".grd"))) %>%
+        brt_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
         brt_proj_df <- rbind(brt_proj_df, brt_proj)
@@ -304,26 +304,26 @@ plot_regions <- function(version, fp_out, species = "cfin") {
   for (i in 1:12) {
     for (j in 2000:2017) {
       # -------- Test if projection exists --------
-      if (paste0("proj_", j, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", j, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (i == 1 & j == 2000) {
-          gam_proj_df <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          gam_proj_df <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
           
-          brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
         } else {
-          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
           gam_proj_df <- rbind(gam_proj_df, gam_proj)
           
-          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
@@ -522,26 +522,26 @@ plot_regions <- function(version, fp_out, species = "cfin") {
   for (i in 1:12) {
     for (j in 2000:2017) {
       # -------- Test if projection exists --------
-      if (paste0("proj_", j, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", j, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (i == 1 & j == 2000) {
-          gam_proj_df <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          gam_proj_df <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
           
-          brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
         } else {
-          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
           gam_proj_df <- rbind(gam_proj_df, gam_proj)
           
-          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".grd"))) %>%
+          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)

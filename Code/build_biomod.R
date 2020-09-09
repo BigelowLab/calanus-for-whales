@@ -115,7 +115,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in 2013:2017) {
+  for (i in years) {
     # ------- Loop over months --------
     for (j in 1:12) {
       # -------- Isolate month data --------
@@ -360,10 +360,10 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       readr::write_csv(month_md %>% dplyr::select(abund, gam_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("gam_abund_vs_pred_", i, "_", j, ".csv")))
       
       # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = ensemble_pred)) +
+      ggplot(data = month_md, aes(x = log10(abund + 1), y = gam_pred)) +
         geom_point() +
         ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_actualvspred_", i, "_", j, ".png")))
+        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("gam_actualvspred_", i, "_", j, ".png")))
       
       # ------- Project BRT -------
       # Create vector all runs of model algorithm for projection
@@ -428,10 +428,10 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       readr::write_csv(month_md %>% dplyr::select(abund, brt_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("brt_abund_vs_pred_", i, "_", j, ".csv")))
       
       # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = ensemble_pred)) +
+      ggplot(data = month_md, aes(x = log10(abund + 1), y = brt_pred)) +
         geom_point() +
         ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_actualvspred_", i, "_", j, ".png")))
+        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("brt_actualvspred_", i, "_", j, ".png")))
       
       # ------- Project RF -------
       # Create vector all runs of model algorithm for projection
@@ -497,10 +497,10 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       readr::write_csv(month_md %>% dplyr::select(abund, rf_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("rf_abund_vs_pred_", i, "_", j, ".csv")))
       
       # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = ensemble_pred)) +
+      ggplot(data = month_md, aes(x = log10(abund + 1), y = rf_pred)) +
         geom_point() +
         ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_actualvspred_", i, "_", j, ".png")))
+        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("rf_actualvspred_", i, "_", j, ".png")))
       
       
     }
