@@ -8,6 +8,7 @@ params:
   species: "cfin"
   version: "v0.2.3"
   env_covars: c("sst")
+  threshold: "40,000"
 title: "`r params$set_title`"
   
 ---
@@ -93,7 +94,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 
 ### Biomod Ensemble Climatology
 
-The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and random forests (RFs).  The ensembles were used to model the right whale feeding threshold, with any abundance greater than 1,000 ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
+The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and random forests (RFs).  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath

@@ -54,5 +54,6 @@ rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for
                                 fp_out = config$fp_out,
                                 species = config$species,
                                 version = config$version,
-                                env_covars = config$env_covars))
+                                env_covars = config$env_covars,
+                                threshold = config$threshold))
 
