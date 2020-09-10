@@ -6,6 +6,7 @@ env_covars:
 - int_chl
 - sss
 anomaly: no
+threshold: 40000.0
 years:
 - 2000
 - 2001
