@@ -78,8 +78,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
     gam_df <- as.data.frame(gam_clim, xy = TRUE, na.rm = TRUE)
     
     # Assign column names
-    names(ensemble_df) <- c('x', 'y', 'pred')
-    names(gam_df) <- c('x', 'y', 'pred')
+    names(ensemble_df) <- c('pred', 'x', 'y')
+    names(gam_df) <- c('pred', 'x', 'y')
 
     # -------- Plot projection --------
     # ---- Ensemble ----

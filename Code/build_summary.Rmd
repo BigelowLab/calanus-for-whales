@@ -128,7 +128,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
 
 ### Biomod GAM Climatology
 
-The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than 1,000 ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
 
 ```{r display_biomod_gam, echo=FALSE}
 # Initialize filepath
@@ -421,3 +421,41 @@ if ("GBK_brt_abund_pred_annual.png" %in% files) {
 ```
 
 **Figure 14.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+## Actual abundance vs. predicted probability of suitability
+
+For the biomod models, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Above the threshold of ``r params$threshold``, the probability of suitability tends to increase.  Below the threshold, the probability of suitability tends to be zero.  
+
+
+```{r ensemble_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+biomod1 <- readPNG(file.path(fp, "biomod_abund_vs_pred_1.png"))
+biomod2 <- readPNG(file.path(fp, "biomod_abund_vs_pred_2.png"))
+biomod3 <- readPNG(file.path(fp, "biomod_abund_vs_pred_3.png"))
+biomod4 <- readPNG(file.path(fp, "biomod_abund_vs_pred_4.png"))
+biomod5 <- readPNG(file.path(fp, "biomod_abund_vs_pred_5.png"))
+biomod6 <- readPNG(file.path(fp, "biomod_abund_vs_pred_6.png"))
+biomod7 <- readPNG(file.path(fp, "biomod_abund_vs_pred_7.png"))
+biomod8 <- readPNG(file.path(fp, "biomod_abund_vs_pred_8.png"))
+biomod9 <- readPNG(file.path(fp, "biomod_abund_vs_pred_9.png"))
+biomod10 <- readPNG(file.path(fp, "biomod_abund_vs_pred_10.png"))
+biomod11 <- readPNG(file.path(fp, "biomod_abund_vs_pred_11.png"))
+biomod12 <- readPNG(file.path(fp, "biomod_abund_vs_pred_12.png"))
+
+
+# Arrange grid
+grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
+             rasterGrob(biomod4), rasterGrob(biomod5), rasterGrob(biomod6),
+             rasterGrob(biomod7), rasterGrob(biomod8), rasterGrob(biomod9),
+             rasterGrob(biomod10), rasterGrob(biomod11), rasterGrob(biomod12),
+             ncol=3)
+
+```
+
+**Figure 15.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.

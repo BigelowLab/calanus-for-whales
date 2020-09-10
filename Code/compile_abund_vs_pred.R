@@ -33,17 +33,17 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
   for (year in years) {
     for (month in 1:12) {
       if (paste0("abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("abundvspred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+          paste0("abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & month == 1) {
           gam_abunds <- readr::read_csv(file.path(fp_out, species, version, "GAMs", "Projections", "abund_vs_pred_2000_1.csv"))
           gam_full_data <- data.frame("year" = year, "month" = month, "abund" = gam_abunds$abund, "pred" = gam_abunds$pred)
           
-          brt_abunds <- readr::read_csv(file.path(fp_out, species, version, "BRTs", "Projections", "abundvspred_2000_1.csv"))
+          brt_abunds <- readr::read_csv(file.path(fp_out, species, version, "BRTs", "Projections", "abund_vs_pred_2000_1.csv"))
           brt_full_data <- data.frame("year" = year, "month" = month, "abund" = brt_abunds$abund, "pred" = brt_abunds$pred)
           
-          if (paste0("abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Projections"))) {
+          if (paste0("ensemble_abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Projections"))) {
             biomod_abunds <- readr::read_csv(file.path(fp_out, species, version, "Biomod", "Projections", "ensemble_abund_vs_pred_2000_1.csv"))
-            biomod_full_data <- data.frame("year" = year, "month" = month, "abund" = biomod_abunds$abund, "pred" = biomod_abunds$pred)
+            biomod_full_data <- data.frame("year" = year, "month" = month, "abund" = biomod_abunds$abund, "pred" = biomod_abunds$ensemble_pred)
           }
         } else {
           gam_abunds <- readr::read_csv(file.path(fp_out, species, version, "GAMs", "Projections", paste0("abund_vs_pred_", year, "_", month, ".csv")))
@@ -51,15 +51,15 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
           gam_temp <- data.frame("year" = year, "month" = month, "abund" = gam_abunds$abund, "pred" = gam_abunds$pred)
           gam_full_data <- rbind(gam_full_data, gam_temp)
           
-          brt_abunds <- readr::read_csv(file.path(fp_out, species, version, "BRTs", "Projections", paste0("abundvspred_", year, "_", month, ".csv")))
+          brt_abunds <- readr::read_csv(file.path(fp_out, species, version, "BRTs", "Projections", paste0("abund_vs_pred_", year, "_", month, ".csv")))
           
           brt_temp <- data.frame("year" = year, "month" = month, "abund" = brt_abunds$abund, "pred" = brt_abunds$pred)
           brt_full_data <- rbind(brt_full_data, brt_temp)
           
-          if (paste0("abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Projections"))) {
+          if (paste0("ensemble_abund_vs_pred_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Projections"))) {
             biomod_abunds <- readr::read_csv(file.path(fp_out, species, version, "Biomod", "Projections", paste0("ensemble_abund_vs_pred_", year, "_", month, ".csv")))
             
-            biomod_temp <- data.frame("year" = year, "month" = month, "abund" = biomod_abunds$abund, "pred" = biomod_abunds$pred)
+            biomod_temp <- data.frame("year" = year, "month" = month, "abund" = biomod_abunds$abund, "pred" = biomod_abunds$ensemble_pred)
             biomod_full_data <- rbind(biomod_full_data, biomod_temp)
           }
         }
@@ -69,17 +69,13 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
   
   # -------- Write data to CSV --------
   gam_full_data <- gam_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "gam_compiled_abund_vs_pred.csv")) %>%
-    duplicated()
-    dplyr::mutate(count = dplyr::count_(gam_full_data, vars = c('abund','pred'))$n)
+    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "gam_compiled_abund_vs_pred.csv"))
   
   brt_full_data <- brt_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "brt_compiled_abund_vs_pred.csv")) %>%
-    dplyr::group_by(abund, pred)
+    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "brt_compiled_abund_vs_pred.csv"))
   
   biomod_full_data <- biomod_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Projections", "biomod_compiled_abund_vs_pred.csv")) %>%
-    dplyr::group_by(abund, pred)
+    readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Projections", "biomod_compiled_abund_vs_pred.csv"))
   
   # -------- Plot actual vs. predicted --------
   for (i in 1:12) {
@@ -93,9 +89,8 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
       xlim(c(0,5)) +
       guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"),
-            legend.position = "none") +
-      ggsave(filename = file.path(fp_out, species, "Climatologies", version, "Plots", paste0("gam_abund_vs_pred_", i, ".png")))
+            panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+      ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("gam_abund_vs_pred_", i, ".png")))
   
     # ---- BRTs ----
     ggplot(brt_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = as.factor(year)), alpha = 0.01) +
@@ -107,23 +102,21 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
       xlim(c(0,5)) +
       guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"),
-            legend.position = "none") +
-      ggsave(filename = file.path(fp_out, species, "Climatologies", version, "Plots", paste0("brt_abund_vs_pred_", i, ".png")))
+            panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+      ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("brt_abund_vs_pred_", i, ".png")))
     
     # ---- Biomod ensemble ----
-    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = as.factor(year)), alpha = 0.01) +
+    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = log10(abund + 1), y = pred, color = as.factor(year)), alpha = 0.01) +
       geom_point() +
       scale_color_viridis(name = "Year", discrete=TRUE) +
       ylab("Predicted value") +
       xlab("Actual Value") +
-      ylim(c(0,5)) +
+      ylim(c(0,1)) +
       xlim(c(0,5)) +
       guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black"),
-            legend.position = "none") +
-      ggsave(filename = file.path(fp_out, species, "Biomod_Climatologies", version, "Plots", paste0("biomod_abund_vs_pred_", i, ".png")))
+            panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+      ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("biomod_abund_vs_pred_", i, ".png")))
   }
 }
 
