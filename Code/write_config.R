@@ -7,9 +7,9 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.4"
-species <- c("cfin", "ctyp", "pseudo")[1]
-env_covars <- c("wind", "lag_sst", "int_chl", "sss")
+version <- "v0.2.5"
+species <- c("cfin", "ctyp", "pseudo")[2]
+env_covars <- c("sst", "chl", "bat", "sss", "wind")
 anomaly <- FALSE
 threshold <- 40000
 years <- 2000:2017
