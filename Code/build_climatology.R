@@ -40,9 +40,10 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
   
   # -------- Loop over months --------
   for (i in 1:12) {
+    print(i)
     
     # -------- Test if projection exists --------
-    for (year in 2000:2017) {
+    for (year in years) {
       if (paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
           paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & i == 1) {

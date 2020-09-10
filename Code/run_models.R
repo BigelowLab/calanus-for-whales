@@ -14,6 +14,7 @@ source("./calanus-for-whales/Code/build_climatology.R")
 source("./calanus-for-whales/Code/build_biomod_climatology.R")
 source("./calanus-for-whales/Code/compile_evals.R")
 source("./calanus-for-whales/Code/plot_regions.R")
+source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
 # ---- Read in config file ----
 config <- read_yaml("./calanus-for-whales/Versions/v0.2.4.yaml")
@@ -46,6 +47,9 @@ compile_evals(version = config$version, fp_out = config$fp_out, years = config$y
 
 # ---- Create region-specific actual vs. predicted plots ----
 plot_regions(version = config$version, fp_out = config$fp_out, species = config$species)
+
+# ---- Compile actual vs. predicted values ----
+compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species)
 
 # ---- Render model summary ----
 rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 

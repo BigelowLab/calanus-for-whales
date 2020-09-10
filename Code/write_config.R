@@ -7,11 +7,11 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.4"
+version <- "v0.2.3"
 species <- c("cfin", "ctyp", "pseudo")[1]
 env_covars <- c("wind", "lag_sst", "int_chl", "sss")
 anomaly <- FALSE
-threshold <- 40000
+threshold <- 10000
 years <- 2000:2017
 
 # ---- Initialize relative filepaths ----
@@ -25,7 +25,7 @@ format_data <- FALSE
 fp_zpd <- NULL
 
 # ---- Initialize yaml parameters ----
-x <- list(version = version, species = species, env_covars = env_covars, anomaly = anomaly, years = years, 
+x <- list(version = version, species = species, env_covars = env_covars, anomaly = anomaly, threshold = threshold, years = years, 
          fp_md = fp_md, fp_covars = fp_covars,
          fp_out = fp_out, format_data = format_data, fp_zpd = fp_zpd)
 

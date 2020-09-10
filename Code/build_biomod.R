@@ -442,7 +442,7 @@ build_biomod <- function(version, fp_md, fp_covars, env_covars,
       
       rfProj <- BIOMOD_Projection(modeling.output = modelOut,
                                    new.env = covars,
-                                   proj.name = paste0("RF", i, "_", j),
+                                   proj.name = paste0("RF_", i, "_", j),
                                    selected.models = select_models,
                                    binary.meth = 'ROC',
                                    compress = 'xz',

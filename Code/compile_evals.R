@@ -35,8 +35,8 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
   for (year in years) {
     for (month in 1:12) {
       # ---- Test if projection exists ----
-      if (paste0("proj_", year, "_", month, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", year, "_", month, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", year, "_", month, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", year, "_", month, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & month == 1) {
           aic <- as.numeric(substring(readr::read_csv(file.path(fp_out, species, version, "GAMs", "Evals", paste0("aic_", year, "_", month, ".csv"))), 4))
           gam_rmse <- as.numeric(substring(readr::read_csv(file.path(fp_out, species, version,"GAMs", "Evals", paste0("rmse_", year, "_", month, ".csv"))), 4))

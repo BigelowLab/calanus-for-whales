@@ -253,6 +253,9 @@ build_brt <- function(version, fp_md, fp_covars, env_covars, years, fp_out,
       month_md$abund <- unlist(month_md$abund)
       month_md$pred <- unlist(month_md$pred)
       
+      readr::write_csv(month_md %>% dplyr::select(abund, pred), file.path(fp_out, species, version, "BRTs", "Projections", paste0("abund_vs_pred_", i, "_", j, ".csv")))
+      
+      
       # -------- Plot actual vs. predicted values
       ggplot(data = month_md, aes(x = abund, y = pred)) +
         geom_point() +

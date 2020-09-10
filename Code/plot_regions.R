@@ -97,18 +97,29 @@ plot_regions <- function(version, fp_out, species = "cfin") {
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
         
+        names(gam_proj_df) <- c("x", "y", "proj", "month")
+        
         brt_proj_df <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
+        
+        names(brt_proj_df) <- c("x", "y", "proj", "month")
+        
       } else {
         gam_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
+        
+        names(gam_proj) <- c("x", "y", "proj", "month")
+        
         gam_proj_df <- rbind(gam_proj_df, gam_proj)
         
         brt_proj <- raster::raster(file.path(fp_out, species, version, "Climatologies", "Projections", paste0("brt_proj_", i, ".tif"))) %>%
           as.data.frame(xy = TRUE) %>%
           dplyr::mutate(month = i)
+        
+        names(brt_proj) <- c("x", "y", "proj", "month")
+        
         brt_proj_df <- rbind(brt_proj_df, brt_proj)
       }
     }
@@ -119,15 +130,15 @@ plot_regions <- function(version, fp_out, species = "cfin") {
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE))
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
   
   brt_proj_df <- brt_proj_df %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE))
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
   
   # -------- Initialize legend colors --------
   colors <- c("Actual" = "red", "Predicted" = "blue")
@@ -312,21 +323,32 @@ plot_regions <- function(version, fp_out, species = "cfin") {
             dplyr::mutate(month = i,
                           year = j)
           
+          names(gam_proj_df) <- c("x", "y", "proj", "month", "year")
+          
           brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(brt_proj_df) <- c("x", "y", "proj", "month", "year")
+          
         } else {
           gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(gam_proj) <- c("x", "y", "proj", "month", "year")
+          
           gam_proj_df <- rbind(gam_proj_df, gam_proj)
           
           brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(brt_proj) <- c("x", "y", "proj", "month", "year")
+          
           brt_proj_df <- rbind(brt_proj_df, brt_proj)
         }
       }
@@ -338,15 +360,15 @@ plot_regions <- function(version, fp_out, species = "cfin") {
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE))
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
   
   brt_proj_df <- brt_proj_df %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE))
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
   
   # -------- Plot MAB --------
   if ("MAB" %in% unique(md$region)) {
@@ -530,21 +552,32 @@ plot_regions <- function(version, fp_out, species = "cfin") {
             dplyr::mutate(month = i,
                           year = j)
           
+          names(gam_proj_df) <- c("x", "y", "proj", "month", "year")
+          
           brt_proj_df <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(brt_proj_df) <- c("x", "y", "proj", "month", "year")
+          
         } else {
           gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(gam_proj) <- c("x", "y", "proj", "month", "year")
+          
           gam_proj_df <- rbind(gam_proj_df, gam_proj)
           
           brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", j, "_", i, ".tif"))) %>%
             as.data.frame(xy = TRUE) %>%
             dplyr::mutate(month = i,
                           year = j)
+          
+          names(brt_proj) <- c("x", "y", "proj", "month", "year")
+          
           brt_proj_df <- rbind(brt_proj_df, brt_proj)
         }
       }
@@ -557,8 +590,8 @@ plot_regions <- function(version, fp_out, species = "cfin") {
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year, month) %>%
     # Compute average and standard deviation
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE)) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE)) %>%
     # Add date
     dplyr::mutate(date = zoo::as.Date(zoo::as.yearmon(paste(month, year), "%m %Y")))
   
@@ -567,8 +600,8 @@ plot_regions <- function(version, fp_out, species = "cfin") {
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year, month) %>%
     # Compute average and standard deviation
-    dplyr::summarize(mean = mean(layer, na.rm = TRUE),
-                     stdev = sd(layer, na.rm = TRUE)) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE)) %>%
     # Add date
     dplyr::mutate(date = zoo::as.Date(zoo::as.yearmon(paste(month, year), "%m %Y")))
   
