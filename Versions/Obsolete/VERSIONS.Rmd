@@ -224,3 +224,4 @@ knitr::opts_chunk$set(echo = TRUE)
 - 1 month sst lag
 - Projections from 2000 through 2017
 - CPR datasets
+- Biomod threshold models with Ecomon data

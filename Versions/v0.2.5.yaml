@@ -7,7 +7,7 @@ env_covars:
 - sss
 - wind
 anomaly: no
-threshold: 40000.0
+threshold: 1000.0
 years:
 - 2000
 - 2001
