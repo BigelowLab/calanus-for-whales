@@ -9,6 +9,9 @@ params:
   version: "v0.2.3"
   env_covars: c("sst")
   threshold: "40,000"
+  years: "2000:2017"
+  dataset: "CPR"
+  biomod_dataset: "Ecomon"
 title: "`r params$set_title`"
   
 ---
@@ -25,7 +28,7 @@ library(gridExtra)
 
 ## Summary
 
-Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$dataset`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_dataset`` dataset(s).  If the model is an anomaly, all datasets are used.  
 
 ## Climatologies
 
@@ -160,6 +163,201 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 **Figure 4.** Monthly climatological GAM projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
 
+## Monthly ensemble projections
+
+Monthly ensemble Biomod2 projections are displayed below for the months of May, June, July, August, and September.
+
+### April
+
+```{r display_biomod_april, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_4.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_4.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_4.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_4.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_4.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_4.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_4.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_4.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_4.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_4.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_4.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_4.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_4.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_4.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_4.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_4.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_4.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_4.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 5.** Ensemble projections for the month of April over ``r params$years``.
+
+### May
+
+```{r display_biomod_may, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_5.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_5.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_5.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_5.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_5.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_5.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_5.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_5.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_5.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_5.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_5.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_5.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_5.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_5.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_5.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_5.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_5.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_5.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 6.** Ensemble projections for the month of May over ``r params$years``.
+
+### June
+
+```{r display_biomod_june, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_6.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_6.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_6.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_6.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_6.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_6.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_6.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_6.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_6.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_6.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_6.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_6.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_6.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_6.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_6.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_6.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_6.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_6.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 7.** Ensemble projections for the month of June over ``r params$years``.
+
+### August
+
+```{r display_biomod_august, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_8.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_8.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_8.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_8.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_8.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_8.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_8.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_8.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_8.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_8.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_8.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_8.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_8.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_8.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_8.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_8.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_8.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_8.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 8.** Ensemble projections for the month of August over ``r params$years``.
+
+### September
+
+```{r display_biomod_september, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_9.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_9.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_9.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_9.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_9.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_9.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_9.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_9.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_9.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_9.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_9.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_9.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_9.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_9.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_9.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_9.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_9.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_9.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 9.** Ensemble projections for the month of September over ``r params$years``.
+
+
 ## Evaluations
 
 Evaluation metrics differed based on the metrics available in each modeling package and compatible with each model object.  For the mgcv GAMs, Aikaike's Information Criterion (AIC), the root mean squared error (RMSE), and the R squared (RSQ) value when comparing the actual and predicted abundances were computed.  For the BRTs produced using the gbm package, RMSE and RSQ were computed.  For the biomod2 ensembles and GAMs, the area under the receiver operator characteristic curve (AUC) and the true skill statistic (TSS) were computed.  
@@ -180,7 +378,7 @@ grid.arrange(rasterGrob(aic), rasterGrob(rmse), rasterGrob(rsq),
              ncol=3)
 ```
 
-**Figure 5.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
+**Figure 10.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
 
 
 ### BRT evaluations
@@ -195,7 +393,7 @@ grid.arrange(rasterGrob(rmse), rasterGrob(rsq),
              ncol=2)
 ```
 
-**Figure 6.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
+**Figure 11.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
 
 ### Biomod ensemble evaluations
 
@@ -212,7 +410,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 7.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 12.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 ### Biomod GAM evaluations
 
@@ -226,7 +424,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 8.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 13.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 ## Regions 
 
@@ -264,7 +462,7 @@ if ("GBK_gam_abund_pred_climatological.png" %in% files) {
 
 ```
 
-**Figure 9.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 14.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -296,7 +494,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 10.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 15.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -325,7 +523,7 @@ if ("GBK_gam_abund_pred_annual.png" %in% files) {
 
 ```
 
-**Figure 11.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 16.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 ### BRT regions
 
@@ -359,7 +557,7 @@ if ("GBK_brt_abund_pred_climatological.png" %in% files) {
 
 ```
 
-**Figure 12.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 17.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -391,7 +589,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 13.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 18.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -420,11 +618,11 @@ if ("GBK_brt_abund_pred_annual.png" %in% files) {
 
 ```
 
-**Figure 14.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 19.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 ## Actual abundance vs. predicted probability of suitability
 
-For the biomod models, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Above the threshold of ``r params$threshold``, the probability of suitability tends to increase.  Below the threshold, the probability of suitability tends to be zero.  
+For the biomod ensemble models, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Above the threshold of ``r params$threshold``, the probability of suitability tends to increase.  Below the threshold, the probability of suitability tends to be zero.  
 
 
 ```{r ensemble_actual_vs_pred, echo=FALSE}
@@ -458,4 +656,4 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 ```
 
-**Figure 15.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
+**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
