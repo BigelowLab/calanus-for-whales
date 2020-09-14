@@ -17,20 +17,20 @@ source("./calanus-for-whales/Code/plot_regions.R")
 source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
 # ---- Read in config file ----
-config <- read_yaml("./calanus-for-whales/Versions/v0.2.5.yaml")
+config <- read_yaml("./calanus-for-whales/Versions/v0.2.4/v0.2.4.yaml")
 
 # ---- Build GAM ----
-build_gam(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+build_gam(version = config$version, fp_md = config$fp_md, dataset = config$dataset, fp_covars = config$fp_covars, env_covars = config$env_covars, 
           years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
           format_data = config$format_data, fp_zpd = config$fp_zpd)
 
 # ---- Build BRT ----
-build_brt(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+build_brt(version = config$version, fp_md = config$fp_md, dataset = config$dataset, fp_covars = config$fp_covars, env_covars = config$env_covars, 
           years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
           format_data = config$format_data, fp_zpd = config$fp_zpd)
 
 # ---- Build Biomod2 models ----
-build_biomod(version = config$version, fp_md = config$fp_md, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+build_biomod(version = config$version, fp_md = config$fp_md, dataset = config$biomod_dataset, fp_covars = config$fp_covars, env_covars = config$env_covars, 
              years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold,
              format_data = config$format_data, fp_zpd = config$fp_zpd)
 
@@ -53,11 +53,14 @@ compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, years = 
 
 # ---- Render model summary ----
 rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
-                  output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", version, paste0(version, ".html")),
+                  output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", config$version, paste0(config$version, ".html")),
                   params = list(set_title = config$version,
                                 fp_out = config$fp_out,
                                 species = config$species,
                                 version = config$version,
                                 env_covars = config$env_covars,
-                                threshold = config$threshold))
+                                threshold = config$threshold,
+                                years = config$years,
+                                dataset = config$dataset,
+                                biomod_dataset = config$biomod_dataset))
 
