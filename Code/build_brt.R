@@ -36,7 +36,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param anomaly <logical> if true, model is run using calanus anomaly
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
-build_brt <- function(version, fp_md, dataset, fp_covars, env_covars, years, fp_out, 
+build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp_out, 
                       species = "cfin", anomaly = FALSE,
                       format_data = FALSE, fp_zpd = NULL) {
   
@@ -65,14 +65,14 @@ build_brt <- function(version, fp_md, dataset, fp_covars, env_covars, years, fp_
       md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv")))
     } else {
       md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv"))) %>% 
-        dplyr::filter(dataset %in% dataset)
+        dplyr::filter(dataset %in% datasets)
     }
   } else {
     if (anomaly) {
       md <- bind_years(fp = file.path(fp_md), years = years)
     } else {
       md <- bind_years(fp = file.path(fp_md), years = years) %>%
-        dplyr::filter(dataset %in% dataset)
+        dplyr::filter(dataset %in% datasets)
     }
   }
   

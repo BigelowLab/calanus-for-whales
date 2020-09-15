@@ -35,7 +35,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param fp_out <chr> file path save the data to 
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
-build_biomod <- function(version, fp_md, dataset, fp_covars, env_covars, 
+build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars, 
                          years, fp_out, species, threshold, 
                          format_data, fp_zpd) {
   
@@ -60,10 +60,10 @@ build_biomod <- function(version, fp_md, dataset, fp_covars, env_covars,
   # -------- Load model data --------
   if (length(years) == 1) {
     md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv"))) %>% 
-      dplyr::filter(dataset %in% dataset)
+      dplyr::filter(dataset %in% biomod_dataset)
   } else {
     md <- bind_years(fp = file.path(fp_md), years = years) %>%
-      dplyr::filter(dataset %in% dataset)
+      dplyr::filter(dataset %in% biomod_dataset)
   }
   
   # -------- Compute anomaly --------
