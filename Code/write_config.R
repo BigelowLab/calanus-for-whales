@@ -10,7 +10,7 @@ library(yaml)
 version <- "v0.2.6"
 species <- c("cfin", "ctyp", "pseudo")[1]
 env_covars <- c("sst", "chl", "bat", "sss", "wind",
-                "lag_sst", "int_chl", "fetch", "slope",
+                "lag_sst", "int_chl", "slope",
                 "bott", "bots", "dist")
 anomaly <- FALSE
 threshold <- 40000
@@ -23,8 +23,8 @@ fp_covars <- "./Env_Covars"
 fp_out <- "~/Desktop/Calanus_Project/projects/calanus4whales/Models"
 
 # ---- Initialize dataset ----
-dataset <- c("CPR", "NOAA_CPR")
-biomod_dataset <- "Ecomon"
+datasets <- c("CPR", "NOAA_CPR")
+biomod_dataset <- "ECOMON"
 
 # ---- Initialize data formatting options ----
 format_data <- FALSE
@@ -32,7 +32,7 @@ fp_zpd <- NULL
 
 # ---- Initialize yaml parameters ----
 x <- list(version = version, species = species, env_covars = env_covars, anomaly = anomaly, threshold = threshold, years = years, 
-         fp_md = fp_md, dataset = dataset, biomod_dataset = biomod_dataset, fp_covars = fp_covars,
+         fp_md = fp_md, datasets = datasets, biomod_dataset = biomod_dataset, fp_covars = fp_covars,
          fp_out = fp_out, format_data = format_data, fp_zpd = fp_zpd)
 
 # ---- Create directory ----

@@ -10,7 +10,7 @@ params:
   env_covars: c("sst")
   threshold: "40,000"
   years: "2000:2017"
-  dataset: "CPR"
+  datasets: "CPR"
   biomod_dataset: "Ecomon"
 title: "`r params$set_title`"
   
@@ -28,7 +28,7 @@ library(gridExtra)
 
 ## Summary
 
-Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$dataset`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_dataset`` dataset(s).  If the model is an anomaly, all datasets are used.  
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$datasets`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_datasets`` dataset(s).  If the model is an anomaly, all datasets are used.  
 
 ## Climatologies
 
