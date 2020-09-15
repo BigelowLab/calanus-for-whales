@@ -20,7 +20,7 @@ require(pals)
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
-compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
+compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "cfin") {
   
   # -------- Create output directories --------
   dir.create(fp_out, showWarnings = FALSE) 
@@ -113,6 +113,7 @@ compile_abund_vs_pred <- function(version, fp_out, years, species = "cfin") {
       xlab("Actual Value") +
       ylim(c(0,1)) +
       xlim(c(0,5)) +
+      geom_vline(xintercept = log10(threshold + 1)) +
       guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black")) +
