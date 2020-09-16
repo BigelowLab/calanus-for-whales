@@ -69,13 +69,16 @@ compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "
   
   # -------- Write data to CSV --------
   gam_full_data <- gam_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "gam_compiled_abund_vs_pred.csv"))
+    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "gam_compiled_abund_vs_pred.csv")) %>%
+    count(abund, pred)
   
   brt_full_data <- brt_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "brt_compiled_abund_vs_pred.csv"))
+    readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "brt_compiled_abund_vs_pred.csv")) %>%
+    count(abund, pred)
   
   biomod_full_data <- biomod_full_data %>% 
-    readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Projections", "biomod_compiled_abund_vs_pred.csv"))
+    readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Projections", "biomod_compiled_abund_vs_pred.csv")) %>%
+    dplyr::count(abund, pred)
   
   # -------- Plot actual vs. predicted --------
   for (i in 1:12) {
@@ -106,7 +109,7 @@ compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "
       ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("brt_abund_vs_pred_", i, ".png")))
     
     # ---- Biomod ensemble ----
-    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = log10(abund + 1), y = pred, color = as.factor(year)), alpha = 0.01) +
+    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = log10(abund + 1), y = pred, color = as.factor(count)), alpha = 0.01) +
       geom_point() +
       scale_color_viridis(name = "Year", discrete=TRUE) +
       ylab("Predicted value") +
