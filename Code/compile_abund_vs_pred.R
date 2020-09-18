@@ -70,54 +70,52 @@ compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "
   # -------- Write data to CSV --------
   gam_full_data <- gam_full_data %>% 
     readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "gam_compiled_abund_vs_pred.csv")) %>%
-    dplyr::count(abund, pred)
+    dplyr::count(abund, pred, month)
   
   brt_full_data <- brt_full_data %>% 
     readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Projections", "brt_compiled_abund_vs_pred.csv")) %>%
-    dplyr::count(abund, pred)
+    dplyr::count(abund, pred, month)
   
   biomod_full_data <- biomod_full_data %>% 
     readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Projections", "biomod_compiled_abund_vs_pred.csv")) %>%
-    dplyr::count(abund, pred)
+    dplyr::count(abund, pred, month) %>%
+    dplyr::mutate(n = log10(n + 1))
   
   # -------- Plot actual vs. predicted --------
   for (i in 1:12) {
     # ---- GAMs ----
-    ggplot(gam_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = as.factor(n)), alpha = 0.01) +
+    ggplot(gam_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = n), alpha = 0.01) +
       geom_point() +
-      scale_color_viridis(name = "Year", discrete=TRUE) +
+      scale_color_viridis(name = "Count") +
       ylab("Predicted value") +
       xlab("Actual Value") +
       ylim(c(0,5)) +
       xlim(c(0,5)) +
-      guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black")) +
       ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("gam_abund_vs_pred_", i, ".png")))
   
     # ---- BRTs ----
-    ggplot(brt_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = as.factor(n)), alpha = 0.01) +
+    ggplot(brt_full_data %>% dplyr::filter(month == i), aes(x = abund, y = pred, color = n), alpha = 0.01) +
       geom_point() +
-      scale_color_viridis(name = "Year", discrete=TRUE) +
+      scale_color_viridis(name = "Year") +
       ylab("Predicted value") +
       xlab("Actual Value") +
       ylim(c(0,5)) +
       xlim(c(0,5)) +
-      guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black")) +
       ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("brt_abund_vs_pred_", i, ".png")))
     
     # ---- Biomod ensemble ----
-    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = log10(abund + 1), y = pred, color = as.factor(n)), alpha = 0.01) +
+    ggplot(biomod_full_data %>% dplyr::filter(month == i), aes(x = log10(abund + 1), y = pred, color = n), alpha = 0.01) +
       geom_point() +
-      scale_color_viridis(name = "Year", discrete=TRUE) +
+      scale_color_viridis(name = "Count") +
       ylab("Predicted value") +
       xlab("Actual Value") +
       ylim(c(0,1)) +
       xlim(c(0,5)) +
       geom_vline(xintercept = log10(threshold + 1)) +
-      guides(color=guide_legend(ncol=2)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black")) +
       ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("biomod_abund_vs_pred_", i, ".png")))
