@@ -115,7 +115,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in years) {
+  for (i in 2008:2017) {
     # ------- Loop over months --------
     for (j in 1:12) {
       # -------- Isolate month data --------

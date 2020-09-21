@@ -69,6 +69,9 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
     }
   }
   
+  temp= md %>% group_by(month, year) %>% summarise(mean = mean(sst))
+  plot(temp$month, temp$mean)
+  
   # -------- Compute anomaly --------
   if (species == "cfin") {
     md <- md %>% dplyr::group_by(dataset) %>%

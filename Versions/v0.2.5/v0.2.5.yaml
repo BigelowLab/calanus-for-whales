@@ -28,10 +28,10 @@ years:
 - 2016
 - 2017
 fp_md: ./calanus_data/Data/Databases/zooplankton_covar_data
-dataset:
+datasets:
 - CPR
 - NOAA_CPR
-biomod_dataset: Ecomon
+biomod_dataset: ECOMON
 fp_covars: ./Env_Covars
 fp_out: ~/Desktop/Calanus_Project/projects/calanus4whales/Models
 format_data: no

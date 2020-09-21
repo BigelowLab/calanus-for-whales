@@ -7,13 +7,11 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.6"
-species <- c("cfin", "ctyp", "pseudo")[1]
-env_covars <- c("sst", "chl", "bat", "sss", "wind",
-                "lag_sst", "int_chl", "slope",
-                "bott", "bots", "dist")
+version <- "v0.2.5"
+species <- c("cfin", "ctyp", "pseudo")[2]
+env_covars <- c("sst", "chl", "bat", "sss", "wind")
 anomaly <- FALSE
-threshold <- 40000
+threshold <- 1000
 years <- 2000:2017
 
 # ---- Initialize relative filepaths ----
