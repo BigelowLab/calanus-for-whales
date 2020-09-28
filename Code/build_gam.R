@@ -151,7 +151,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       
       # -------- Get AIC --------
       write.table(gam_sdm$aic, file = file.path(fp_out, species, version, "GAMs", "Evals", paste0("AIC_", i, "_", j, ".csv")))
-        
+
       # -------- Load environmental covariates for projection --------
       covars <- load_covars(fp_covars = fp_covars, year = i, month = j,
                             env_covars = env_covars,

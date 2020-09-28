@@ -86,7 +86,7 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
       min_val <- -2
     } else {
       color_scale <- inferno(500)
-      max_val <- 5
+      max_val <- 9
       min_val <- 0
       # Zero out negative values
       gam_clim[gam_clim < 0] <- 0
