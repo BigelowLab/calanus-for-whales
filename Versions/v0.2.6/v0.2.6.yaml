@@ -1,13 +1,19 @@
 version: v0.2.6
-species: pseudo
+species: cfin
 env_covars:
 - sst
 - chl
 - bat
 - sss
 - wind
+- bots
+- bott
+- int_chl
+- lag_sst
+- slope
+- dist
 anomaly: no
-threshold: 10000.0
+threshold: 40000.0
 years:
 - 2000
 - 2001
