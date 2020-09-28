@@ -7,7 +7,7 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.6"
+version <- "v0.2.7"
 species <- c("cfin", "ctyp", "pseudo")[3]
 env_covars <- c("sst", "chl", "bat", "sss", "wind")
 anomaly <- FALSE
