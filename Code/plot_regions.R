@@ -542,7 +542,7 @@ plot_regions <- function(version, fp_out, species = "cfin") {
   
   # -------- Load projections -------
   for (i in 1:12) {
-    for (j in 2000:2017) {
+    for (j in years) {
       # -------- Test if projection exists --------
       if (paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
           paste0("proj_", j, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {

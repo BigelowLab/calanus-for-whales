@@ -28,7 +28,7 @@ library(gridExtra)
 
 ## Summary
 
-Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$datasets`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_datasets`` dataset(s).  If the model is an anomaly, all datasets are used.  
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$datasets`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_dataset`` dataset(s).  If the model is an anomaly, all datasets are used.  
 
 ## Climatologies
 
@@ -172,35 +172,39 @@ Monthly ensemble Biomod2 projections are displayed below for the months of May, 
 ```{r display_biomod_april, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+files <- list.files(fp)
 
 # Load images
-ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_4.png"))
-ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_4.png"))
-ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_4.png"))
-ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_4.png"))
-ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_4.png"))
-ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_4.png"))
-ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_4.png"))
-ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_4.png"))
-ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_4.png"))
-ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_4.png"))
-ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_4.png"))
-ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_4.png"))
-ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_4.png"))
-ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_4.png"))
-ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_4.png"))
-ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_4.png"))
-ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_4.png"))
-ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_4.png"))
+if ("ensemble_proj_2002_4.png" %in% files) {
+  ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_4.png"))
+  ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_4.png"))
+  ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_4.png"))
+  ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_4.png"))
+  ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_4.png"))
+  ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_4.png"))
+  ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_4.png"))
+  ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_4.png"))
+  ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_4.png"))
+  ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_4.png"))
+  ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_4.png"))
+  ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_4.png"))
+  ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_4.png"))
+  ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_4.png"))
+  ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_4.png"))
+  ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_4.png"))
+  ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_4.png"))
+  ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_4.png"))
+  
+  # Arrange grid
+  grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+               rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+               rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+               rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+               rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+               rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+               ncol=3)
+}
 
-# Arrange grid
-grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
-             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
-             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
-             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
-             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
-             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-             ncol=3)
 ```
 
 **Figure 5.** Ensemble projections for the month of April over ``r params$years``.
@@ -326,33 +330,34 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
 
 # Load images
-ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_9.png"))
-ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_9.png"))
-ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_9.png"))
-ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_9.png"))
-ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_9.png"))
-ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_9.png"))
-ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_9.png"))
-ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_9.png"))
-ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_9.png"))
-ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_9.png"))
-ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_9.png"))
-ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_9.png"))
-ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_9.png"))
-ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_9.png"))
-ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_9.png"))
-ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_9.png"))
-ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_9.png"))
-ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_9.png"))
+  ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_9.png"))
+  ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_9.png"))
+  ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_9.png"))
+  ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_9.png"))
+  ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_9.png"))
+  ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_9.png"))
+  ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_9.png"))
+  ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_9.png"))
+  ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_9.png"))
+  ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_9.png"))
+  ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_9.png"))
+  ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_9.png"))
+  ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_9.png"))
+  ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_9.png"))
+  ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_9.png"))
+  ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_9.png"))
+  ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_9.png"))
+  ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_9.png"))
+  
+  # Arrange grid
+  grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+               rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+               rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+               rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+               rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+               rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+               ncol=3)
 
-# Arrange grid
-grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
-             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
-             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
-             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
-             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
-             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-             ncol=3)
 ```
 
 **Figure 9.** Ensemble projections for the month of September over ``r params$years``.

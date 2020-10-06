@@ -115,9 +115,9 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in years){
+  for (i in 2002){
     # ------- Loop over months --------
-    for (j in 1:12) {
+    for (j in 6:9) {
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
     
@@ -264,7 +264,8 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
         # Add projection color gradient and label
         scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
         labs(x = "", 
-             y = "") +
+             y = "",
+             fill = "Probability") +
         # Add world map data
         geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
         coord_quickmap(xlim = c(round(min(ensemble_proj_df$x)), round(max(ensemble_proj_df$x))), 

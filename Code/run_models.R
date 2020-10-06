@@ -17,7 +17,7 @@ source("./calanus-for-whales/Code/plot_regions.R")
 source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
 # ---- Read in config file ----
-config <- read_yaml("./calanus-for-whales/Versions/v0.2.7/v0.2.7.yaml")
+config <- read_yaml("./calanus-for-whales/Versions/v0.2.4/v0.2.4.yaml")
 
 # ---- Build GAM ----
 build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
@@ -46,7 +46,7 @@ compile_evals(version = config$version, fp_out = config$fp_out, years = config$y
               anomaly = config$anomaly)
 
 # ---- Create region-specific actual vs. predicted plots ----
-plot_regions(version = config$version, fp_out = config$fp_out, species = config$species)
+plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
 
 # ---- Compile actual vs. predicted values ----
 compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
