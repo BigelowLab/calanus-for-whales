@@ -627,6 +627,77 @@ if ("GBK_brt_abund_pred_annual.png" %in% files) {
 
 ## Actual abundance vs. predicted probability of suitability
 
+For the mgcv GAM and gbm BRT models, the logged actual abundance of ``r params$species`` was plotted against the logged predicted abundance.
+
+### GAM
+
+```{r gam_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load region plots
+gam1 <- readPNG(file.path(fp, "gam_abund_vs_pred_1.png"))
+gam2 <- readPNG(file.path(fp, "gam_abund_vs_pred_2.png"))
+gam3 <- readPNG(file.path(fp, "gam_abund_vs_pred_3.png"))
+gam4 <- readPNG(file.path(fp, "gam_abund_vs_pred_4.png"))
+gam5 <- readPNG(file.path(fp, "gam_abund_vs_pred_5.png"))
+gam6 <- readPNG(file.path(fp, "gam_abund_vs_pred_6.png"))
+gam7 <- readPNG(file.path(fp, "gam_abund_vs_pred_7.png"))
+gam8 <- readPNG(file.path(fp, "gam_abund_vs_pred_8.png"))
+gam9 <- readPNG(file.path(fp, "gam_abund_vs_pred_9.png"))
+gam10 <- readPNG(file.path(fp, "gam_abund_vs_pred_10.png"))
+gam11 <- readPNG(file.path(fp, "gam_abund_vs_pred_11.png"))
+gam12 <- readPNG(file.path(fp, "gam_abund_vs_pred_12.png"))
+
+
+# Arrange grid
+grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
+             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
+             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
+             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
+             ncol=3)
+
+```
+
+**Figure 20.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+
+### BRT
+
+
+```{r brt_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load region plots
+brt1 <- readPNG(file.path(fp, "brt_abund_vs_pred_1.png"))
+brt2 <- readPNG(file.path(fp, "brt_abund_vs_pred_2.png"))
+brt3 <- readPNG(file.path(fp, "brt_abund_vs_pred_3.png"))
+brt4 <- readPNG(file.path(fp, "brt_abund_vs_pred_4.png"))
+brt5 <- readPNG(file.path(fp, "brt_abund_vs_pred_5.png"))
+brt6 <- readPNG(file.path(fp, "brt_abund_vs_pred_6.png"))
+brt7 <- readPNG(file.path(fp, "brt_abund_vs_pred_7.png"))
+brt8 <- readPNG(file.path(fp, "brt_abund_vs_pred_8.png"))
+brt9 <- readPNG(file.path(fp, "brt_abund_vs_pred_9.png"))
+brt10 <- readPNG(file.path(fp, "brt_abund_vs_pred_10.png"))
+brt11 <- readPNG(file.path(fp, "brt_abund_vs_pred_11.png"))
+brt12 <- readPNG(file.path(fp, "brt_abund_vs_pred_12.png"))
+
+
+# Arrange grid
+grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
+             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
+             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
+             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
+             ncol=3)
+
+```
+
+**Figure 21.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+
+### Biomod ensemble
+
 For the biomod ensemble models, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Above the threshold of ``r params$threshold``, the probability of suitability tends to increase.  Below the threshold, the probability of suitability tends to be zero.  
 
 
@@ -661,4 +732,4 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 ```
 
-**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
+**Figure 22.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
