@@ -75,15 +75,15 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       dplyr::ungroup()
   } else if (species == "ctyp") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`ctyp_adult` + 1), na.rm = TRUE),
-                    sd = sd(log10(`ctyp_adult` + 1), na.rm = TRUE),
-                    anomaly = (log10(`ctyp_adult` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "pseudo") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_adult` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_adult` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_adult` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -91,9 +91,9 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   if (species == "cfin") {
     md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
   } else if (species == "ctyp") {
-    md$abund <- as.data.frame(md[paste0(species, "_adult")])$ctyp_adult
+    md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
   } else if (species == "pseudo") {
-    md$abund <- as.data.frame(md[paste0(species, "_adult")])$pseudo_adult
+    md$abund <- as.data.frame(md[paste0(species, "_total")])$pseudo_total
   }
   
   # -------- Exclude NAs and select columns --------

@@ -78,15 +78,15 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       dplyr::ungroup()
   } else if (species == "ctyp") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`ctyp_adult` + 1), na.rm = TRUE),
-                    sd = sd(log10(`ctyp_adult` + 1), na.rm = TRUE),
-                    anomaly = (log10(`ctyp_adult` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "pseudo") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_adult` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_adult` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_adult` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -97,9 +97,9 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
     if (species == "cfin") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
     } else if (species == "ctyp") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_adult")] + 1))$ctyp_adult
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
     } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_adult")] + 1))$pseudo_adult
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
     }
   }
   

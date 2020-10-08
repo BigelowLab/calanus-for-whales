@@ -92,7 +92,8 @@ compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "
       ylim(c(0,5)) +
       xlim(c(0,5)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.position = "none") +
       ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("gam_abund_vs_pred_", i, ".png")))
   
     # ---- BRTs ----
@@ -104,7 +105,8 @@ compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "
       ylim(c(0,5)) +
       xlim(c(0,5)) +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-            panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.position = "none") +
       ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Plots", paste0("brt_abund_vs_pred_", i, ".png")))
     
     # ---- Biomod ensemble ----
