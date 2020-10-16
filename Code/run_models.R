@@ -16,50 +16,56 @@ source("./calanus-for-whales/Code/compile_evals.R")
 source("./calanus-for-whales/Code/plot_regions.R")
 source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
-# ---- Read in config file ----
-config <- read_yaml("./calanus-for-whales/Versions/v0.2.7/v0.2.7.yaml")
+# Function to run all models and analysis and build report
+#'@param config <chr> name of .yaml file with model configuration information
+run_models(config) {
 
-# ---- Build GAM ----
-build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-          years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
-          format_data = config$format_data, fp_zpd = config$fp_zpd)
-
-# ---- Build BRT ----
-build_brt(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-          years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
-          format_data = config$format_data, fp_zpd = config$fp_zpd)
-
-# ---- Build Biomod2 models ----
-build_biomod(version = config$version, fp_md = config$fp_md, biomod_dataset = config$biomod_dataset, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-             years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold,
-             format_data = config$format_data, fp_zpd = config$fp_zpd)
-
-# ---- Build climatology ----
-build_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
-                  anomaly = config$anomaly)
-
-# ---- Build biomod2 ensemble climatology ----
-build_biomod_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species)
-
-# ---- Compile evaluations ----
-compile_evals(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
-              anomaly = config$anomaly)
-
-# ---- Create region-specific actual vs. predicted plots ----
-plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
-
-# ---- Compile actual vs. predicted values ----
-compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
-
-# ---- Render model summary ----
-rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
-                  output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", config$version, paste0(config$version, ".html")),
-                  params = list(set_title = config$version,
-                                fp_out = config$fp_out,
-                                species = config$species,
-                                version = config$version,
-                                env_covars = config$env_covars,
-                                threshold = config$threshold,
-                                years = config$years,
-                                datasets = config$datasets,
-                                biomod_dataset = config$biomod_dataset))
+  # ---- Read in config file ----
+  config <- read_yaml(file.path("./calanus-for-whales/Versions", config, paste0(config, ".yaml")))
+  
+  # ---- Build GAM ----
+  build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+            years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
+            format_data = config$format_data, fp_zpd = config$fp_zpd)
+  
+  # ---- Build BRT ----
+  build_brt(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+            years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
+            format_data = config$format_data, fp_zpd = config$fp_zpd)
+  
+  # ---- Build Biomod2 models ----
+  build_biomod(version = config$version, fp_md = config$fp_md, biomod_dataset = config$biomod_dataset, fp_covars = config$fp_covars, env_covars = config$env_covars, 
+               years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold,
+               format_data = config$format_data, fp_zpd = config$fp_zpd)
+  
+  # ---- Build climatology ----
+  build_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
+                    anomaly = config$anomaly)
+  
+  # ---- Build biomod2 ensemble climatology ----
+  build_biomod_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species)
+  
+  # ---- Compile evaluations ----
+  compile_evals(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
+                anomaly = config$anomaly)
+  
+  # ---- Create region-specific actual vs. predicted plots ----
+  plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
+  
+  # ---- Compile actual vs. predicted values ----
+  compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
+  
+  # ---- Render model summary ----
+  rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
+                    output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", config$version, paste0(config$version, ".html")),
+                    params = list(set_title = config$version,
+                                  fp_out = config$fp_out,
+                                  species = config$species,
+                                  version = config$version,
+                                  env_covars = config$env_covars,
+                                  threshold = config$threshold,
+                                  years = config$years,
+                                  datasets = config$datasets,
+                                  biomod_dataset = config$biomod_dataset))
+  
+}
