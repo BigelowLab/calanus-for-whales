@@ -17,7 +17,7 @@ source("./calanus-for-whales/Code/plot_regions.R")
 source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
 # ---- Read in config file ----
-config <- read_yaml("./calanus-for-whales/Versions/v0.2.5/v0.2.5.yaml")
+config <- read_yaml("./calanus-for-whales/Versions/v0.2.7/v0.2.7.yaml")
 
 # ---- Build GAM ----
 build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
