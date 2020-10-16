@@ -18,10 +18,10 @@ source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
 
 # Function to run all models and analysis and build report
 #'@param config <chr> name of .yaml file with model configuration information
-run_models <- function(config) {
+run_models <- function(version) {
 
   # ---- Read in config file ----
-  config <- read_yaml(file.path("./calanus-for-whales/Versions", config, paste0(config, ".yaml")))
+  config <- read_yaml(file.path("./calanus-for-whales/Versions", version, paste0(version, ".yaml")))
   
   # ---- Build GAM ----
   build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
