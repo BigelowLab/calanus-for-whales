@@ -1,0 +1,7 @@
+Species: Centropages typical
+Covariates: wind, sst, chl, bat, sss
+Threshold: 10,000
+
+Notes:
+Initial ctyp run
+Covariates and threshold selected based on Nick's suggestion
