@@ -117,7 +117,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   # -------- Loop over years --------
   for (i in 2002){
     # ------- Loop over months --------
-    for (j in 6:9) {
+    for (j in 8:9) {
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
     

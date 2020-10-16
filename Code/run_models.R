@@ -63,4 +63,3 @@ rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for
                                 years = config$years,
                                 datasets = config$datasets,
                                 biomod_dataset = config$biomod_dataset))
-

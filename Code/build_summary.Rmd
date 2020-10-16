@@ -472,36 +472,36 @@ if ("GBK_gam_abund_pred_climatological.png" %in% files) {
 #### Monthly average time series
 
 ```{r gam_monthly, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "GAMs", "Plots")
-
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
-
-if ("GBK_gam_abund_pred_monthly.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
-
-
-# Arrange grid
-if ("GBK_gam_abund_pred_monthly.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
+# # Initialize filepath
+# fp <- file.path(params$fp_out, params$species, params$version, "GAMs", "Plots")
+# 
+# # Load filenames
+# files <- list.files(fp)
+# 
+# # Load region plots
+# mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
+# 
+# if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+#   gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
+# }
+# 
+# gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
+# 
+# 
+# # Arrange grid
+# if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+#   grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+#               ncol=3)
+# } else {
+#   grid.arrange(rasterGrob(mab), rasterGrob(gom),
+#               ncol=2)
+# }
 
 ```
 
 **Figure 15.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
-#### Monthly average time series
+#### Annual average time series
 
 ```{r gam_annual, echo=FALSE}
 # Load filenames
@@ -567,36 +567,36 @@ if ("GBK_brt_abund_pred_climatological.png" %in% files) {
 #### Monthly average time series
 
 ```{r brt_monthly, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "BRTs", "Plots")
-
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
-
-if ("GBK_brt_abund_pred_monthly.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
-
-
-# Arrange grid
-if ("GBK_brt_abund_pred_monthly.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
+# # Initialize filepath
+# fp <- file.path(params$fp_out, params$species, params$version, "BRTs", "Plots")
+# 
+# # Load filenames
+# files <- list.files(fp)
+# 
+# # Load region plots
+# mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
+# 
+# if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+#   gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
+# }
+# 
+# gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
+# 
+# 
+# # Arrange grid
+# if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+#   grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+#               ncol=3)
+# } else {
+#   grid.arrange(rasterGrob(mab), rasterGrob(gom),
+#               ncol=2)
+# }
 
 ```
 
 **Figure 18.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
-#### Monthly average time series
+#### Annual average time series
 
 ```{r brt_annual, echo=FALSE}
 # Load filenames

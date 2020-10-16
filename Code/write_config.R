@@ -7,8 +7,8 @@ library(yaml)
 
 # ---- Initialize parameters ----
 
-version <- "v0.2.5"
-species <- c("cfin", "ctyp", "pseudo")[2]
+version <- "v0.2.7"
+species <- c("cfin", "ctyp", "pseudo")[3]
 env_covars <- c("sst", "chl", "bat", "sss", "wind")
 anomaly <- FALSE
 threshold <- 10000

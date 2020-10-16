@@ -385,7 +385,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "MAB_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "GAMs", "Plots"))
+      ggsave(filename = "MAB_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
     # ---- BRTs ----
     ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
@@ -400,7 +400,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "MAB_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "BRTs", "Plots"))
+      ggsave(filename = "MAB_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
   }
   
@@ -419,7 +419,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "GBK_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "GAMs", "Plots"))
+      ggsave(filename = "GBK_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
     # ---- BRTs ----
     ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
@@ -434,7 +434,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "GBK_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "BRTs", "Plots"))
+      ggsave(filename = "GBK_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
   }
   
@@ -453,7 +453,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "GOM_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "GAMs", "Plots"))
+      ggsave(filename = "GOM_gam_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
     # ---- BRTs ----
     ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
@@ -468,7 +468,7 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) +
-      ggsave(filename = "GOM_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "BRTs", "Plots"))
+      ggsave(filename = "GOM_brt_abund_pred_annual.png", path = file.path(fp_out, species, version, "Climatologies", "Plots"))
     
   }
   
