@@ -107,7 +107,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
-```{r display_biomod_gam, echo=FALSE}
+```{r display_biomod_brt, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
 
@@ -141,7 +141,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 
 The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
-```{r display_biomod_gam, echo=FALSE}
+```{r display_biomod_rf, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
 
@@ -405,6 +405,70 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
 ```
 
 **Figure 9.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+#### BRT evaluations
+
+```{r brt_biomod_evals, echo=FALSE}
+# Load evals
+auc <- readPNG(file.path(fp, "brt_auc.png"))
+tss <- readPNG(file.path(fp, "brt_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 9.** Biomod BRT evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+
+#### RF evaluations
+
+```{r rf_biomod_evals, echo=FALSE}
+# Load evals
+auc <- readPNG(file.path(fp, "rf_auc.png"))
+tss <- readPNG(file.path(fp, "rf_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 9.** Biomod RF evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+### Variable contribution
+
+#### GAM variable contribution
+
+```{r gam_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "gam_var_contribution.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
+
+#### BRT variable contribution
+
+```{r brt_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "brt_var_contribution.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
+
+#### RF variable contribution
+
+```{r rf_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "rf_var_contribution.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
 
 ### Actual abundance vs. predicted probability of suitability
 
