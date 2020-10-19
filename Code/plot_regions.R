@@ -11,7 +11,7 @@ require(dplyr)
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 plot_regions <- function(version, fp_out, datasets, species = "cfin") {
   
   # -------- Create output directories --------
@@ -53,11 +53,11 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pseudo") {
+  } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -69,8 +69,8 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
-    } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
+    } else if (species == "pcal") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
     }
   }
   
@@ -277,11 +277,11 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pseudo") {
+  } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -293,8 +293,8 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
-    } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
+    } else if (species == "pcal") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
     }
   }
   
@@ -504,11 +504,11 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pseudo") {
+  } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -520,8 +520,8 @@ plot_regions <- function(version, fp_out, datasets, species = "cfin") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
-    } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
+    } else if (species == "pcal") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
     }
   }
   

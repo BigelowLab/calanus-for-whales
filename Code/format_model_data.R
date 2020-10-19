@@ -62,19 +62,19 @@ format_model_data <- function(fp_data, fp_covars, fp_out,
           # Add presence absence values
           dplyr::mutate(cfin_pa = dplyr::if_else(is.na(cfin_total), 0, 1),
                         ctyp_pa = dplyr::if_else(is.na(ctyp_total), 0, 1),
-                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1))
+                        pcal_pa = dplyr::if_else(is.na(pcal_total), 0, 1))
       } else {
         # Join zooplankton data and covariates
         temp_data <- dplyr::left_join(month_data, covars, by  = c("lon", "lat")) %>%
           # Add presence absence values
           dplyr::mutate(cfin_pa = dplyr::if_else(is.na(cfin_total), 0, 1),
                         ctyp_pa = dplyr::if_else(is.na(ctyp_total), 0, 1),
-                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1))
+                        pcal_pa = dplyr::if_else(is.na(pcal_total), 0, 1))
         # Bind temporary and full dataframes
         full_data <- rbind(full_data, temp_data)
       }
       # Keep only one entry for each latitude and longitude
-      full_data <- full_data %>% distinct(lon, lat, cfin_total, ctyp_total, pseudo_total, .keep_all = TRUE)
+      full_data <- full_data %>% distinct(lon, lat, cfin_total, ctyp_total, pcal_total, .keep_all = TRUE)
     }
     # Write year data to CSV
     readr::write_csv(x = full_data, path = file.path(fp_out, paste0(i, ".csv")))

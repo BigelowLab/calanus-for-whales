@@ -22,7 +22,7 @@ source("./calanus_data/Code/bind_years.R")
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_md <chr> file path to formatted data used in model
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 #'@param fp_covars <chr> file path to environmental covariate data
 #'@param env_covars <vector> vector of covariates to include in the model
 #'@param years <vectors> years for which to run the model

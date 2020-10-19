@@ -28,7 +28,7 @@ source("./calanus_data/Code/bind_years.R")
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_md <chr> file path to formatted data used in model
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 #'@param fp_covars <chr> file path to environmental covariate data
 #'@param env_covars <vector> vector of covariates to include in the model
 #'@param years <vectors> years for which to run the model
@@ -79,11 +79,11 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pseudo") {
+  } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -92,8 +92,8 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
     md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
   } else if (species == "ctyp") {
     md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
-  } else if (species == "pseudo") {
-    md$abund <- as.data.frame(md[paste0(species, "_total")])$pseudo_total
+  } else if (species == "pcal") {
+    md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
   }
   
   # -------- Exclude NAs and select columns --------
@@ -115,9 +115,9 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in 2002){
+  for (i in years){
     # ------- Loop over months --------
-    for (j in 8:9) {
+    for (j in 1:12) {
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
     

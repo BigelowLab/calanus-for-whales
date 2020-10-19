@@ -26,7 +26,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param env_covars <vector> vector of covariates to include in the model
 #'@param years <vectors> years for which to run the model
 #'@param fp_out <chr> file path save the data to 
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 #'@param anomaly <logical> if true, model is run using calanus anomaly
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
@@ -82,11 +82,11 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pseudo") {
+  } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -98,8 +98,8 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
-    } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
+    } else if (species == "pcal") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
     }
   }
   

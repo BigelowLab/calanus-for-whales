@@ -19,7 +19,7 @@ require(pals)
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 compile_abund_vs_pred <- function(version, fp_out, threshold, years, species = "cfin") {
   
   # -------- Create output directories --------
