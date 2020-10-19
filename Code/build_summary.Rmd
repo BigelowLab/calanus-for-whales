@@ -4,6 +4,7 @@ date: "8/17/2020"
 output:
   html_document:
     toc: true
+    toc_float: true
 params:
   set_title: "v0.2.3"
   fp_out: "./calanus_for_whales/Versions"
@@ -738,6 +739,9 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 ### Evaluations
 
 ```{r brt_evals, echo=FALSE}
+# Initialize file path
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Evals")
+
 # Load evals
 rmse <- readPNG(file.path(fp, "brt_rmse.png"))
 rsq <- readPNG(file.path(fp, "brt_rsq.png"))
