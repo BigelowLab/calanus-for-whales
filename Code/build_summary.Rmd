@@ -2,6 +2,7 @@
 author: "Camille Ross"
 date: "8/17/2020"
 output: html_document
+  toc: TRUE
 params:
   set_title: "v0.2.3"
   fp_out: "./calanus_for_whales/Versions"
@@ -30,74 +31,13 @@ library(gridExtra)
 
 Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The mgvc GAMs and the gbm BRTs were run using the ``r params$datasets`` dataset(s).  The Biomod2 models were run using the ``r params$biomod_dataset`` dataset(s).  If the model is an anomaly, all datasets are used.  
 
-## Climatologies
+## Biomod: right whale feeding threshold models
 
-### GAM Climatology
+### Climatologies
 
-The generalized additive models (GAMs) were run using the mgcv package and were used to model ``r params$species`` abundances.  
+#### Biomod Ensemble Climatology
 
-```{r display_GAM, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
-
-# Load images
-gam1 <- readPNG(file.path(fp, "gam_proj_1.png"))
-gam2 <- readPNG(file.path(fp, "gam_proj_2.png"))
-gam3 <- readPNG(file.path(fp, "gam_proj_3.png"))
-gam4 <- readPNG(file.path(fp, "gam_proj_4.png"))
-gam5 <- readPNG(file.path(fp, "gam_proj_5.png"))
-gam6 <- readPNG(file.path(fp, "gam_proj_6.png"))
-gam7 <- readPNG(file.path(fp, "gam_proj_7.png"))
-gam8 <- readPNG(file.path(fp, "gam_proj_8.png"))
-gam9 <- readPNG(file.path(fp, "gam_proj_9.png"))
-gam10 <- readPNG(file.path(fp, "gam_proj_10.png"))
-gam11 <- readPNG(file.path(fp, "gam_proj_11.png"))
-gam12 <- readPNG(file.path(fp, "gam_proj_12.png"))
-
-# Arrange grid
-grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
-             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
-             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
-             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
-             ncol=3)
-
-
-```
-
-**Figure 1.** Monthly climatological GAM projections.  The climatology was created by averaging together the projections from 2000 to 2017.
-
-### BRT Climatology
-
-The boosted regression tree (BRT) models were run using the gbm package and used to model ``r params$species`` abundances. 
-
-```{r display_BRT, echo=FALSE}
-# Load images
-brt1 <- readPNG(file.path(fp, "brt_proj_1.png"))
-brt2 <- readPNG(file.path(fp, "brt_proj_2.png"))
-brt3 <- readPNG(file.path(fp, "brt_proj_3.png"))
-brt4 <- readPNG(file.path(fp, "brt_proj_4.png"))
-brt5 <- readPNG(file.path(fp, "brt_proj_5.png"))
-brt6 <- readPNG(file.path(fp, "brt_proj_6.png"))
-brt7 <- readPNG(file.path(fp, "brt_proj_7.png"))
-brt8 <- readPNG(file.path(fp, "brt_proj_8.png"))
-brt9 <- readPNG(file.path(fp, "brt_proj_9.png"))
-brt10 <- readPNG(file.path(fp, "brt_proj_10.png"))
-brt11 <- readPNG(file.path(fp, "brt_proj_11.png"))
-brt12 <- readPNG(file.path(fp, "brt_proj_12.png"))
-
-# Arrange grid
-grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
-             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
-             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
-             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
-             ncol=3)
-```
-
-**Figure 2.** Monthly climatological BRT projections.  The climatology was created by averaging together the projections from 2000 to 2017.
-
-### Biomod Ensemble Climatology
-
-The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and random forests (RFs).  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
+The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and random forests (RFs).  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath
@@ -127,11 +67,11 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
 
 ```
 
-**Figure 3.** Monthly climatological ensemble projections of GAMs, BRTs, and random forests (RFs).  The climatology was created by averaging together the projections from 2000 to 2017.
+**Figure 1.** Monthly climatological ensemble projections of GAMs, BRTs, and random forests (RFs).  The climatology was created by averaging together the projections from 2000 to 2017.
 
-### Biomod GAM Climatology
+#### GAM Climatology
 
-The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
 ```{r display_biomod_gam, echo=FALSE}
 # Initialize filepath
@@ -161,13 +101,81 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 ```
 
-**Figure 4.** Monthly climatological GAM projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+**Figure 2.** Monthly climatological GAM projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
 
-## Monthly ensemble projections
+#### BRT Climatology
+
+The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
+
+```{r display_biomod_gam, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+brt1 <- readPNG(file.path(fp, "brt_proj_1.png"))
+brt2 <- readPNG(file.path(fp, "brt_proj_2.png"))
+brt3 <- readPNG(file.path(fp, "brt_proj_3.png"))
+brt4 <- readPNG(file.path(fp, "brt_proj_4.png"))
+brt5 <- readPNG(file.path(fp, "brt_proj_5.png"))
+brt6 <- readPNG(file.path(fp, "brt_proj_6.png"))
+brt7 <- readPNG(file.path(fp, "brt_proj_7.png"))
+brt8 <- readPNG(file.path(fp, "brt_proj_8.png"))
+brt9 <- readPNG(file.path(fp, "brt_proj_9.png"))
+brt10 <- readPNG(file.path(fp, "brt_proj_10.png"))
+brt11 <- readPNG(file.path(fp, "brt_proj_11.png"))
+brt12 <- readPNG(file.path(fp, "brt_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
+             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
+             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
+             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
+             ncol=3)
+
+
+```
+
+**Figure 3.** Monthly climatological BRT projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+#### RF Climatology
+
+The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
+
+```{r display_biomod_gam, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+rf1 <- readPNG(file.path(fp, "rf_proj_1.png"))
+rf2 <- readPNG(file.path(fp, "rf_proj_2.png"))
+rf3 <- readPNG(file.path(fp, "rf_proj_3.png"))
+rf4 <- readPNG(file.path(fp, "rf_proj_4.png"))
+rf5 <- readPNG(file.path(fp, "rf_proj_5.png"))
+rf6 <- readPNG(file.path(fp, "rf_proj_6.png"))
+rf7 <- readPNG(file.path(fp, "rf_proj_7.png"))
+rf8 <- readPNG(file.path(fp, "rf_proj_8.png"))
+rf9 <- readPNG(file.path(fp, "rf_proj_9.png"))
+rf10 <- readPNG(file.path(fp, "rf_proj_10.png"))
+rf11 <- readPNG(file.path(fp, "rf_proj_11.png"))
+rf12 <- readPNG(file.path(fp, "rf_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf1), rasterGrob(rf2), rasterGrob(rf3),
+             rasterGrob(rf4), rasterGrob(rf5), rasterGrob(rf6),
+             rasterGrob(rf7), rasterGrob(rf8), rasterGrob(rf9),
+             rasterGrob(rf10), rasterGrob(rf11), rasterGrob(rf12),
+             ncol=3)
+
+
+```
+
+**Figure 4.** Monthly climatological RF projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### Monthly ensemble projections
 
 Monthly ensemble Biomod2 projections are displayed below for the months of May, June, July, August, and September.
 
-### April
+#### April
 
 ```{r display_biomod_april, echo=FALSE}
 # Initialize filepath
@@ -207,9 +215,9 @@ if ("ensemble_proj_2002_4.png" %in% files) {
 
 ```
 
-**Figure 5.** Ensemble projections for the month of April over ``r params$years``.
+**Figure 3.** Ensemble projections for the month of April over ``r params$years``.
 
-### May
+#### May
 
 ```{r display_biomod_may, echo=FALSE}
 # Initialize filepath
@@ -245,9 +253,9 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 6.** Ensemble projections for the month of May over ``r params$years``.
+**Figure 4.** Ensemble projections for the month of May over ``r params$years``.
 
-### June
+#### June
 
 ```{r display_biomod_june, echo=FALSE}
 # Initialize filepath
@@ -283,9 +291,9 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 7.** Ensemble projections for the month of June over ``r params$years``.
+**Figure 5.** Ensemble projections for the month of June over ``r params$years``.
 
-### August
+#### August
 
 ```{r display_biomod_august, echo=FALSE}
 # Initialize filepath
@@ -321,9 +329,9 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 8.** Ensemble projections for the month of August over ``r params$years``.
+**Figure 6.** Ensemble projections for the month of August over ``r params$years``.
 
-### September
+#### September
 
 ```{r display_biomod_september, echo=FALSE}
 # Initialize filepath
@@ -360,47 +368,14 @@ fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots"
 
 ```
 
-**Figure 9.** Ensemble projections for the month of September over ``r params$years``.
+**Figure 7.** Ensemble projections for the month of September over ``r params$years``.
 
 
-## Evaluations
+### Evaluations
 
 Evaluation metrics differed based on the metrics available in each modeling package and compatible with each model object.  For the mgcv GAMs, Aikaike's Information Criterion (AIC), the root mean squared error (RMSE), and the R squared (RSQ) value when comparing the actual and predicted abundances were computed.  For the BRTs produced using the gbm package, RMSE and RSQ were computed.  For the biomod2 ensembles and GAMs, the area under the receiver operator characteristic curve (AUC) and the true skill statistic (TSS) were computed.  
 
-### GAM evaluations
-
-```{r gam_evals, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Evals")
-
-# Load evals
-aic <- readPNG(file.path(fp, "gam_aic.png"))
-rmse <- readPNG(file.path(fp, "gam_rmse.png"))
-rsq <- readPNG(file.path(fp, "gam_rsq.png"))
-
-# Arrange grid
-grid.arrange(rasterGrob(aic), rasterGrob(rmse), rasterGrob(rsq),
-             ncol=3)
-```
-
-**Figure 10.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
-
-
-### BRT evaluations
-
-```{r brt_evals, echo=FALSE}
-# Load evals
-rmse <- readPNG(file.path(fp, "brt_rmse.png"))
-rsq <- readPNG(file.path(fp, "brt_rsq.png"))
-
-# Arrange grid
-grid.arrange(rasterGrob(rmse), rasterGrob(rsq),
-             ncol=2)
-```
-
-**Figure 11.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
-
-### Biomod ensemble evaluations
+#### Ensemble evaluations
 
 ```{r ensemble_evals, echo=FALSE}
 # Initialize filepath
@@ -415,9 +390,9 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 12.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 8.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
 
-### Biomod GAM evaluations
+#### GAM evaluations
 
 ```{r gam_biomod_evals, echo=FALSE}
 # Load evals
@@ -429,274 +404,11 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 13.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 9.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
 
-## Regions 
+### Actual abundance vs. predicted probability of suitability
 
-The study area was divided into three regions, the MAB, GBK, and GOM.  For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted.  So far, this has only been done for the mgcv GAMs and gbm BRTs. 
-
-### GAM regions
-
-#### Climatological average
-
-```{r gam_clim, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
-
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_climatological.png"))
-
-if ("GBK_gam_abund_pred_climatological.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_climatological.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_climatological.png"))
-
-
-# Arrange grid
-if ("GBK_gam_abund_pred_climatological.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
-
-```
-
-**Figure 14.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-#### Monthly average time series
-
-```{r gam_monthly, echo=FALSE}
-# # Initialize filepath
-# fp <- file.path(params$fp_out, params$species, params$version, "GAMs", "Plots")
-# 
-# # Load filenames
-# files <- list.files(fp)
-# 
-# # Load region plots
-# mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
-# 
-# if ("GBK_gam_abund_pred_monthly.png" %in% files) {
-#   gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
-# }
-# 
-# gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
-# 
-# 
-# # Arrange grid
-# if ("GBK_gam_abund_pred_monthly.png" %in% files) {
-#   grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-#               ncol=3)
-# } else {
-#   grid.arrange(rasterGrob(mab), rasterGrob(gom),
-#               ncol=2)
-# }
-
-```
-
-**Figure 15.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-#### Annual average time series
-
-```{r gam_annual, echo=FALSE}
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_annual.png"))
-
-if ("GBK_gam_abund_pred_annual.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_annual.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_annual.png"))
-
-
-# Arrange grid
-if ("GBK_gam_abund_pred_annual.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
-
-```
-
-**Figure 16.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-### BRT regions
-
-#### Climatological average
-
-```{r brt_clim, echo=FALSE}
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
-
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_climatological.png"))
-
-if ("GBK_brt_abund_pred_climatological.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_climatological.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_climatological.png"))
-
-
-# Arrange grid
-if ("GBK_brt_abund_pred_climatological.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
-
-```
-
-**Figure 17.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-#### Monthly average time series
-
-```{r brt_monthly, echo=FALSE}
-# # Initialize filepath
-# fp <- file.path(params$fp_out, params$species, params$version, "BRTs", "Plots")
-# 
-# # Load filenames
-# files <- list.files(fp)
-# 
-# # Load region plots
-# mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
-# 
-# if ("GBK_brt_abund_pred_monthly.png" %in% files) {
-#   gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
-# }
-# 
-# gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
-# 
-# 
-# # Arrange grid
-# if ("GBK_brt_abund_pred_monthly.png" %in% files) {
-#   grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-#               ncol=3)
-# } else {
-#   grid.arrange(rasterGrob(mab), rasterGrob(gom),
-#               ncol=2)
-# }
-
-```
-
-**Figure 18.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-#### Annual average time series
-
-```{r brt_annual, echo=FALSE}
-# Load filenames
-files <- list.files(fp)
-
-# Load region plots
-mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_annual.png"))
-
-if ("GBK_brt_abund_pred_annual.png" %in% files) {
-  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_annual.png"))
-}
-
-gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_annual.png"))
-
-
-# Arrange grid
-if ("GBK_brt_abund_pred_annual.png" %in% files) {
-  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
-              ncol=3)
-} else {
-  grid.arrange(rasterGrob(mab), rasterGrob(gom),
-              ncol=2)
-}
-
-```
-
-**Figure 19.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
-
-## Actual abundance vs. predicted probability of suitability
-
-For the mgcv GAM and gbm BRT models, the logged actual abundance of ``r params$species`` was plotted against the logged predicted abundance.
-
-### GAM
-
-```{r gam_actual_vs_pred, echo=FALSE}
-
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
-
-# Load region plots
-gam1 <- readPNG(file.path(fp, "gam_abund_vs_pred_1.png"))
-gam2 <- readPNG(file.path(fp, "gam_abund_vs_pred_2.png"))
-gam3 <- readPNG(file.path(fp, "gam_abund_vs_pred_3.png"))
-gam4 <- readPNG(file.path(fp, "gam_abund_vs_pred_4.png"))
-gam5 <- readPNG(file.path(fp, "gam_abund_vs_pred_5.png"))
-gam6 <- readPNG(file.path(fp, "gam_abund_vs_pred_6.png"))
-gam7 <- readPNG(file.path(fp, "gam_abund_vs_pred_7.png"))
-gam8 <- readPNG(file.path(fp, "gam_abund_vs_pred_8.png"))
-gam9 <- readPNG(file.path(fp, "gam_abund_vs_pred_9.png"))
-gam10 <- readPNG(file.path(fp, "gam_abund_vs_pred_10.png"))
-gam11 <- readPNG(file.path(fp, "gam_abund_vs_pred_11.png"))
-gam12 <- readPNG(file.path(fp, "gam_abund_vs_pred_12.png"))
-
-
-# Arrange grid
-grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
-             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
-             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
-             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
-             ncol=3)
-
-```
-
-**Figure 20.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
-
-### BRT
-
-
-```{r brt_actual_vs_pred, echo=FALSE}
-
-# Initialize filepath
-fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
-
-# Load region plots
-brt1 <- readPNG(file.path(fp, "brt_abund_vs_pred_1.png"))
-brt2 <- readPNG(file.path(fp, "brt_abund_vs_pred_2.png"))
-brt3 <- readPNG(file.path(fp, "brt_abund_vs_pred_3.png"))
-brt4 <- readPNG(file.path(fp, "brt_abund_vs_pred_4.png"))
-brt5 <- readPNG(file.path(fp, "brt_abund_vs_pred_5.png"))
-brt6 <- readPNG(file.path(fp, "brt_abund_vs_pred_6.png"))
-brt7 <- readPNG(file.path(fp, "brt_abund_vs_pred_7.png"))
-brt8 <- readPNG(file.path(fp, "brt_abund_vs_pred_8.png"))
-brt9 <- readPNG(file.path(fp, "brt_abund_vs_pred_9.png"))
-brt10 <- readPNG(file.path(fp, "brt_abund_vs_pred_10.png"))
-brt11 <- readPNG(file.path(fp, "brt_abund_vs_pred_11.png"))
-brt12 <- readPNG(file.path(fp, "brt_abund_vs_pred_12.png"))
-
-
-# Arrange grid
-grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
-             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
-             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
-             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
-             ncol=3)
-
-```
-
-**Figure 21.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
-
-### Biomod ensemble
+#### Biomod ensemble
 
 For the biomod ensemble models, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Above the threshold of ``r params$threshold``, the probability of suitability tends to increase.  Below the threshold, the probability of suitability tends to be zero.  
 
@@ -732,4 +444,371 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 ```
 
-**Figure 22.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
+**Figure 10.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
+
+
+## MGCV GAMs
+
+### Climatology
+
+The generalized additive models (GAMs) were run using the mgcv package and were used to model ``r params$species`` abundances.  
+
+```{r display_GAM, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load images
+gam1 <- readPNG(file.path(fp, "gam_proj_1.png"))
+gam2 <- readPNG(file.path(fp, "gam_proj_2.png"))
+gam3 <- readPNG(file.path(fp, "gam_proj_3.png"))
+gam4 <- readPNG(file.path(fp, "gam_proj_4.png"))
+gam5 <- readPNG(file.path(fp, "gam_proj_5.png"))
+gam6 <- readPNG(file.path(fp, "gam_proj_6.png"))
+gam7 <- readPNG(file.path(fp, "gam_proj_7.png"))
+gam8 <- readPNG(file.path(fp, "gam_proj_8.png"))
+gam9 <- readPNG(file.path(fp, "gam_proj_9.png"))
+gam10 <- readPNG(file.path(fp, "gam_proj_10.png"))
+gam11 <- readPNG(file.path(fp, "gam_proj_11.png"))
+gam12 <- readPNG(file.path(fp, "gam_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
+             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
+             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
+             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
+             ncol=3)
+
+
+```
+
+**Figure 11.** Monthly climatological GAM projections.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### Evaluations
+
+```{r gam_evals, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Evals")
+
+# Load evals
+aic <- readPNG(file.path(fp, "gam_aic.png"))
+rmse <- readPNG(file.path(fp, "gam_rmse.png"))
+rsq <- readPNG(file.path(fp, "gam_rsq.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(aic), rasterGrob(rmse), rasterGrob(rsq),
+             ncol=3)
+```
+
+**Figure 12.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
+
+### Regions
+
+The study area was divided into three regions, the MAB, GBK, and GOM.  For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted.
+
+#### Climatological average
+
+```{r gam_clim, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_climatological.png"))
+
+if ("GBK_gam_abund_pred_climatological.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_climatological.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_climatological.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_climatological.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 13.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+#### Monthly average time series
+
+```{r gam_monthly, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "GAMs", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
+
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 14.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+#### Annual average time series
+
+```{r gam_annual, echo=FALSE}
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_annual.png"))
+
+if ("GBK_gam_abund_pred_annual.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_annual.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_annual.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_annual.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 15.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+### Actual vs predicted values
+
+Actual abundance values were plotted against predicted abundance values.
+
+```{r gam_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load region plots
+gam1 <- readPNG(file.path(fp, "gam_abund_vs_pred_1.png"))
+gam2 <- readPNG(file.path(fp, "gam_abund_vs_pred_2.png"))
+gam3 <- readPNG(file.path(fp, "gam_abund_vs_pred_3.png"))
+gam4 <- readPNG(file.path(fp, "gam_abund_vs_pred_4.png"))
+gam5 <- readPNG(file.path(fp, "gam_abund_vs_pred_5.png"))
+gam6 <- readPNG(file.path(fp, "gam_abund_vs_pred_6.png"))
+gam7 <- readPNG(file.path(fp, "gam_abund_vs_pred_7.png"))
+gam8 <- readPNG(file.path(fp, "gam_abund_vs_pred_8.png"))
+gam9 <- readPNG(file.path(fp, "gam_abund_vs_pred_9.png"))
+gam10 <- readPNG(file.path(fp, "gam_abund_vs_pred_10.png"))
+gam11 <- readPNG(file.path(fp, "gam_abund_vs_pred_11.png"))
+gam12 <- readPNG(file.path(fp, "gam_abund_vs_pred_12.png"))
+
+
+# Arrange grid
+grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
+             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
+             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
+             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
+             ncol=3)
+
+```
+
+**Figure 16.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+
+## GBM BRTs
+
+### Climatology
+
+The boosted regression tree (BRT) models were run using the gbm package and used to model ``r params$species`` abundances. 
+
+```{r display_BRT, echo=FALSE}
+# Load images
+brt1 <- readPNG(file.path(fp, "brt_proj_1.png"))
+brt2 <- readPNG(file.path(fp, "brt_proj_2.png"))
+brt3 <- readPNG(file.path(fp, "brt_proj_3.png"))
+brt4 <- readPNG(file.path(fp, "brt_proj_4.png"))
+brt5 <- readPNG(file.path(fp, "brt_proj_5.png"))
+brt6 <- readPNG(file.path(fp, "brt_proj_6.png"))
+brt7 <- readPNG(file.path(fp, "brt_proj_7.png"))
+brt8 <- readPNG(file.path(fp, "brt_proj_8.png"))
+brt9 <- readPNG(file.path(fp, "brt_proj_9.png"))
+brt10 <- readPNG(file.path(fp, "brt_proj_10.png"))
+brt11 <- readPNG(file.path(fp, "brt_proj_11.png"))
+brt12 <- readPNG(file.path(fp, "brt_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
+             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
+             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
+             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
+             ncol=3)
+```
+
+**Figure 17.** Monthly climatological BRT projections.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### Evaluations
+
+```{r brt_evals, echo=FALSE}
+# Load evals
+rmse <- readPNG(file.path(fp, "brt_rmse.png"))
+rsq <- readPNG(file.path(fp, "brt_rsq.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rmse), rasterGrob(rsq),
+             ncol=2)
+```
+
+**Figure 18.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
+
+### Regions
+
+The study area was divided into three regions, the MAB, GBK, and GOM.  For each region, a climatological average (one point per month), monthly average time series, and annual average time series were computed and the actual versus predicted abundance values were plotted.
+
+#### Climatological average
+
+```{r brt_clim, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_climatological.png"))
+
+if ("GBK_brt_abund_pred_climatological.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_climatological.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_climatological.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_climatological.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 19.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+#### Monthly average time series
+
+```{r brt_monthly, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "BRTs", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
+
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 20.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+#### Annual average time series
+
+```{r brt_annual, echo=FALSE}
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_annual.png"))
+
+if ("GBK_brt_abund_pred_annual.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_annual.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_annual.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_annual.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+**Figure 21.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+
+### Actual vs. predicted values
+
+Actual abundance values were plotted against predicted abundance values.
+
+
+```{r brt_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Climatologies", "Plots")
+
+# Load region plots
+brt1 <- readPNG(file.path(fp, "brt_abund_vs_pred_1.png"))
+brt2 <- readPNG(file.path(fp, "brt_abund_vs_pred_2.png"))
+brt3 <- readPNG(file.path(fp, "brt_abund_vs_pred_3.png"))
+brt4 <- readPNG(file.path(fp, "brt_abund_vs_pred_4.png"))
+brt5 <- readPNG(file.path(fp, "brt_abund_vs_pred_5.png"))
+brt6 <- readPNG(file.path(fp, "brt_abund_vs_pred_6.png"))
+brt7 <- readPNG(file.path(fp, "brt_abund_vs_pred_7.png"))
+brt8 <- readPNG(file.path(fp, "brt_abund_vs_pred_8.png"))
+brt9 <- readPNG(file.path(fp, "brt_abund_vs_pred_9.png"))
+brt10 <- readPNG(file.path(fp, "brt_abund_vs_pred_10.png"))
+brt11 <- readPNG(file.path(fp, "brt_abund_vs_pred_11.png"))
+brt12 <- readPNG(file.path(fp, "brt_abund_vs_pred_12.png"))
+
+
+# Arrange grid
+grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
+             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
+             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
+             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
+             ncol=3)
+
+```
+
+**Figure 22.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+
+
