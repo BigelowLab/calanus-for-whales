@@ -190,7 +190,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
-    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_AIC.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_aic.png"))
   
   # -------- Plot RMSE --------
   # ---- GAMs ----
@@ -204,7 +204,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
-    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_RMSE.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_rmse.png"))
   
   # ---- BRTs ----
   ggplot(brt_evals, aes(x = month, y = rmse, color = as.factor(year))) +
@@ -217,7 +217,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
-    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "brt_RMSE.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "brt_rmse.png"))
   
   # -------- Plot RSQ --------
   # ---- GAMs ----
@@ -231,7 +231,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
-    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_RSQ.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "gam_rsq.png"))
   
   # ---- BRTs ----
   ggplot(brt_evals, aes(x = month, y = rsq, color = as.factor(year))) +
@@ -244,7 +244,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
-    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "brt_RSQ.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Climatologies", "Evals", "brt_rsq.png"))
   
   # -------- Plot AUC --------
   # ---- GAMs ----
