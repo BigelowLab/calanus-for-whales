@@ -18,7 +18,7 @@ require(tidyverse)
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param years <vectors> years for which to run the model
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FALSE) {
   
   # -------- Create output directories --------
@@ -47,13 +47,29 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
           brt_rsq <- as.numeric(substring(readr::read_csv(file.path(fp_out, species, version, "BRTs", "Evals", paste0("rsq_", year, "_", month, ".csv"))), 4))[1]
           brt_evals <- data.frame("year" = year, "month" = month, "rmse" = brt_rmse, "rsq" = brt_rsq)
 
-          biomod_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+          biomod_gam_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
             dplyr::filter(stringr::str_detect(Model.name, "GAM"), Eval.metric == "ROC") %>%
             dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
-          biomod_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+          biomod_gam_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
             dplyr::filter(stringr::str_detect(Model.name, "GAM"), Eval.metric == "TSS") %>%
             dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
-          biomod_evals <- data.frame("year" = year, "month" = month, "auc" = biomod_auc, "tss" = biomod_tss)
+          biomod_gam_evals <- data.frame("year" = year, "month" = month, "auc" = biomod_gam_auc, "tss" = biomod_gam_tss)
+          
+          biomod_brt_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            dplyr::filter(stringr::str_detect(Model.name, "GBM"), Eval.metric == "ROC") %>%
+            dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
+          biomod_brt_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            dplyr::filter(stringr::str_detect(Model.name, "GBM"), Eval.metric == "TSS") %>%
+            dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
+          biomod_brt_evals <- data.frame("year" = year, "month" = month, "auc" = biomod_brt_auc, "tss" = biomod_brt_tss)
+          
+          biomod_rf_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            dplyr::filter(stringr::str_detect(Model.name, "RF"), Eval.metric == "ROC") %>%
+            dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
+          biomod_rf_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            dplyr::filter(stringr::str_detect(Model.name, "RF"), Eval.metric == "TSS") %>%
+            dplyr::summarize(Testing.data = mean(Testing.data, na.rm = TRUE)))
+          biomod_rf_evals <- data.frame("year" = year, "month" = month, "auc" = biomod_rf_auc, "tss" = biomod_rf_tss)
           
           ensemble_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("ensemble_evals_", year, "_", month, ".csv"))) %>%
             dplyr::filter(stringr::str_detect(Model.name, "EMmeanByROC"), Eval.metric == "ROC") %>%
@@ -78,15 +94,35 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
           brt_evals <- rbind(brt_evals, brt_temp)
           
           if (paste0("evals_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Evals"))) {
-            biomod_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            biomod_gam_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
               dplyr::filter(stringr::str_detect(Model.name, "GAM"), Eval.metric == "ROC") %>%
               dplyr::summarize(Testing.data = mean(Testing.data)))
-            biomod_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+            biomod_gam_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
               dplyr::filter(stringr::str_detect(Model.name, "GAM"), Eval.metric == "TSS") %>%
               dplyr::summarize(Testing.data = mean(Testing.data)))
               
-            biomod_temp <- data.frame("year" = year, "month" = month, "auc" = biomod_auc, "tss" = biomod_tss)
-            biomod_evals <- rbind(biomod_evals, biomod_temp)
+            biomod_gam_temp <- data.frame("year" = year, "month" = month, "auc" = biomod_gam_auc, "tss" = biomod_gam_tss)
+            biomod_gam_evals <- rbind(biomod_gam_evals, biomod_gam_temp)
+            
+            biomod_brt_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+                                           dplyr::filter(stringr::str_detect(Model.name, "GBM"), Eval.metric == "ROC") %>%
+                                           dplyr::summarize(Testing.data = mean(Testing.data)))
+            biomod_brt_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+                                           dplyr::filter(stringr::str_detect(Model.name, "GBM"), Eval.metric == "TSS") %>%
+                                           dplyr::summarize(Testing.data = mean(Testing.data)))
+            
+            biomod_brt_temp <- data.frame("year" = year, "month" = month, "auc" = biomod_brt_auc, "tss" = biomod_brt_tss)
+            biomod_brt_evals <- rbind(biomod_brt_evals, biomod_brt_temp)
+            
+            biomod_rf_auc <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+                                           dplyr::filter(stringr::str_detect(Model.name, "RF"), Eval.metric == "ROC") %>%
+                                           dplyr::summarize(Testing.data = mean(Testing.data)))
+            biomod_rf_tss <- as.numeric(readr::read_csv(file.path(fp_out, species, version, "Biomod", "Evals", paste0("evals_", year, "_", month, ".csv"))) %>%
+                                           dplyr::filter(stringr::str_detect(Model.name, "RF"), Eval.metric == "TSS") %>%
+                                           dplyr::summarize(Testing.data = mean(Testing.data)))
+            
+            biomod_rf_temp <- data.frame("year" = year, "month" = month, "auc" = biomod_rf_auc, "tss" = biomod_rf_tss)
+            biomod_rf_evals <- rbind(biomod_rf_evals, biomod_rf_temp)
           }
           
           if (paste0("ensemble_evals_", year, "_", month, ".csv") %in% list.files(file.path(fp_out, species, version, "Biomod", "Evals"))) {
@@ -118,11 +154,23 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
     # ---- Write to CSV ----
     readr::write_csv(file.path(fp_out, species, version, "Climatologies", "Evals", "brt_compiled_evals.csv"))
   
-  biomod_evals <- biomod_evals %>% 
+  biomod_gam_evals <- biomod_gam_evals %>% 
     dplyr::group_by(month) %>% 
     dplyr::mutate(mean_auc = mean(auc, na.rm = TRUE), mean_tss = mean(tss, na.rm = TRUE)) %>%
     # ---- Write to CSV ----
     readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "gam_compiled_evals.csv"))
+  
+  biomod_brt_evals <- biomod_brt_evals %>% 
+    dplyr::group_by(month) %>% 
+    dplyr::mutate(mean_auc = mean(auc, na.rm = TRUE), mean_tss = mean(tss, na.rm = TRUE)) %>%
+    # ---- Write to CSV ----
+  readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "brt_compiled_evals.csv"))
+  
+  biomod_rf_evals <- biomod_rf_evals %>% 
+    dplyr::group_by(month) %>% 
+    dplyr::mutate(mean_auc = mean(auc, na.rm = TRUE), mean_tss = mean(tss, na.rm = TRUE)) %>%
+    # ---- Write to CSV ----
+  readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "rf_compiled_evals.csv"))
   
   ensemble_evals <- ensemble_evals %>% 
     dplyr::group_by(month) %>% 
@@ -200,7 +248,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
   
   # -------- Plot AUC --------
   # ---- GAMs ----
-  ggplot(biomod_evals, aes(x = month, y = auc, color = as.factor(year))) +
+  ggplot(biomod_gam_evals, aes(x = month, y = auc, color = as.factor(year))) +
     geom_path() +
     scale_color_viridis(name = "Year", discrete=TRUE) +
     ylim(c(0.6,1)) +
@@ -212,6 +260,34 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
     ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "gam_AUC.png"))
+  
+  # ---- BRTs ----
+  ggplot(biomod_brt_evals, aes(x = month, y = auc, color = as.factor(year))) +
+    geom_path() +
+    scale_color_viridis(name = "Year", discrete=TRUE) +
+    ylim(c(0.6,1)) +
+    ylab("AUC") +
+    xlab("Month") +
+    guides(color = guide_legend(ncol = 2)) +
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position = "none") +
+    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "brt_AUC.png"))
+  
+  # ---- RF ----
+  ggplot(biomod_rf_evals, aes(x = month, y = auc, color = as.factor(year))) +
+    geom_path() +
+    scale_color_viridis(name = "Year", discrete=TRUE) +
+    ylim(c(0.6,1)) +
+    ylab("AUC") +
+    xlab("Month") +
+    guides(color = guide_legend(ncol = 2)) +
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position = "none") +
+    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "rf_AUC.png"))
   
   
   # ---- Ensemble ----
@@ -230,7 +306,7 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
   
   # -------- Plot TSS --------
   # ---- GAMs ----
-  ggplot(biomod_evals, aes(x = month, y = tss, color = as.factor(year))) +
+  ggplot(biomod_gam_evals, aes(x = month, y = tss, color = as.factor(year))) +
     geom_path() +
     scale_color_viridis(name = "Year", discrete=TRUE) +
     ylim(c(0,1)) +
@@ -242,6 +318,34 @@ compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FA
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.position = "none") +
     ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "gam_TSS.png"))
+  
+  # ---- BRTs ----
+  ggplot(biomod_brt_evals, aes(x = month, y = tss, color = as.factor(year))) +
+    geom_path() +
+    scale_color_viridis(name = "Year", discrete=TRUE) +
+    ylim(c(0,1)) +
+    ylab("TSS") +
+    xlab("Month") +
+    guides(color = guide_legend(ncol = 2)) +
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position = "none") +
+    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "brt_TSS.png"))
+  
+  # ---- GAMs ----
+  ggplot(biomod_rf_evals, aes(x = month, y = tss, color = as.factor(year))) +
+    geom_path() +
+    scale_color_viridis(name = "Year", discrete=TRUE) +
+    ylim(c(0,1)) +
+    ylab("TSS") +
+    xlab("Month") +
+    guides(color = guide_legend(ncol = 2)) +
+    scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.position = "none") +
+    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "rf_TSS.png"))
   
   # ---- Ensemble ----
   ggplot(ensemble_evals, aes(x = month, y = tss, color = as.factor(year))) +
