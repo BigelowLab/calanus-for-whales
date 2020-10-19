@@ -163,7 +163,7 @@ compile_var_contribution <- function(version, fp_out, years, env_covars, species
       labs(y = "Contribution", fill = "Covariate") +
       theme_bw() +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-      ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "gam_var_cont_.png"))
+      ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "gam_var_cont.png"))
     
   # Plot BRT variable contributions
   ggplot(data = (var_cont %>% filter(Model == "BRT")), aes(x = Month, fill = factor(Var, env_covars))) +
@@ -172,7 +172,7 @@ compile_var_contribution <- function(version, fp_out, years, env_covars, species
     labs(y = "Contribution", fill = "Covariate") +
     theme_bw() +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "brt_var_cont_.png"))
+    ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "brt_var_cont.png"))
     
   # Plot RF variable contributions
   ggplot(data = (var_cont %>% filter(Model == "RF")), aes(x = Month, fill = factor(Var, env_covars))) +
