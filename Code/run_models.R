@@ -49,6 +49,10 @@ run_models <- function(version) {
   compile_evals(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
                 anomaly = config$anomaly)
   
+  # ---- Compile biomod variable contributions ----
+  compile_var_contribution(version = config$version, fp_out = config$fp_out, years = config$years, 
+                           env_covars = config$env_covars, species = config$species, anomaly = config$anomaly)
+  
   # ---- Create region-specific actual vs. predicted plots ----
   plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
   
