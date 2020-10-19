@@ -1,8 +1,9 @@
 ---
 author: "Camille Ross"
 date: "8/17/2020"
-output: html_document
-  toc: TRUE
+output:
+  html_document:
+    toc: true
 params:
   set_title: "v0.2.3"
   fp_out: "./calanus_for_whales/Versions"
@@ -215,7 +216,7 @@ if ("ensemble_proj_2002_4.png" %in% files) {
 
 ```
 
-**Figure 3.** Ensemble projections for the month of April over ``r params$years``.
+**Figure 5.** Ensemble projections for the month of April over ``r params$years``.
 
 #### May
 
@@ -253,7 +254,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 4.** Ensemble projections for the month of May over ``r params$years``.
+**Figure 6.** Ensemble projections for the month of May over ``r params$years``.
 
 #### June
 
@@ -291,7 +292,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 5.** Ensemble projections for the month of June over ``r params$years``.
+**Figure 7.** Ensemble projections for the month of June over ``r params$years``.
 
 #### August
 
@@ -329,7 +330,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              ncol=3)
 ```
 
-**Figure 6.** Ensemble projections for the month of August over ``r params$years``.
+**Figure 8.** Ensemble projections for the month of August over ``r params$years``.
 
 #### September
 
@@ -368,7 +369,7 @@ fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots"
 
 ```
 
-**Figure 7.** Ensemble projections for the month of September over ``r params$years``.
+**Figure 9.** Ensemble projections for the month of September over ``r params$years``.
 
 
 ### Evaluations
@@ -390,7 +391,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 8.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 10.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 #### GAM evaluations
 
@@ -404,7 +405,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 9.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 11.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 #### BRT evaluations
 
@@ -418,7 +419,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 9.** Biomod BRT evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 12.** Biomod BRT evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 
 #### RF evaluations
@@ -433,7 +434,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
              ncol=2)
 ```
 
-**Figure 9.** Biomod RF evaluations on a monthly time scale using a.) AUC and b.) TSS
+**Figure 13.** Biomod RF evaluations on a monthly time scale using a.) AUC and b.) TSS
 
 ### Variable contribution
 
@@ -441,34 +442,40 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
 
 ```{r gam_biomod_var_cont, echo=FALSE}
 # Load evals
-var_cont <- readPNG(file.path(fp, "gam_var_contribution.png"))
+var_cont <- readPNG(file.path(fp, "gam_var_cont.png"))
 
 # Arrange grid
 grid.arrange(rasterGrob(var_cont),
              ncol = 1)
 ```
+
+**Figure 14.** Biomod GAM variable contributions on a monthly time scale.
 
 #### BRT variable contribution
 
 ```{r brt_biomod_var_cont, echo=FALSE}
 # Load evals
-var_cont <- readPNG(file.path(fp, "brt_var_contribution.png"))
+var_cont <- readPNG(file.path(fp, "brt_var_cont.png"))
 
 # Arrange grid
 grid.arrange(rasterGrob(var_cont),
              ncol = 1)
 ```
+
+**Figure 15.** Biomod BRT variable contributions on a monthly time scale.
 
 #### RF variable contribution
 
 ```{r rf_biomod_var_cont, echo=FALSE}
 # Load evals
-var_cont <- readPNG(file.path(fp, "rf_var_contribution.png"))
+var_cont <- readPNG(file.path(fp, "rf_var_cont.png"))
 
 # Arrange grid
 grid.arrange(rasterGrob(var_cont),
              ncol = 1)
 ```
+
+**Figure 16.** Biomod RF variable contributions on a monthly time scale.
 
 ### Actual abundance vs. predicted probability of suitability
 
@@ -508,7 +515,7 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 ```
 
-**Figure 10.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
+**Figure 17.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
 
 
 ## MGCV GAMs
@@ -545,7 +552,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 ```
 
-**Figure 11.** Monthly climatological GAM projections.  The climatology was created by averaging together the projections from 2000 to 2017.
+**Figure 18.** Monthly climatological GAM projections.  The climatology was created by averaging together the projections from 2000 to 2017.
 
 ### Evaluations
 
@@ -563,7 +570,7 @@ grid.arrange(rasterGrob(aic), rasterGrob(rmse), rasterGrob(rsq),
              ncol=3)
 ```
 
-**Figure 12.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
+**Figure 19.** Model evaluations on a monthly time scale using a.) AIC, b.) RMSE, and c.) R2.
 
 ### Regions
 
@@ -599,7 +606,7 @@ if ("GBK_gam_abund_pred_climatological.png" %in% files) {
 
 ```
 
-**Figure 13.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 20.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -631,7 +638,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 14.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 21.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Annual average time series
 
@@ -660,7 +667,7 @@ if ("GBK_gam_abund_pred_annual.png" %in% files) {
 
 ```
 
-**Figure 15.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 22.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 ### Actual vs predicted values
 
@@ -695,7 +702,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 ```
 
-**Figure 16.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+**Figure 23.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
 
 ## GBM BRTs
 
@@ -726,7 +733,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
              ncol=3)
 ```
 
-**Figure 17.** Monthly climatological BRT projections.  The climatology was created by averaging together the projections from 2000 to 2017.
+**Figure 24.** Monthly climatological BRT projections.  The climatology was created by averaging together the projections from 2000 to 2017.
 
 ### Evaluations
 
@@ -740,7 +747,7 @@ grid.arrange(rasterGrob(rmse), rasterGrob(rsq),
              ncol=2)
 ```
 
-**Figure 18.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
+**Figure 25.** Model evaluations on a monthly time scale using a.) RMSE and b.) R2.
 
 ### Regions
 
@@ -776,7 +783,7 @@ if ("GBK_brt_abund_pred_climatological.png" %in% files) {
 
 ```
 
-**Figure 19.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 26.** Climatological abundance values averaged over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Monthly average time series
 
@@ -808,7 +815,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 20.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 27.** Abundance values averaged monthly over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 #### Annual average time series
 
@@ -837,7 +844,7 @@ if ("GBK_brt_abund_pred_annual.png" %in% files) {
 
 ```
 
-**Figure 21.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
+**Figure 28.** Abundance values averaged annually over three regions, a.) the Mid Atlantic Bight, b.) George's Bank, and c.) the Gulf of Maine.  The predicted values come from the projections.
 
 ### Actual vs. predicted values
 
@@ -873,6 +880,6 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 
 ```
 
-**Figure 22.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
+**Figure 29.** Actual logged abundance versus logged predicted abundance for ``r params$species`` for all 12 months.
 
 

@@ -42,7 +42,7 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
           gam_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GAM_", year, "_", i), paste0("proj_GAM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          brt_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_BRT_", year, "_", i), paste0("proj_BRT_", year, "_", i, "_", species, version, ".grd"))) %>%
+          brt_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           rf_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
@@ -62,7 +62,7 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
           gam_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GAM_", year, "_", i), paste0("proj_GAM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          brt_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_BRT_", year, "_", i), paste0("proj_BRT_", year, "_", i, "_", species, version, ".grd"))) %>%
+          brt_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           rf_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
