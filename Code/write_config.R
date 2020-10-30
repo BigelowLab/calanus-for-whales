@@ -8,7 +8,7 @@ library(yaml)
 # ---- Function to write configuration file ----
 #'@param version <chr> model version in "vx.x.x" format
 #'@param species <chr> species for which the model is run; one of "cfin", "ctyp", or "pcal"
-#'@param env_covars <list> list of environmental covaraites; options are wind, fetch, sst, sss,
+#'@param env_covars <list> list of environmental covariates; options are wind, fetch, sst, sss,
 # bott, bots, bat, slope, dist, chl, lag_sst, int_chl
 #'@param anomaly <logical> whether or not model converts data to anomalies
 #'@param threshold <num> right whale feeding thershold for biomod models
