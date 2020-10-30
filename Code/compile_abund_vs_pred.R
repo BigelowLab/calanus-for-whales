@@ -6,7 +6,6 @@
 require(plyr)
 require(dplyr)
 require(readr)
-require(dismo)
 require(gbm)
 require(viridis)
 require(Metrics)
