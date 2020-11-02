@@ -11,7 +11,7 @@ library(yaml)
 #'@param env_covars <list> list of environmental covariates; options are wind, fetch, sst, sss,
 # bott, bots, bat, slope, dist, chl, lag_sst, int_chl
 #'@param anomaly <logical> whether or not model converts data to anomalies
-#'@param threshold <num> right whale feeding thershold for biomod models
+#'@param threshold <num> right whale feeding threshold for biomod models
 #'@param years <vector> years to run model for between 2000 and 2017
 #'@param fp_md <filepath> filepath to model data
 #'@param fp_covars <filepath> filepath to environmental covariates
@@ -20,10 +20,19 @@ library(yaml)
 #'@param biomod_dataset <chr> datasets to use for biomod models
 #'@param format_data <logical> whether or not to format sightings and covar data
 #'@param fp_zpd <filepath> filepath to zooplankton data if format_data is TRUE
-write_config <- function(version, species, env_covars, anomaly,
-                         threshold, years, fp_md, fp_covars,
-                         fp_out, datasets, biomod_dataset, format_data, 
-                         fp_zpd) {
+write_config <- function(version = "v0.2.7", 
+                         species = "pcal", 
+                         env_covars = c("sst", "chl", "bat", "sss", "wind"), 
+                         anomaly = TRUE,
+                         threshold = 10000, 
+                         years = 2000:2017, 
+                         fp_md = "./calanus_data/Data/Databases/zooplankton_covar_data", 
+                         fp_covars = "./Env_Covars",
+                         fp_out = "~/Desktop/Calanus_Project/Models",
+                         datasets = "CPR", 
+                         biomod_dataset = "ECOMON", 
+                         format_data = FALSE, 
+                         fp_zpd = NULL) {
 
   # ---- Initialize yaml parameters ----
   x <- list(version = version, species = species, env_covars = env_covars, anomaly = anomaly, threshold = threshold, years = years, 
