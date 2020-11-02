@@ -65,17 +65,14 @@ load_covars <- function(fp_covars, year, month,
   bots <- raster::raster(file.path(fp_bots, year, paste0(year, "_month", 
                                                          dplyr::if_else(month < 10, paste0(0, month), as.character(month)),
                                                          "_mean.img")))
-
   # -- Load bottom temperature --
   bott <- raster::raster(file.path(fp_bott, year, paste0(year, "_month", 
                                                          dplyr::if_else(month < 10, paste0(0, month), as.character(month)),
                                                          "_mean.img")))
-
   # -- Load surface salinity --
   sss <- raster::raster(file.path(fp_sss, year, paste0(year, "_month", 
                                                        dplyr::if_else(month < 10, paste0(0, month), as.character(month)),
                                                        "_mean.img")))
-
   # -- Load sea surface temperature --
   sst <- raster::raster(file.path(fp_sst, year, paste0(year, "_month", 
                                                        dplyr::if_else(month < 10, paste0(0, month), as.character(month)),

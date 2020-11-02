@@ -23,7 +23,7 @@ library(yaml)
 write_config <- function(version = "v0.2.7", 
                          species = "pcal", 
                          env_covars = c("sst", "chl", "bat", "sss", "wind"), 
-                         anomaly = TRUE,
+                         anomaly = FALSE,
                          threshold = 10000, 
                          years = 2000:2017, 
                          fp_md = "./calanus_data/Data/Databases/zooplankton_covar_data", 
