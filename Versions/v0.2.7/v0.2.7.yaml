@@ -1,5 +1,5 @@
 version: v0.2.7
-species: pseudo
+species: pcal
 env_covars:
 - sst
 - chl
@@ -28,11 +28,9 @@ years:
 - 2016
 - 2017
 fp_md: ./calanus_data/Data/Databases/zooplankton_covar_data
-datasets:
-- CPR
-- NOAA_CPR
+datasets: CPR
 biomod_dataset: ECOMON
 fp_covars: ./Env_Covars
-fp_out: ~/Desktop/Calanus_Project/projects/calanus4whales/Models
+fp_out: ~/Desktop/Calanus_Project/Models
 format_data: no
 fp_zpd: ~
