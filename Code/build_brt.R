@@ -141,11 +141,13 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
   # -------- Loop over months --------
   for (i in years) {
     for (j in 1:12) {
+      print(paste0("Year: ", i, ", Month: ", j))
+      
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
       
       if ((nrow(month_md) < 15) | (length(unique(month_md$abund)) == 1)) {
-        print("skipped")
+        print("Skipped")
         next
       }
     
@@ -187,7 +189,7 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       proj <- raster::predict(covars, brt_sdm,
                               filename = file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "GTiff")
+                              format = "raster")
       
       # Zero out projections below 1000m
       proj[bat >= 1000] <- 0

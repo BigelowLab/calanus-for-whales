@@ -115,9 +115,9 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in years){
+  for (i in 2001){
     # ------- Loop over months --------
-    for (j in 1:12) {
+    for (j in 2:12) {
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
     
@@ -127,6 +127,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       trainingData$pa <- if_else(trainingData$abund < threshold, 0, 1)
       
       if (nrow(trainingData) < 100 | length(unique(trainingData$pa)) != 2) {
+        print("skipped")
         next
       }
       

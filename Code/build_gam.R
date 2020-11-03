@@ -133,6 +133,8 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
   # -------- Loop over months --------
   for (i in years) {
     for (j in 1:12) {
+      print(paste0("Year: ", i, ", Month: ", j))
+      
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
       
@@ -168,7 +170,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       # -------- Project model onto covariates --------
       proj <- raster::predict(covars, gam_sdm, filename = file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "GTiff")
+                              format = "raster")
       # Zero out projections below 1000m
       if (species == "cfin") {
         proj[bat >= 1000] <- 0
