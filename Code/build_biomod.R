@@ -115,15 +115,16 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   modelOptions <- BIOMOD_ModelingOptions()
   
   # -------- Loop over years --------
-  for (i in 2001){
+  for (i in 2002:2017){
     # ------- Loop over months --------
-    for (j in 2:12) {
+    for (j in c(8)) {
+      
       # -------- Isolate month data --------
       month_md <- md %>% dplyr::filter(month == j)
     
       # -------- Isolate month data --------
       trainingData <- month_md %>% dplyr::filter(month == j) 
-      # -------- Select presence or absence based on right whale feeding index of mininmum of 1000 --------
+      # -------- Select presence or absence based on right whale feeding threshold --------
       trainingData$pa <- if_else(trainingData$abund < threshold, 0, 1)
       
       if (nrow(trainingData) < 100 | length(unique(trainingData$pa)) != 2) {
@@ -256,7 +257,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       ensemble_proj_df <- as.data.frame(ensemble_proj_raster, xy = TRUE, na.rm = TRUE)
       
       # Assign column names
-      names(ensemble_proj_df) <- c('pred', 'x', 'y')
+      names(ensemble_proj_df) <- c('x', 'y', 'pred')
       
       # -------- Plot projection --------
       ggplot() + 
@@ -326,7 +327,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       gam_proj_df <- as.data.frame(gam_proj_raster, xy = TRUE, na.rm = TRUE)
       
       # Assign column names
-      names(gam_proj_df) <- c('pred', 'x', 'y')
+      names(gam_proj_df) <- c('x', 'y', 'pred')
       
       # -------- Plot projection --------
       ggplot() + 
@@ -395,7 +396,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       brt_proj_df <- as.data.frame(brt_proj_raster, xy = TRUE, na.rm = TRUE)
       
       # Assign column names
-      names(brt_proj_df) <- c('pred', 'x', 'y')
+      names(brt_proj_df) <- c('x', 'y', 'pred')
       
       # -------- Plot projection --------
       ggplot() + 
@@ -463,7 +464,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       rf_proj_df <- as.data.frame(rf_proj_raster, xy = TRUE, na.rm = TRUE)
       
       # Assign column names
-      names(rf_proj_df) <- c('pred', 'x', 'y')
+      names(rf_proj_df) <- c('x', 'y', 'pred')
       
       # -------- Plot projection --------
       ggplot() + 
