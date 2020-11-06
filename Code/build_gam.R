@@ -170,7 +170,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       # -------- Project model onto covariates --------
       proj <- raster::predict(covars, gam_sdm, filename = file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "raster")
+                              format = "GTiff")
       # Zero out projections below 1000m
       if (species == "cfin") {
         proj[bat >= 1000] <- 0
@@ -187,7 +187,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       } else {
         color_scale <- inferno(500)
         max_val <- max(md$abund, na.rm = TRUE) + 4
-        min_val <- 0
+        min_val <- -2
         # Zero out negative values
         proj[proj < 0] <- 0
       }

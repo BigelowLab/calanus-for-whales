@@ -166,9 +166,9 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       # -------- Plot results --------
       plot(brt_sdm)
       # -------- Load summary of model --------
-      png(file.path(fp_out, species, version, "BRTs", "Plots", paste0("var_cont_", i, "_", j, ".png")))
-      summary(brt_sdm)
-      dev.off()
+      # png(file.path(fp_out, species, version, "BRTs", "Plots", paste0("var_cont_", i, "_", j, ".png")))
+      # summary(brt_sdm)
+      # dev.off()
         
       # -------- Load environmental covariates for projection --------
       covars <- load_covars(fp_covars = fp_covars, year = i, month = j,
@@ -189,7 +189,7 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       proj <- raster::predict(covars, brt_sdm,
                               filename = file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", i, "_", j)), progress = "text",
                               overwrite = TRUE,
-                              format = "raster")
+                              format = "GTiff")
       
       # Zero out projections below 1000m
       proj[bat >= 1000] <- 0
