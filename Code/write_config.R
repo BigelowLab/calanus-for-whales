@@ -20,8 +20,8 @@ library(yaml)
 #'@param biomod_dataset <chr> datasets to use for biomod models
 #'@param format_data <logical> whether or not to format sightings and covar data
 #'@param fp_zpd <filepath> filepath to zooplankton data if format_data is TRUE
-write_config <- function(version = "v0.2.7", 
-                         species = "pcal", 
+write_config <- function(version = "v0.2.5", 
+                         species = "ctyp", 
                          env_covars = c("sst", "chl", "bat", "sss", "wind"), 
                          anomaly = FALSE,
                          threshold = 10000, 
