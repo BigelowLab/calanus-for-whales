@@ -4,7 +4,8 @@
 
 library(yaml)
 
-setwd("~/Desktop/Calanus_Project/")
+DIR <- "~/Desktop/Calanus_Project/"
+setwd(DIR)
 
 # ---- Source necessary scripts ----
 source("./calanus-for-whales/Code/build_gam.R")
@@ -60,8 +61,8 @@ run_models <- function(version) {
   compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
   
   # ---- Render model summary ----
-  rmarkdown::render("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Code/build_summary.Rmd", 
-                    output_file = file.path("~/Desktop/Calanus_Project/projects/calanus4whales/calanus-for-whales/Versions", config$version, paste0(config$version, ".html")),
+  rmarkdown::render(file.path(DIR, "calanus-for-whales/Code/build_summary.Rmd"), 
+                    output_file = file.path(DIR, "calanus-for-whales/Versions", config$version, paste0(config$version, ".html")),
                     params = list(set_title = config$version,
                                   fp_out = config$fp_out,
                                   species = config$species,
