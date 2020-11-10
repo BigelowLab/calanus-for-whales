@@ -24,12 +24,12 @@ source("./calanus_data/Code/bind_years.R")
 #'@param fp_md <chr> file path to formatted data used in model
 #'@param fp_covars <chr> file path to environmental covariate data
 #'@param env_covars <vector> vector of covariates to include in the model
-#'@param years <vectors> years for which to run the model
+#'@param years <vector> years for which to run the model
 #'@param fp_out <chr> file path save the data to 
 #'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 #'@param anomaly <logical> if true, model is run using calanus anomaly
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
-#'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
+#'@param fp_zpd <chr> file path to the zooplankton database if data is formatted within function
 build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp_out, 
                       species = "cfin", anomaly = FALSE, 
                       format_data = FALSE, fp_zpd = NULL) {
@@ -156,7 +156,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
                             env_covars = env_covars,
                             as_raster = TRUE)
       
-      # -------- Log chloroplyll and bathymetry --------
+      # -------- Log chlorophyll and bathymetry --------
       if ("chl" %in% env_covars) {
         covars$chl <- log(covars$chl)
       }
