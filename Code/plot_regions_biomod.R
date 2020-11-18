@@ -174,6 +174,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   names(brt_proj) <- c("x", "y", "proj", "month", "year")
   names(rf_proj) <- c("x", "y", "proj", "month", "year")
 
+  # -------- MONTHLY VARIABILITY --------
   # -------- Compute regions --------
   ensemble_proj_monthly <- ensemble_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
@@ -554,6 +555,72 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   # -------- INTERANNUAL VARIABILITY --------
   
+  # -------- Load model data --------
+  if (length(years) == 1) {
+    if (anomaly) {
+      md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv")))
+    } else {
+      md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv"))) %>% 
+        dplyr::filter(dataset %in% biomod_dataset)
+    }
+  } else {
+    if (anomaly) {
+      md <- bind_years(fp = file.path(fp_md), years = years)
+    } else {
+      md <- bind_years(fp = file.path(fp_md), years = years) %>%
+        dplyr::filter(dataset %in% biomod_dataset)
+    }
+  }
+  
+  # -------- Compute anomaly --------
+  if (species == "cfin") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    sd = sd(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    anomaly = (log10(`cfin_CV_VI` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  } else if (species == "ctyp") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  } else if (species == "pcal") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  }
+  
+  # -------- Take the log of count data --------
+  if (anomaly) {
+    md$abund <- md$anomaly
+  } else {
+    if (species == "cfin") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
+    } else if (species == "ctyp") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
+    } else if (species == "pcal") {
+      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
+    }
+  }
+  
+  # -------- Exclude NAs and select columns --------
+  md <- md %>% dplyr::select(lat, lon, year, month, abund, wind, fetch, chl, int_chl, bots, bott, sss, sst, lag_sst, uv, bat, dist, slope) %>%
+    as.data.frame() %>%
+    na.exclude() %>%
+    dplyr::filter(!is.infinite(abund)) %>%
+    dplyr::mutate(season = if_else(month %in% c(1:3), 1,
+                                   if_else(month %in% c(4:6), 2,
+                                           if_else(month %in% c(7:9), 3, 4))),
+                  region = if_else(lat <= 41.5 & lon < -70, "MAB", 
+                                   if_else(lat >= 39 & lat <= 42 & lon >= -70 & lon <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, year) %>%
+    dplyr::summarize(mean = mean(abund, na.rm=TRUE),
+                     stdev = sd(abund, na.rm = TRUE))
+  
+  
   # -------- Compute regions --------
   ensemble_proj_yearly <- ensemble_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
@@ -582,16 +649,13 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
                      stdev = sd(proj, na.rm = TRUE))
   
-  # -------- Initialize legend colors --------
-  colors <- c("Actual" = "red", "Predicted" = "blue")
-  
   # -------- Plot MAB --------
   if ("MAB" %in% unique(md$region)) {
     
     # ---- Plot Ensembles ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -601,11 +665,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -617,9 +681,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot GAMs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -629,11 +693,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -645,9 +709,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot BRTs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -657,11 +721,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -673,9 +737,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot RF ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -685,11 +749,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -705,9 +769,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   # -------- Plot GBK --------
   if ("GBK" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -717,11 +781,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -733,9 +797,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot GAMs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -745,11 +809,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -761,9 +825,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot BRTs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -773,11 +837,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -789,9 +853,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot RF ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -801,11 +865,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -820,9 +884,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   # -------- Plot GOM --------
   if ("GOM" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -832,11 +896,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -848,9 +912,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot GAMs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -860,11 +924,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -876,9 +940,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot BRTs ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -888,11 +952,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -904,9 +968,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
     
     # ---- Plot RF ----
-    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_smooth(fill = "red") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
@@ -916,11 +980,11 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
-      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
-      labs(x = "Month",
+      labs(x = "Year",
            y = "Probability of Habitat Suitability",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
