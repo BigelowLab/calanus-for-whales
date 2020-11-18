@@ -45,7 +45,7 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
           brt_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          rf_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
+          rf_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF", year, "_", i), paste0("proj_RF", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           crs(ensemble_proj) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
@@ -65,7 +65,7 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
           brt_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          rf_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
+          rf_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF", year, "_", i), paste0("proj_RF", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           crs(ensemble_temp) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
