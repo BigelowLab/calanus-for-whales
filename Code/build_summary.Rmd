@@ -520,7 +520,7 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 ### Ensemble region plots
 
-```{r}
+```{r ensemble_region_plot, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
 
@@ -550,7 +550,7 @@ if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
 
 ### GAM region plots
 
-```{r}
+```{r biomod_gam_region_plot, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
 
@@ -580,7 +580,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ### Ensemble region plots
 
-```{r}
+```{r biomod_brt_region_plot, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
 
@@ -610,7 +610,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ### Ensemble region plots
 
-```{r}
+```{r biomod_rf_region_plot, echo=FALSE}
 # Initialize filepath
 fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
 
