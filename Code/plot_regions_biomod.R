@@ -19,7 +19,7 @@ require(gridExtra)
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
-plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
+plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin") {
   
   # -------- Create output directories --------
   dir.create(fp_out, showWarnings = FALSE) 
@@ -36,14 +36,14 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
       md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv")))
     } else {
       md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv"))) %>% 
-        dplyr::filter(dataset %in% datasets)
+        dplyr::filter(dataset %in% biomod_dataset)
     }
   } else {
     if (anomaly) {
       md <- bind_years(fp = file.path(fp_md), years = years)
     } else {
       md <- bind_years(fp = file.path(fp_md), years = years) %>%
-        dplyr::filter(dataset %in% datasets)
+        dplyr::filter(dataset %in% biomod_dataset)
     }
   }
   
@@ -175,27 +175,27 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
   names(rf_proj) <- c("x", "y", "proj", "month", "year")
 
   # -------- Compute regions --------
-  ensemble_proj <- ensemble_proj %>%
+  ensemble_proj_monthly <- ensemble_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
                      stdev = sd(proj, na.rm = TRUE))
-  gam_proj <- gam_proj %>%
-    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
-                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
-    dplyr::group_by(region, month) %>%
-    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
-  
-  brt_proj <- brt_proj %>%
+  gam_proj_monthly <- gam_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
                      stdev = sd(proj, na.rm = TRUE))
   
-  rf_proj <- rf_proj %>%
+  brt_proj_monthly <- brt_proj %>%
+    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
+                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, month) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
+  
+  rf_proj_monthly <- rf_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
@@ -221,7 +221,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -232,7 +232,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -249,7 +249,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -260,7 +260,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -277,7 +277,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -288,7 +288,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -305,7 +305,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -316,7 +316,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -337,7 +337,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -348,7 +348,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_ensemble_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_ensemble_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -365,7 +365,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -376,7 +376,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_gam_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_gam_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -393,7 +393,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -404,7 +404,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_brt_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_brt_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -421,7 +421,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -432,7 +432,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_rf_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_rf_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
   }
@@ -452,7 +452,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = ensemble_proj %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -463,7 +463,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -480,7 +480,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = gam_proj %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -491,7 +491,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -508,7 +508,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = brt_proj %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -519,7 +519,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_abund_pred_monthly.png'))
     grid.arrange(abund, pred)
     dev.off()
     
@@ -536,7 +536,7 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    pred <- ggplot(data = rf_proj %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+    pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_smooth(fill = "blue") +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
@@ -547,7 +547,387 @@ plot_regions_biomod <- function(version, fp_out, datasets, species = "cfin") {
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
-    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_abund_pred.png'))
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_abund_pred_monthly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+  }
+  
+  # -------- INTERANNUAL VARIABILITY --------
+  
+  # -------- Compute regions --------
+  ensemble_proj_yearly <- ensemble_proj %>%
+    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
+                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, year) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
+  gam_proj_yearly <- gam_proj %>%
+    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
+                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, year) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
+  
+  brt_proj_yearly <- brt_proj %>%
+    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
+                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, year) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
+  
+  rf_proj_yearly <- rf_proj %>%
+    dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
+                                   if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
+    dplyr::group_by(region, year) %>%
+    dplyr::summarize(mean = mean(proj, na.rm = TRUE),
+                     stdev = sd(proj, na.rm = TRUE))
+  
+  # -------- Initialize legend colors --------
+  colors <- c("Actual" = "red", "Predicted" = "blue")
+  
+  # -------- Plot MAB --------
+  if ("MAB" %in% unique(md$region)) {
+    
+    # ---- Plot Ensembles ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot GAMs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot BRTs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("BRT Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot RF ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+  }
+  
+  # -------- Plot GBK --------
+  if ("GBK" %in% unique(md$region)) {
+    # ---- Plot Ensembles ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_ensemble_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot GAMs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_gam_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot BRTs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("BRT George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_brt_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot RF ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_rf_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+  }
+  
+  # -------- Plot GOM --------
+  if ("GOM" %in% unique(md$region)) {
+    # ---- Plot Ensembles ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot GAMs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM Geulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot BRTs ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("BRT Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_abund_pred_yearly.png'))
+    grid.arrange(abund, pred)
+    dev.off()
+    
+    # ---- Plot RF ----
+    abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
+      geom_smooth(fill = "red") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
+      geom_smooth(fill = "blue") +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "Month",
+           y = "Probability of Habitat Suitability",
+           color = "Legend") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_abund_pred_yearly.png'))
     grid.arrange(abund, pred)
     dev.off()
   }
