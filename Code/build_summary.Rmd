@@ -518,6 +518,125 @@ grid.arrange(rasterGrob(biomod1), rasterGrob(biomod2), rasterGrob(biomod3),
 
 **Figure 17.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for all 12 months.
 
+### Ensemble region plots
+
+```{r}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_abund_pred_monthly.png"))
+
+if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+### GAM region plots
+
+```{r}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
+
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+### Ensemble region plots
+
+```{r}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
+
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
+
+### Ensemble region plots
+
+```{r}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_abund_pred_monthly.png"))
+
+if ("GBK_rf_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_rf_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+              ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+              ncol=2)
+}
+
+```
 
 ## MGCV GAMs
 
