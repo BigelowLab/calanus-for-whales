@@ -578,7 +578,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-### Ensemble region plots
+### BRT region plots
 
 ```{r biomod_brt_region_plot, echo=FALSE}
 # Initialize filepath
@@ -608,7 +608,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-### Ensemble region plots
+### RF region plots
 
 ```{r biomod_rf_region_plot, echo=FALSE}
 # Initialize filepath
