@@ -15,7 +15,9 @@ source("./calanus-for-whales/Code/build_climatology.R")
 source("./calanus-for-whales/Code/build_biomod_climatology.R")
 source("./calanus-for-whales/Code/compile_evals.R")
 source("./calanus-for-whales/Code/plot_regions.R")
+source("./calanus-for-whales/Code/plot_regions_biomod.R")
 source("./calanus-for-whales/Code/compile_abund_vs_pred.R")
+source("./calanus-for-whales/Code/compile_var_contribution.R")
 
 # Function to run all models and analysis and build report
 #'@param version <chr> name of .yaml file with model configuration information
@@ -57,6 +59,9 @@ run_models <- function(version) {
   # ---- Create region-specific actual vs. predicted plots ----
   plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
   
+  # ---- Create region-specific actual vs. predicted plots for biomod ----
+  plot_regions_biomod(version = config$version, fp_out = config$fp_out, biomod_dataset = config$biomod_dataset, species = config$species)
+    
   # ---- Compile actual vs. predicted values ----
   compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
   
