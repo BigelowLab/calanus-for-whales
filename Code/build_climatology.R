@@ -14,6 +14,7 @@ require(maps)
 require(ggplot2)
 require(stats)
 require(pals)
+require(raster)
 
 # -------- Main function --------
 #'@param version <chr> version of model
@@ -44,23 +45,23 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
     
     # -------- Test if projection exists --------
     for (year in years) {
-      if (paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & i == 1) {
-          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
-          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
+          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
         } else {
-          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
+          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
           gam_proj <- raster::stack(gam_proj, gam_temp)
           
-          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
+          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
           brt_proj <- raster::stack(brt_proj, brt_temp)
         }
       }
     }
     
-    gam_clim <- calc(gam_proj, fun = mean, na.rm = TRUE)
-    brt_clim <- calc(brt_proj, fun = mean, na.rm = TRUE)
+    gam_clim <- raster::calc(gam_proj, fun = mean, na.rm = TRUE)
+    brt_clim <- mean(brt_proj, na.rm = TRUE)
       
     raster::writeRaster(x = gam_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif")),
                         overwrite = TRUE)
