@@ -8,6 +8,9 @@ require(lubridate)
 require(readr)
 require(dplyr)
 
+# Source data binding function
+source("./calanus_data/Code/bind_years.R")
+
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 

@@ -15,6 +15,9 @@ require(raster)
 require(ggplot2)
 require(gridExtra)
 
+# Source data binding function
+source("./calanus_data/Code/bind_years.R")
+
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
@@ -553,6 +556,50 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dev.off()
   }
   
+  synth_dat <- full_join(md, ensemble_proj_monthly, by = c("region", "month"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_monthly.png'))
+  
+  synth_dat <- full_join(md, gam_proj_monthly, by = c("region", "month"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_monthly.png'))
+  
+  synth_dat <- full_join(md, brt_proj_monthly, by = c("region", "month"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_monthly.png'))
+  
+  synth_dat <- full_join(md, rf_proj_monthly, by = c("region", "month"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_monthly.png'))
+  
   # -------- INTERANNUAL VARIABILITY --------
   
   # -------- Load model data --------
@@ -658,7 +705,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("Ensemble Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -686,7 +733,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("GAM Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -714,7 +761,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("BRT Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -742,7 +789,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("RF Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -774,7 +821,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("Ensemble George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -802,7 +849,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("GAM George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -830,7 +877,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("BRT George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -858,7 +905,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("RF George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -889,7 +936,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("Ensemble Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -917,7 +964,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("GAM Geulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -945,7 +992,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("BRT Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -973,7 +1020,7 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
-           y = "Climatological Abundance",
+           y = "Annual Abundance",
            color = "Legend") +
       ggtitle("RF Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -995,6 +1042,53 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
   }
+  
+  synth_dat <- full_join(md, ensemble_proj_yearly, by = c("region", "year"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_yearly.png'))
+  
+  synth_dat <- full_join(md, gam_proj_yearly, by = c("region", "year"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_yearly.png'))
+  
+  synth_dat <- full_join(md, brt_proj_yearly, by = c("region", "year"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_yearly.png'))
+  
+  synth_dat <- full_join(md, rf_proj_yearly, by = c("region", "year"))
+  
+  ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual abundance",
+         color = "Region") +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_yearly.png'))
+  
+  
+  
   
 }
   
