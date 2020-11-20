@@ -131,7 +131,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
                      as_raster = TRUE)
   
   # -------- Loop over months --------
-  for (i in years) {
+  for (i in 2002:2017) {
     for (j in 1:12) {
       print(paste0("Year: ", i, ", Month: ", j))
       
