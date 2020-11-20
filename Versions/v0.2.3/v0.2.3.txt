@@ -1,0 +1,7 @@
+Species: Calanus finmarchicus
+Covariates: wind, lagged sst, integrated cal, sss
+Threshold: 10,000
+
+Notes:
+Covariates selected based on trial runs for lowest AIC in mgcv gams
+Threshold selected based on Stormy Mayo's paper and recommendation at zooplankton modeling workshop
