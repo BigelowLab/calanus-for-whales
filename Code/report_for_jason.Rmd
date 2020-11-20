@@ -1,0 +1,702 @@
+---
+author: "Camille Ross"
+date: "11/19/2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+params:
+  set_title: "v0.2.3"
+  fp_out: "./calanus_for_whales/Versions"
+  species: "cfin"
+  version: "v0.2.3"
+  env_covars: c("sst")
+  threshold: "40,000"
+  years: "2000:2017"
+  datasets: "CPR"
+  biomod_dataset: "Ecomon"
+title: "Biomod: right whale feeding threshold models"
+
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_libraries, echo=FALSE, include = FALSE, message=FALSE}
+library(png)
+library(grid)
+library(gridExtra)
+```
+
+## Summary
+
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^3$, which is the right whale feeding threshold selected for this model.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
+
+The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The models were run using the ``r params$biomod_dataset`` dataset(s). 
+
+## Climatologies
+
+### Ensemble Climatology
+
+The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
+
+```{r display_ensemble, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_1.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_3.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_4.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_5.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_6.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_7.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_8.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_9.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_10.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_11.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             ncol=3)
+
+
+```
+
+**Figure 1.** Monthly climatological ensemble projections of GAMs, BRTs, and random forests (RFs).  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### GAM Climatology
+
+The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+
+```{r display_biomod_gam, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+gam1 <- readPNG(file.path(fp, "gam_proj_1.png"))
+gam2 <- readPNG(file.path(fp, "gam_proj_2.png"))
+gam3 <- readPNG(file.path(fp, "gam_proj_3.png"))
+gam4 <- readPNG(file.path(fp, "gam_proj_4.png"))
+gam5 <- readPNG(file.path(fp, "gam_proj_5.png"))
+gam6 <- readPNG(file.path(fp, "gam_proj_6.png"))
+gam7 <- readPNG(file.path(fp, "gam_proj_7.png"))
+gam8 <- readPNG(file.path(fp, "gam_proj_8.png"))
+gam9 <- readPNG(file.path(fp, "gam_proj_9.png"))
+gam10 <- readPNG(file.path(fp, "gam_proj_10.png"))
+gam11 <- readPNG(file.path(fp, "gam_proj_11.png"))
+gam12 <- readPNG(file.path(fp, "gam_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
+             rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
+             rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
+             rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
+             ncol=3)
+
+
+```
+
+**Figure 2.** Monthly climatological GAM projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### BRT Climatology
+
+The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+
+```{r display_biomod_brt, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+brt1 <- readPNG(file.path(fp, "brt_proj_1.png"))
+brt2 <- readPNG(file.path(fp, "brt_proj_2.png"))
+brt3 <- readPNG(file.path(fp, "brt_proj_3.png"))
+brt4 <- readPNG(file.path(fp, "brt_proj_4.png"))
+brt5 <- readPNG(file.path(fp, "brt_proj_5.png"))
+brt6 <- readPNG(file.path(fp, "brt_proj_6.png"))
+brt7 <- readPNG(file.path(fp, "brt_proj_7.png"))
+brt8 <- readPNG(file.path(fp, "brt_proj_8.png"))
+brt9 <- readPNG(file.path(fp, "brt_proj_9.png"))
+brt10 <- readPNG(file.path(fp, "brt_proj_10.png"))
+brt11 <- readPNG(file.path(fp, "brt_proj_11.png"))
+brt12 <- readPNG(file.path(fp, "brt_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
+             rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
+             rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
+             rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
+             ncol=3)
+
+
+```
+
+**Figure 3.** Monthly climatological BRT projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+### RF Climatology
+
+The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+
+```{r display_biomod_rf, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Plots")
+
+# Load images
+rf1 <- readPNG(file.path(fp, "rf_proj_1.png"))
+rf2 <- readPNG(file.path(fp, "rf_proj_2.png"))
+rf3 <- readPNG(file.path(fp, "rf_proj_3.png"))
+rf4 <- readPNG(file.path(fp, "rf_proj_4.png"))
+rf5 <- readPNG(file.path(fp, "rf_proj_5.png"))
+rf6 <- readPNG(file.path(fp, "rf_proj_6.png"))
+rf7 <- readPNG(file.path(fp, "rf_proj_7.png"))
+rf8 <- readPNG(file.path(fp, "rf_proj_8.png"))
+rf9 <- readPNG(file.path(fp, "rf_proj_9.png"))
+rf10 <- readPNG(file.path(fp, "rf_proj_10.png"))
+rf11 <- readPNG(file.path(fp, "rf_proj_11.png"))
+rf12 <- readPNG(file.path(fp, "rf_proj_12.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf1), rasterGrob(rf2), rasterGrob(rf3),
+             rasterGrob(rf4), rasterGrob(rf5), rasterGrob(rf6),
+             rasterGrob(rf7), rasterGrob(rf8), rasterGrob(rf9),
+             rasterGrob(rf10), rasterGrob(rf11), rasterGrob(rf12),
+             ncol=3)
+
+
+```
+
+**Figure 4.** Monthly climatological RF projections produced using Biomod2.  The climatology was created by averaging together the projections from 2000 to 2017.
+
+## Monthly ensemble projections
+
+Monthly ensemble Biomod2 projections are displayed below for the months of May, June, July, August, and September.
+
+### April
+
+```{r display_biomod_april, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+files <- list.files(fp)
+
+# Load images
+if ("ensemble_proj_2002_4.png" %in% files) {
+  ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_4.png"))
+  ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_4.png"))
+  ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_4.png"))
+  ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_4.png"))
+  ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_4.png"))
+  ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_4.png"))
+  ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_4.png"))
+  ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_4.png"))
+  ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_4.png"))
+  ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_4.png"))
+  ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_4.png"))
+  ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_4.png"))
+  ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_4.png"))
+  ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_4.png"))
+  ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_4.png"))
+  ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_4.png"))
+  ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_4.png"))
+  ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_4.png"))
+  
+  # Arrange grid
+  grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+               rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+               rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+               rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+               rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+               rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+               ncol=3)
+}
+
+```
+
+**Figure 5.** Ensemble projections for the month of April from 2000 to 2017.
+
+### May
+
+```{r display_biomod_may, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_5.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_5.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_5.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_5.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_5.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_5.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_5.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_5.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_5.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_5.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_5.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_5.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_5.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_5.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_5.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_5.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_5.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_5.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 6.** Ensemble projections for the month of May from 2000 to 2017.
+
+### June
+
+```{r display_biomod_june, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_6.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_6.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_6.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_6.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_6.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_6.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_6.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_6.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_6.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_6.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_6.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_6.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_6.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_6.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_6.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_6.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_6.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_6.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 7.** Ensemble projections for the month of June from 2000 to 2017`.
+
+### August
+
+```{r display_biomod_august, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_8.png"))
+ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_8.png"))
+ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_8.png"))
+ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_8.png"))
+ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_8.png"))
+ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_8.png"))
+ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_8.png"))
+ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_8.png"))
+ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_8.png"))
+ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_8.png"))
+ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_8.png"))
+ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_8.png"))
+ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_8.png"))
+ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_8.png"))
+ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_8.png"))
+ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_8.png"))
+ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_8.png"))
+ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_8.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+             rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+             rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+             rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+             rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+             ncol=3)
+```
+
+**Figure 8.** Ensemble projections for the month of August from 2000 to 2017.
+
+### September
+
+```{r display_biomod_september, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load images
+  ensemble1 <- readPNG(file.path(fp, "ensemble_proj_2000_9.png"))
+  ensemble2 <- readPNG(file.path(fp, "ensemble_proj_2001_9.png"))
+  ensemble3 <- readPNG(file.path(fp, "ensemble_proj_2002_9.png"))
+  ensemble4 <- readPNG(file.path(fp, "ensemble_proj_2003_9.png"))
+  ensemble5 <- readPNG(file.path(fp, "ensemble_proj_2004_9.png"))
+  ensemble6 <- readPNG(file.path(fp, "ensemble_proj_2005_9.png"))
+  ensemble7 <- readPNG(file.path(fp, "ensemble_proj_2006_9.png"))
+  ensemble8 <- readPNG(file.path(fp, "ensemble_proj_2007_9.png"))
+  ensemble9 <- readPNG(file.path(fp, "ensemble_proj_2008_9.png"))
+  ensemble10 <- readPNG(file.path(fp, "ensemble_proj_2009_9.png"))
+  ensemble11 <- readPNG(file.path(fp, "ensemble_proj_2010_9.png"))
+  ensemble12 <- readPNG(file.path(fp, "ensemble_proj_2011_9.png"))
+  ensemble13 <- readPNG(file.path(fp, "ensemble_proj_2012_9.png"))
+  ensemble14 <- readPNG(file.path(fp, "ensemble_proj_2013_9.png"))
+  ensemble15 <- readPNG(file.path(fp, "ensemble_proj_2014_9.png"))
+  ensemble16 <- readPNG(file.path(fp, "ensemble_proj_2015_9.png"))
+  ensemble17 <- readPNG(file.path(fp, "ensemble_proj_2016_9.png"))
+  ensemble18 <- readPNG(file.path(fp, "ensemble_proj_2017_9.png"))
+  
+  # Arrange grid
+  grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3),
+               rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
+               rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
+               rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
+               rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
+               rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
+               ncol=3)
+
+```
+
+**Figure 9.** Ensemble projections for the month of September from 2000 to 2017.
+
+
+## Evaluations
+
+Evaluation metrics were selected based on availability within the Biomod2 package.  The area under the receiver operator characteristic curve (AUC) and the true skill statistic (TSS) were computed during the creation of the model object.  
+
+### Ensemble evaluations
+
+```{r ensemble_evals, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod_Climatologies", "Evals")
+
+# Load evals
+auc <- readPNG(file.path(fp, "ensemble_auc.png"))
+tss <- readPNG(file.path(fp, "ensemble_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 10.** Biomod ensemble evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+### GAM evaluations
+
+```{r gam_biomod_evals, echo=FALSE}
+# Load evals
+auc <- readPNG(file.path(fp, "gam_auc.png"))
+tss <- readPNG(file.path(fp, "gam_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 11.** Biomod GAM evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+### BRT evaluations
+
+```{r brt_biomod_evals, echo=FALSE}
+# Load evals
+auc <- readPNG(file.path(fp, "brt_auc.png"))
+tss <- readPNG(file.path(fp, "brt_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 12.** Biomod BRT evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+
+### RF evaluations
+
+```{r rf_biomod_evals, echo=FALSE}
+# Load evals
+auc <- readPNG(file.path(fp, "rf_auc.png"))
+tss <- readPNG(file.path(fp, "rf_tss.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(auc), rasterGrob(tss),
+             ncol=2)
+```
+
+**Figure 13.** Biomod RF evaluations on a monthly time scale using a.) AUC and b.) TSS
+
+## Variable contribution
+
+Variable contribution was saved during each model run and then reloaded and plotted on a monthly basis and standardized so the total contribution is equal to 100%. This was only done for the individual models.
+
+### GAM variable contribution
+
+```{r gam_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "gam_var_cont.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
+
+**Figure 14.** Biomod GAM variable contributions on a monthly time scale.
+
+### BRT variable contribution
+
+```{r brt_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "brt_var_cont.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
+
+**Figure 15.** Biomod BRT variable contributions on a monthly time scale.
+
+### RF variable contribution
+
+```{r rf_biomod_var_cont, echo=FALSE}
+# Load evals
+var_cont <- readPNG(file.path(fp, "rf_var_cont.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(var_cont),
+             ncol = 1)
+```
+
+**Figure 16.** Biomod RF variable contributions on a monthly time scale.
+
+## Climatological and inter-annual actual abundance vs. predicted
+
+For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+
+### Ensemble model
+
+```{r ensemble_actual_vs_pred, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+ensemble_monthly <- readPNG(file.path(fp, "ensemble_abund_vs_pred_monthly.png"))
+ensemble_yearly <- readPNG(file.path(fp, "ensemble_abund_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
+             ncol=2)
+
+```
+
+**Figure 17.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+### GAM model
+
+```{r gam_actual_vs_pred_biomod, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+gam_monthly <- readPNG(file.path(fp, "gam_abund_vs_pred_monthly.png"))
+gam_yearly <- readPNG(file.path(fp, "gam_abund_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
+             ncol=2)
+
+```
+
+**Figure 18.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+### BRT model
+
+```{r brt_actual_vs_pred_biomod, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+brt_monthly <- readPNG(file.path(fp, "brt_abund_vs_pred_monthly.png"))
+brt_yearly <- readPNG(file.path(fp, "brt_abund_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
+             ncol=2)
+
+```
+
+**Figure 19.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+### RF model
+
+```{r rf_actual_vs_pred_biomod, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+rf_monthly <- readPNG(file.path(fp, "rf_abund_vs_pred_monthly.png"))
+rf_yearly <- readPNG(file.path(fp, "rf_abund_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
+             ncol=2)
+
+```
+
+**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+## Region plots
+
+For each region, a plot was created comparing the actual abundance of ``r params$species`` to the predicted probability of habitat suitability.  The shaded confidence intereval represents variance.
+
+### Ensemble region plots
+
+```{r ensemble_region_plot, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_abund_pred_monthly.png"))
+
+if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 21.** Plots of actual vs. predicted abundance in different regions.
+
+### GAM region plots
+
+```{r biomod_gam_region_plot, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly.png"))
+
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 22.** Plots of actual vs. predicted abundance in different regions.
+
+### BRT region plots
+
+```{r biomod_brt_region_plot, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly.png"))
+
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 23.** Plots of actual vs. predicted abundance in different regions.
+
+### RF region plots
+
+```{r biomod_rf_region_plot, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_abund_pred_monthly.png"))
+
+if ("GBK_rf_abund_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_abund_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_abund_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_rf_abund_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 24.** Plots of actual vs. predicted abundance in different regions.
+
