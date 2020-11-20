@@ -26,6 +26,11 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
   # -------- Load world map data --------
   worldmap <- ggplot2::map_data("world")
   
+  months <- c("January", "February", "March",
+              "April", "May", "June", 
+              "July", "August", "September",
+              "October", "November", "December")
+  
   # -------- Loop over months --------
   for (i in 1:12) {
     
@@ -117,7 +122,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
       # Add projection color gradient and label
       scale_fill_gradientn(colors = inferno(500), limits = c(0, 0.5), na.value = "white") +
       labs(x = "", 
-           y = "") +
+           y = "",
+           title = months[i]) +
       # Add world map data
       geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
       coord_quickmap(xlim = c(round(min(gam_df$x)), round(max(gam_df$x))), 
@@ -136,7 +142,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
       # Add projection color gradient and label
       scale_fill_gradientn(colors = inferno(500), limits = c(0, 0.5), na.value = "white") +
       labs(x = "", 
-           y = "") +
+           y = "",
+           title = months[i]) +
       # Add world map data
       geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
       coord_quickmap(xlim = c(round(min(gam_df$x)), round(max(gam_df$x))), 
@@ -155,7 +162,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
       # Add projection color gradient and label
       scale_fill_gradientn(colors = inferno(500), limits = c(0, 0.5), na.value = "white") +
       labs(x = "", 
-           y = "") +
+           y = "",
+           title = months[i]) +
       # Add world map data
       geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
       coord_quickmap(xlim = c(round(min(gam_df$x)), round(max(gam_df$x))), 
@@ -174,7 +182,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
       # Add projection color gradient and label
       scale_fill_gradientn(colors = inferno(500), limits = c(0, 0.5), na.value = "white") +
       labs(x = "", 
-           y = "") +
+           y = "",
+           title = months[i]) +
       # Add world map data
       geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
       coord_quickmap(xlim = c(round(min(gam_df$x)), round(max(gam_df$x))), 
