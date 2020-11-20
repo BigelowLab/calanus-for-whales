@@ -55,18 +55,21 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
                     sd = sd(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    var = var(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
                     anomaly = (log10(`cfin_CV_VI` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "ctyp") {
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    var = var(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
                     sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    var = var(log10(`pcal_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
@@ -96,7 +99,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
                                    if_else(lat >= 39 & lat <= 42 & lon >= -70 & lon <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
-                     stdev = sd(abund, na.rm = TRUE))
+                     stdev = sd(abund, na.rm = TRUE),
+                     var = var(abund, na.rm = TRUE))
   
   
   for (year in 2000:2017) {
@@ -184,27 +188,31 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   gam_proj_monthly <- gam_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   brt_proj_monthly <- brt_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   rf_proj_monthly <- rf_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, month) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   # -------- Initialize legend colors --------
   colors <- c("Actual" = "red", "Predicted" = "blue")
@@ -214,7 +222,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -226,7 +235,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -242,7 +252,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -254,7 +265,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -270,7 +282,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -282,7 +295,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -298,7 +312,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -310,7 +325,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "MAB"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -330,7 +346,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   if ("GBK" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -342,7 +359,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -358,7 +376,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -370,7 +389,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -386,7 +406,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -398,7 +419,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -414,7 +436,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -426,7 +449,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -445,7 +469,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   if ("GOM" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -457,7 +482,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -473,19 +499,21 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
            color = "Legend") +
-      ggtitle("GAM Geulf of Maine") +
+      ggtitle("GAM Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -501,7 +529,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -513,7 +542,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -529,7 +559,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -541,7 +572,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
@@ -560,8 +592,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
          color = "Region") +
@@ -571,8 +603,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
          color = "Region") +
@@ -582,8 +614,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
          color = "Region") +
@@ -593,8 +625,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
          color = "Region") +
@@ -624,18 +656,21 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
                     sd = sd(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    var = var(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
                     anomaly = (log10(`cfin_CV_VI` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "ctyp") {
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
                     sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    var = var(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   } else if (species == "pcal") {
     md <- md %>% dplyr::group_by(dataset) %>%
       dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
                     sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    var = var(log10(`pcal_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
@@ -665,7 +700,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
                                    if_else(lat >= 39 & lat <= 42 & lon >= -70 & lon <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
-                     stdev = sd(abund, na.rm = TRUE))
+                     stdev = sd(abund, na.rm = TRUE),
+                     var = var(abund, na.rm = TRUE))
   
   
   # -------- Compute regions --------
@@ -674,34 +710,39 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   gam_proj_yearly <- gam_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   brt_proj_yearly <- brt_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   rf_proj_yearly <- rf_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
     dplyr::group_by(region, year) %>%
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
-                     stdev = sd(proj, na.rm = TRUE))
+                     stdev = sd(proj, na.rm = TRUE),
+                     var = var(proj, na.rm = TRUE))
   
   # -------- Plot MAB --------
   if ("MAB" %in% unique(md$region)) {
     
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - stdev, ymax = mean + stdev), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -713,7 +754,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -729,7 +771,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -741,7 +784,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -757,7 +801,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -769,7 +814,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -785,7 +831,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -797,7 +844,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -817,7 +865,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   if ("GBK" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -829,7 +878,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -845,7 +895,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -857,7 +908,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -873,7 +925,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -885,7 +938,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -901,7 +955,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -913,7 +968,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GBK"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -932,7 +988,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   if ("GOM" %in% unique(md$region)) {
     # ---- Plot Ensembles ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -944,7 +1001,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = ensemble_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -960,7 +1018,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -972,7 +1031,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = gam_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -988,7 +1048,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1000,7 +1061,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -1016,7 +1078,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Actual")) +
-      geom_smooth(fill = "red") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1028,7 +1091,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     pred <- ggplot(data = rf_proj_yearly %>% dplyr::filter(region == "GOM"), mapping = aes(x = year, y = mean, color = "Predicted")) +
-      geom_smooth(fill = "blue") +
+      geom_path() +
+      geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
@@ -1047,8 +1111,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
          color = "Region") +
@@ -1058,8 +1122,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
          color = "Region") +
@@ -1069,8 +1133,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
          color = "Region") +
@@ -1080,8 +1144,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
     geom_point() +
-    geom_errorbar(aes(ymin = mean.y - stdev.y, ymax = mean.y + stdev.y), width=.2) +
-    geom_errorbarh(aes(xmin = mean.x - stdev.x, xmax = mean.x + stdev.x), height = 0.025) +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
+    geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
          color = "Region") +
