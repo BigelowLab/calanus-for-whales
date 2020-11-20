@@ -78,4 +78,17 @@ run_models <- function(version) {
                                   datasets = config$datasets,
                                   biomod_dataset = config$biomod_dataset))
   
+  # ---- Render model summary for Jason ----
+  rmarkdown::render(file.path(DIR, "calanus-for-whales/Code/report_for_jason.Rmd"), 
+                    output_file = file.path(DIR, "calanus-for-whales/Versions", config$version, paste0(config$version, "_for_jason.html")),
+                    params = list(set_title = config$version,
+                                  fp_out = config$fp_out,
+                                  species = config$species,
+                                  version = config$version,
+                                  env_covars = config$env_covars,
+                                  threshold = config$threshold,
+                                  years = config$years,
+                                  datasets = config$datasets,
+                                  biomod_dataset = config$biomod_dataset))
+  
 }
