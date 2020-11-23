@@ -131,7 +131,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
                      expand = TRUE) +
       # Remove grid lines
       theme_bw() +
-      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            plot.title = element_text(size=50)) +
       # Save plot to hard drive
       ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("ensemble_proj_", i, ".png")), width = 7, height = 7)
     
@@ -151,7 +152,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
                      expand = TRUE) +
       # Remove grid lines
       theme_bw() +
-      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            plot.title = element_text(size=50)) +
       # Save plot to hard drive
       ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("gam_proj_", i, ".png")), width = 7, height = 7)
     
@@ -171,7 +173,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
                      expand = TRUE) +
       # Remove grid lines
       theme_bw() +
-      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            plot.title = element_text(size=50)) +
       # Save plot to hard drive
       ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("brt_proj_", i, ".png")), width = 7, height = 7)
     
@@ -191,7 +194,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
                      expand = TRUE) +
       # Remove grid lines
       theme_bw() +
-      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            plot.title = element_text(size=50)) +
       # Save plot to hard drive
       ggsave(filename = file.path(fp_out, species, version, "Biomod_Climatologies", "Plots", paste0("rf_proj_", i, ".png")), width = 7, height = 7)
     

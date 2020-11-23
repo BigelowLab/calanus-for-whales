@@ -596,7 +596,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_monthly.png'))
   
   synth_dat <- full_join(md, gam_proj_monthly, by = c("region", "month"))
@@ -607,7 +610,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_monthly.png'))
   
   synth_dat <- full_join(md, brt_proj_monthly, by = c("region", "month"))
@@ -618,7 +624,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_monthly.png'))
   
   synth_dat <- full_join(md, rf_proj_monthly, by = c("region", "month"))
@@ -629,7 +638,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Climatological abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_monthly.png'))
   
   # -------- INTERANNUAL VARIABILITY --------
@@ -1115,7 +1127,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_yearly.png'))
   
   synth_dat <- full_join(md, gam_proj_yearly, by = c("region", "year"))
@@ -1126,7 +1141,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_yearly.png'))
   
   synth_dat <- full_join(md, brt_proj_yearly, by = c("region", "year"))
@@ -1137,7 +1155,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
-         color = "Region") +
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_yearly.png'))
   
   synth_dat <- full_join(md, rf_proj_yearly, by = c("region", "year"))
@@ -1149,6 +1170,9 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     labs(y = "Probability of Feeding",
          x = "Inter-annual abundance",
          color = "Region") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_yearly.png'))
   
   
