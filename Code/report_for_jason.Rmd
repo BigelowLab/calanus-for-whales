@@ -33,13 +33,13 @@ library(gridExtra)
 
 Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^3$, which is the right whale feeding threshold selected for this model.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
 
-The models were averaged into climatologies with one climatology per month.  Evaluations were compiled from the climatological averages and plotted.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The models were run using the ``r params$biomod_dataset`` dataset(s). 
+The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each indiviual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The models were produced using the ``r params$biomod_dataset`` dataset(s). 
 
 ## Climatologies
 
 ### Ensemble Climatology
 
-The ensemble models were created using the biomod2 package.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
+The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath
