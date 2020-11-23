@@ -1,0 +1,7 @@
+Species: Calanus finmarchicus
+Covariates: sst, chl, bat, sss, wind, bots, bott, integrated chlorophyll, lagged sst, slope, distance to shore (all covariates except for fetch)
+Threshold: 40,000
+
+Notes:
+Baseline run with all covariates for cfin
+Fetch excluded because it causes mgcv gams to crash
