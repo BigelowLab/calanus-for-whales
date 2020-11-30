@@ -482,9 +482,11 @@ grid.arrange(rasterGrob(var_cont),
 
 ## Climatological and inter-annual actual abundance vs. predicted
 
-For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
 
 ### Ensemble model
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r ensemble_actual_vs_pred, echo=FALSE}
 
@@ -505,7 +507,31 @@ grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
 
 **Figure 17.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
 
+#### Independent data (CPR)
+
+```{r ensemble_actual_vs_pred_cpr, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+ensemble_monthly <- readPNG(file.path(fp, "ensemble_abund_vs_pred_monthly_cpr.png"))
+ensemble_yearly <- readPNG(file.path(fp, "ensemble_abund_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
+             ncol=2)
+
+```
+
+**Figure 18.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+
 ### GAM model
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r gam_actual_vs_pred_biomod, echo=FALSE}
 
@@ -524,9 +550,32 @@ grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
 
 ```
 
-**Figure 18.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 19.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+#### Independent data (CPR)
+
+```{r gam_actual_vs_pred_biomod_cpr, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+gam_monthly <- readPNG(file.path(fp, "gam_abund_vs_pred_monthly_cpr.png"))
+gam_yearly <- readPNG(file.path(fp, "gam_abund_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
+             ncol=2)
+
+```
+
+**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### BRT model
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r brt_actual_vs_pred_biomod, echo=FALSE}
 
@@ -545,9 +594,32 @@ grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
 
 ```
 
-**Figure 19.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 21.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+#### Independent data (CPR)
+
+```{r brt_actual_vs_pred_biomod_cpr, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+brt_monthly <- readPNG(file.path(fp, "brt_abund_vs_pred_monthly_cpr.png"))
+brt_yearly <- readPNG(file.path(fp, "brt_abund_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
+             ncol=2)
+
+```
+
+**Figure 22.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### RF model
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r rf_actual_vs_pred_biomod, echo=FALSE}
 
@@ -566,13 +638,36 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 
 ```
 
-**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 23.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
+#### Independent data (CPR)
+
+```{r rf_actual_vs_pred_biomod_cpr, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+rf_monthly <- readPNG(file.path(fp, "rf_abund_vs_pred_monthly_cpr.png"))
+rf_yearly <- readPNG(file.path(fp, "rf_abund_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
+             ncol=2)
+
+```
+
+**Figure 24.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+
 
 ## Region plots
 
-For each region, a plot was created comparing the actual abundance of ``r params$species`` to the predicted probability of habitat suitability.  The shaded confidence intereval represents variance.
+For each region, a plot was created comparing the actual abundance of ``r params$species`` for both the training dataset (``r params$biomod_dataset``) and an independent dataset (CPR) to the predicted probability of habitat suitability.  The shaded confidence interval represents variance.
 
 ### Ensemble region plots
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r ensemble_region_plot, echo=FALSE}
 # Initialize filepath
@@ -602,9 +697,43 @@ if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 21.** Plots of actual vs. predicted abundance in different regions.
+**Figure 25.** Plots of actual vs. predicted abundance in different regions.
+
+#### Independent data (CPR)
+
+```{r ensemble_region_plot_cpr, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_abund_pred_monthly_cpr.png"))
+
+if ("GBK_ensemble_abund_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_abund_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_abund_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_abund_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 26.** Plots of actual vs. predicted abundance in different regions.
 
 ### GAM region plots
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r biomod_gam_region_plot, echo=FALSE}
 # Initialize filepath
@@ -634,9 +763,43 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 22.** Plots of actual vs. predicted abundance in different regions.
+**Figure 27.** Plots of actual vs. predicted abundance in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_gam_region_plot_cpr, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_monthly_cpr.png"))
+
+if ("GBK_gam_abund_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 28.** Plots of actual vs. predicted abundance in different regions.
 
 ### BRT region plots
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r biomod_brt_region_plot, echo=FALSE}
 # Initialize filepath
@@ -666,9 +829,43 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 23.** Plots of actual vs. predicted abundance in different regions.
+**Figure 29.** Plots of actual vs. predicted abundance in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_brt_region_plot_cpr, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_monthly_cpr.png"))
+
+if ("GBK_brt_abund_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 30.** Plots of actual vs. predicted abundance in different regions.
 
 ### RF region plots
+
+#### Training data (``r params$biomod_dataset``)
 
 ```{r biomod_rf_region_plot, echo=FALSE}
 # Initialize filepath
@@ -698,5 +895,38 @@ if ("GBK_rf_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 24.** Plots of actual vs. predicted abundance in different regions.
+**Figure 31.** Plots of actual vs. predicted abundance in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_rf_region_plot_cpr, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_abund_pred_monthly_cpr.png"))
+
+if ("GBK_rf_abund_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_abund_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_abund_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_rf_abund_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 32.** Plots of actual vs. predicted abundance in different regions.
+
 
