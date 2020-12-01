@@ -31,15 +31,15 @@ library(gridExtra)
 
 ## Summary
 
-Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^3$, which is the right whale feeding threshold selected for this model.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were produced using the ``r params$biomod_dataset`` dataset(s).  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^2$, which is the right whale feeding threshold selected for this model.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
 
-The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each indiviual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region.  The models were produced using the ``r params$biomod_dataset`` dataset(s). 
+The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each indiviual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region. 
 
 ## Climatologies
 
 ### Ensemble Climatology
 
-The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.
+The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath
@@ -73,7 +73,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
 
 ### GAM Climatology
 
-The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
 ```{r display_biomod_gam, echo=FALSE}
 # Initialize filepath
@@ -107,7 +107,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 ### BRT Climatology
 
-The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
 ```{r display_biomod_brt, echo=FALSE}
 # Initialize filepath
@@ -141,7 +141,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 
 ### RF Climatology
 
-The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^3$ counted as a presence and anything below that threshold counted as an absence.  
+The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
 
 ```{r display_biomod_rf, echo=FALSE}
 # Initialize filepath
@@ -661,7 +661,7 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 **Figure 24.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
 
 
-## Region plots
+## Region plots for actual abundance
 
 For each region, a plot was created comparing the actual abundance of ``r params$species`` for both the training dataset (``r params$biomod_dataset``) and an independent dataset (CPR) to the predicted probability of habitat suitability.  The shaded confidence interval represents variance.
 
@@ -697,7 +697,7 @@ if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 25.** Plots of actual vs. predicted abundance in different regions.
+**Figure 25.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -729,7 +729,7 @@ if ("GBK_ensemble_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 26.** Plots of actual vs. predicted abundance in different regions.
+**Figure 26.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### GAM region plots
 
@@ -763,7 +763,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 27.** Plots of actual vs. predicted abundance in different regions.
+**Figure 27.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -795,7 +795,7 @@ if ("GBK_gam_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 28.** Plots of actual vs. predicted abundance in different regions.
+**Figure 28.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### BRT region plots
 
@@ -829,7 +829,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 29.** Plots of actual vs. predicted abundance in different regions.
+**Figure 29.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -861,7 +861,7 @@ if ("GBK_brt_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 30.** Plots of actual vs. predicted abundance in different regions.
+**Figure 30.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### RF region plots
 
@@ -895,7 +895,7 @@ if ("GBK_rf_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 31.** Plots of actual vs. predicted abundance in different regions.
+**Figure 31.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -927,6 +927,277 @@ if ("GBK_rf_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 32.** Plots of actual vs. predicted abundance in different regions.
+**Figure 32.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+## Region plots for binary feeding threshold
+
+For each region, a plot was created comparing whether or not the abundance data exceeded the right whale feeding threshold (1 and 0, respectively) for both the training dataset (``r params$biomod_dataset``) and an independent dataset (CPR) to the predicted probability of habitat suitability.  The shaded confidence interval represents variance.
+
+### Ensemble region plots
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r ensemble_region_plot_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_pa_pred_monthly.png"))
+
+if ("GBK_ensemble_pa_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_pa_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_pa_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_pa_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 33.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+#### Independent data (CPR)
+
+```{r ensemble_region_plot_cpr_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_pa_pred_monthly_cpr.png"))
+
+if ("GBK_ensemble_pa_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_pa_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_pa_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_pa_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 34.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+### GAM region plots
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r biomod_gam_region_plot_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_pa_pred_monthly.png"))
+
+if ("GBK_gam_pa_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_pa_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_pa_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_pa_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 35.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_gam_region_plot_cpr_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_pa_pred_monthly_cpr.png"))
+
+if ("GBK_gam_pa_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_pa_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_pa_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_gam_pa_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 36.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+### BRT region plots
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r biomod_brt_region_plot_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_pa_pred_monthly.png"))
+
+if ("GBK_brt_pa_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_pa_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_pa_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_pa_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 37.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_brt_region_plot_cpr_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_pa_pred_monthly_cpr.png"))
+
+if ("GBK_brt_pa_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_pa_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_pa_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_brt_pa_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 38.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+### RF region plots
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r biomod_rf_region_plot_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_pa_pred_monthly.png"))
+
+if ("GBK_rf_pa_pred_monthly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_pa_pred_monthly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_pa_pred_monthly.png"))
+
+
+# Arrange grid
+if ("GBK_rf_pa_pred_monthly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 39.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+#### Independent data (CPR)
+
+```{r biomod_rf_region_plot_cpr_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_pa_pred_monthly_cpr.png"))
+
+if ("GBK_rf_pa_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_pa_pred_monthly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_pa_pred_monthly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_rf_pa_pred_monthly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 40.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+
+
 
 

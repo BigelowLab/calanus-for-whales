@@ -22,7 +22,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
-plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin") {
+plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, species = "cfin") {
   
   # -------- Create output directories --------
   dir.create(fp_out, showWarnings = FALSE) 
@@ -100,7 +100,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dplyr::group_by(region, month, dataset) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
                      stdev = sd(abund, na.rm = TRUE),
-                     var = var(abund, na.rm = TRUE))
+                     var = var(abund, na.rm = TRUE)) %>%
+    dplyr::mutate(pa = if_else(mean >= threshold, 1, 0))
   
   
   for (year in 2000:2017) {
@@ -234,6 +235,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("Ensemble Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -241,6 +254,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("Ensemble Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -263,8 +288,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot GAMs ----
@@ -281,6 +314,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("GAM Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -288,6 +333,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -310,8 +367,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot BRTs ----
@@ -328,6 +393,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("BRT Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -335,6 +412,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("BRT Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("BRT Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -357,8 +446,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot RF ----
@@ -375,6 +472,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("RF Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -382,6 +491,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -404,8 +525,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
   }
@@ -426,6 +555,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("Ensemble George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
     pred <- ggplot(data = ensemble_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "blue", color = NA) +
@@ -442,6 +583,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_ensemble_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
@@ -450,6 +595,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -472,6 +629,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_gam_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
@@ -485,6 +646,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("BRT George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
     
     pred <- ggplot(data = brt_proj_monthly %>% dplyr::filter(region == "GBK"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_path() +
@@ -502,6 +675,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_brt_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
@@ -510,6 +687,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -532,6 +721,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_rf_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
   }
   
   # -------- Plot GOM --------
@@ -548,6 +741,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       ggtitle("Ensemble Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("Ensemble Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
@@ -557,6 +762,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("Ensemble Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -579,8 +796,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot GAMs ----
@@ -591,6 +816,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("GAM Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -609,6 +846,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("GAM Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
     
     pred <- ggplot(data = gam_proj_monthly %>% dplyr::filter(region == "GOM"), mapping = aes(x = month, y = mean, color = "Predicted")) +
       geom_path() +
@@ -626,8 +875,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot BRTs ----
@@ -644,6 +901,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("BRT Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -651,6 +920,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("BRT Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("BRT Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -673,8 +954,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot RF ----
@@ -691,6 +980,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("RF Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -698,6 +999,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Climatological Abundance",
+           color = "Legend") +
+      ggtitle("RF Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -720,8 +1033,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_pa_pred_monthly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_abund_pred_monthly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_pa_pred_monthly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
   }
   
@@ -906,7 +1227,8 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     dplyr::group_by(region, year, dataset) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
                      stdev = sd(abund, na.rm = TRUE),
-                     var = var(abund, na.rm = TRUE))
+                     var = var(abund, na.rm = TRUE)) %>%
+    dplyr::mutate(pa = if_else(mean >= threshold, 1, 0))
   
   
   # -------- Compute regions --------
@@ -958,6 +1280,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("Ensemble Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - stdev, ymax = mean + stdev), alpha=0.2, fill = "red", color = NA) +
@@ -965,6 +1299,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("Ensemble Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -987,8 +1333,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_ensemble_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot GAMs ----
@@ -1005,6 +1359,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("GAM Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1012,6 +1378,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("GAM Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1034,8 +1412,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_gam_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot BRTs ----
@@ -1046,6 +1432,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("BRT Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("BRT Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1064,6 +1462,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("BRT Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
     
     pred <- ggplot(data = brt_proj_yearly %>% dplyr::filter(region == "MAB"), mapping = aes(x = year, y = mean, color = "Predicted")) +
       geom_path() +
@@ -1081,8 +1491,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_brt_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot RF ----
@@ -1099,6 +1517,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("RF Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1106,6 +1536,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("RF Mid Atlantic Bight") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF Mid Atlantic Bight") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1128,8 +1570,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'MAB_rf_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
   }
@@ -1144,6 +1594,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("Ensemble George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1166,6 +1628,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_ensemble_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot GAMs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
@@ -1174,6 +1640,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("GAM George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1196,6 +1674,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_gam_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot BRTs ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
@@ -1204,6 +1686,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("BRT George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("BRT George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1226,6 +1720,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_brt_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     # ---- Plot RF ----
     abund <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
@@ -1234,6 +1732,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("RF George's Bank") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF George's Bank") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1256,6 +1766,10 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GBK_rf_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
   }
   
   # -------- Plot GOM --------
@@ -1274,6 +1788,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("Ensemble Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1281,6 +1807,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("Ensemble Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("Ensemble Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1303,8 +1841,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_ensemble_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot GAMs ----
@@ -1321,6 +1867,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("GAM Geulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1328,6 +1886,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("GAM Geulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("GAM Geulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1350,8 +1920,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_gam_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot BRTs ----
@@ -1368,6 +1946,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("BRT Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1375,6 +1965,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("BRT Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white"))
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("BRT Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1397,8 +1999,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_brt_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
     
     # ---- Plot RF ----
@@ -1415,6 +2025,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
+    abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
+           color = "Legend") +
+      ggtitle("RF Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
     abund_cpr <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = mean, color = "Actual")) +
       geom_path() +
       geom_ribbon(aes(ymin = mean - var, ymax = mean + var), alpha=0.2, fill = "red", color = NA) +
@@ -1422,6 +2044,18 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
       scale_color_manual(values = colors) +
       labs(x = "",
            y = "Annual Abundance",
+           color = "Legend") +
+      ggtitle("RF Gulf of Maine") +
+      theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+            panel.background = element_blank(), axis.line = element_line(colour = "black"),
+            legend.key = element_rect(color = "transparent", fill = "white")) 
+    
+    abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
+      geom_point() +
+      scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
+      scale_color_manual(values = colors) +
+      labs(x = "",
+           y = "Exceeding of Feeding Threshold",
            color = "Legend") +
       ggtitle("RF Gulf of Maine") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1444,8 +2078,16 @@ plot_regions_biomod <- function(version, fp_out, biomod_dataset, species = "cfin
     grid.arrange(abund, pred)
     dev.off()
     
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_pa_pred_yearly.png'))
+    grid.arrange(abund_pa, pred)
+    dev.off()
+    
     png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_abund_pred_yearly_cpr.png'))
     grid.arrange(abund_cpr, pred)
+    dev.off()
+    
+    png(file.path(fp_out, species, version, "Biomod", "Plots", 'GOM_rf_pa_pred_yearly_cpr.png'))
+    grid.arrange(abund_cpr_pa, pred)
     dev.off()
   }
   
