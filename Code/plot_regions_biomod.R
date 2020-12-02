@@ -79,11 +79,11 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     md$abund <- md$anomaly
   } else {
     if (species == "cfin") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
+      md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
     } else if (species == "ctyp") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
     } else if (species == "pcal") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
     }
   }
   
@@ -97,11 +97,14 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
                                            if_else(month %in% c(7:9), 3, 4))),
                   region = if_else(lat <= 41.5 & lon < -70, "MAB", 
                                    if_else(lat >= 39 & lat <= 42 & lon >= -70 & lon <= -68, "GBK", "GOM"))) %>%
+    dplyr::mutate(pa = if_else(abund >= threshold, 1, 0),
+                  abund = log10(abund + 1)) %>%
     dplyr::group_by(region, month, dataset) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
                      stdev = sd(abund, na.rm = TRUE),
-                     var = var(abund, na.rm = TRUE)) %>%
-    dplyr::mutate(pa = if_else(mean >= threshold, 1, 0))
+                     var = var(abund, na.rm = TRUE),
+                     var_pa = var(pa, na.rm = TRUE),
+                     pa = mean(pa, na.rm = TRUE))
   
   
   for (year in 2000:2017) {
@@ -236,7 +239,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -261,7 +265,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -315,7 +320,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -340,7 +346,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -394,7 +401,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -419,7 +427,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -473,7 +482,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -498,7 +508,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -556,7 +567,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -602,7 +614,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -648,7 +661,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -694,7 +708,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -744,7 +759,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -769,7 +785,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -823,7 +840,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -848,7 +866,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -902,7 +921,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -927,7 +947,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -981,7 +1002,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1006,7 +1028,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = month, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1060,6 +1083,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_monthly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_pa_vs_pred_monthly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), ensemble_proj_monthly, by = c("region", "month"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -1073,6 +1108,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_monthly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_pa_vs_pred_monthly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), gam_proj_monthly, by = c("region", "month"))
   
@@ -1088,6 +1135,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_monthly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_pa_vs_pred_monthly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), gam_proj_monthly, by = c("region", "month"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -1101,6 +1160,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_monthly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_pa_vs_pred_monthly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), brt_proj_monthly, by = c("region", "month"))
   
@@ -1116,6 +1187,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_monthly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_pa_vs_pred_monthly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), brt_proj_monthly, by = c("region", "month"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -1129,6 +1212,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_monthly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_pa_vs_pred_monthly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), rf_proj_monthly, by = c("region", "month"))
   
@@ -1144,6 +1239,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_monthly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_pa_vs_pred_monthly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), rf_proj_monthly, by = c("region", "month"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -1157,6 +1264,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_monthly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Climatological Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_pa_vs_pred_monthly_cpr.png'))
   
   # -------- INTERANNUAL VARIABILITY --------
   
@@ -1206,11 +1325,11 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     md$abund <- md$anomaly
   } else {
     if (species == "cfin") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
+      md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
     } else if (species == "ctyp") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
     } else if (species == "pcal") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pcal_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
     }
   }
   
@@ -1224,11 +1343,14 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
                                            if_else(month %in% c(7:9), 3, 4))),
                   region = if_else(lat <= 41.5 & lon < -70, "MAB", 
                                    if_else(lat >= 39 & lat <= 42 & lon >= -70 & lon <= -68, "GBK", "GOM"))) %>%
+    dplyr::mutate(pa = if_else(abund >= threshold, 1, 0),
+                  abund = log10(abund + 1)) %>%
     dplyr::group_by(region, year, dataset) %>%
     dplyr::summarize(mean = mean(abund, na.rm=TRUE),
                      stdev = sd(abund, na.rm = TRUE),
-                     var = var(abund, na.rm = TRUE)) %>%
-    dplyr::mutate(pa = if_else(mean >= threshold, 1, 0))
+                     var = var(abund, na.rm = TRUE),
+                     var_pa = var(pa, na.rm = TRUE),
+                     pa = mean(pa, na.rm = TRUE))
   
   
   # -------- Compute regions --------
@@ -1281,7 +1403,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1306,7 +1429,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1360,7 +1484,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1385,7 +1510,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1439,7 +1565,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1464,7 +1591,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1518,7 +1646,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1543,7 +1672,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "MAB", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1601,7 +1731,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1647,7 +1778,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1693,7 +1825,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1739,7 +1872,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GBK", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1789,7 +1923,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1814,7 +1949,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1868,7 +2004,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1893,7 +2030,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1947,7 +2085,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -1972,7 +2111,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white"))
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -2026,7 +2166,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset %in% biomod_dataset), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -2051,7 +2192,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
             legend.key = element_rect(color = "transparent", fill = "white")) 
     
     abund_cpr_pa <- ggplot(data = md %>% dplyr::filter(region == "GOM", dataset == "CPR"), mapping = aes(x = year, y = pa, color = "Actual")) +
-      geom_point() +
+      geom_path() +
+      geom_ribbon(aes(ymin = pa - var_pa, ymax = pa + var_pa), alpha=0.2, fill = "red", color = NA) +
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "",
@@ -2105,6 +2247,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_yearly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_pa_vs_pred_yearly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), ensemble_proj_yearly, by = c("region", "year"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -2118,6 +2272,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_abund_vs_pred_yearly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'ensemble_pa_vs_pred_yearly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), gam_proj_yearly, by = c("region", "year"))
   
@@ -2133,6 +2299,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_yearly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_pa_vs_pred_yearly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), gam_proj_yearly, by = c("region", "year"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -2146,6 +2324,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_abund_vs_pred_yearly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'gam_pa_vs_pred_yearly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), brt_proj_yearly, by = c("region", "year"))
   
@@ -2161,6 +2351,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_yearly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_pa_vs_pred_yearly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), brt_proj_yearly, by = c("region", "year"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -2174,6 +2376,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           panel.background = element_blank(), axis.line = element_line(colour = "black"),
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_abund_vs_pred_yearly_cpr.png'))
+  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region")  +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'brt_pa_vs_pred_yearly_cpr.png'))
   
   synth_dat <- full_join(md %>% dplyr::filter(dataset %in% biomod_dataset), rf_proj_yearly, by = c("region", "year"))
   
@@ -2189,6 +2403,18 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_yearly.png'))
   
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_pa_vs_pred_yearly.png'))
+  
   synth_dat <- full_join(md %>% dplyr::filter(dataset == "CPR"), rf_proj_yearly, by = c("region", "year"))
   
   ggplot(data = synth_dat, mapping = aes(x = mean.x, y = mean.y, color = region)) +
@@ -2203,8 +2429,17 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           legend.key = element_rect(color = "transparent", fill = "white")) +
     ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_abund_vs_pred_yearly_cpr.png'))
   
-  
-  
+  ggplot(data = synth_dat, mapping = aes(x = pa, y = mean.y, color = region)) +
+    geom_point() +
+    geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
+    geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
+    labs(y = "Probability of Feeding",
+         x = "Inter-annual Actual Probability of Feeding",
+         color = "Region") +
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+          panel.background = element_blank(), axis.line = element_line(colour = "black"),
+          legend.key = element_rect(color = "transparent", fill = "white")) +
+    ggsave(file.path(fp_out, species, version, "Biomod", "Plots", 'rf_pa_vs_pred_yearly_cpr.png'))
   
 }
   

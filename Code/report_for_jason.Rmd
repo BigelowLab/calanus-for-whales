@@ -480,9 +480,9 @@ grid.arrange(rasterGrob(var_cont),
 
 **Figure 16.** Biomod RF variable contributions on a monthly time scale.
 
-## Climatological and inter-annual actual abundance vs. predicted
+## Climatological and inter-annual actual abundance vs. predicted probability of feeding
 
-For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of suitability.  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of feeding  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
 
 ### Ensemble model
 
@@ -505,7 +505,7 @@ grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
 
 ```
 
-**Figure 17.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 17.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -526,7 +526,7 @@ grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
 
 ```
 
-**Figure 18.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 18.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 
 ### GAM model
@@ -550,7 +550,7 @@ grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
 
 ```
 
-**Figure 19.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 19.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -571,7 +571,7 @@ grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
 
 ```
 
-**Figure 20.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 20.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### BRT model
 
@@ -594,7 +594,7 @@ grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
 
 ```
 
-**Figure 21.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 21.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -615,7 +615,7 @@ grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
 
 ```
 
-**Figure 22.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 22.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### RF model
 
@@ -638,7 +638,7 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 
 ```
 
-**Figure 23.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 23.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -658,8 +658,187 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 
 ```
 
-**Figure 24.** Actual logged abundance versus predicted probability of suitability for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 24.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
 
+## Climatological and inter-annual actual probability of feeding vs. predicted
+
+For each model, the actual probability of right whales feeding on ``r params$species`` was plotted against the predicted probability of feeding  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+
+### Ensemble model
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r ensemble_actual_vs_pred_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+ensemble_monthly <- readPNG(file.path(fp, "ensemble_pa_vs_pred_monthly.png"))
+ensemble_yearly <- readPNG(file.path(fp, "ensemble_pa_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
+             ncol=2)
+
+```
+
+**Figure 25.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+#### Independent data (CPR)
+
+```{r ensemble_actual_vs_pred_cpr_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+ensemble_monthly <- readPNG(file.path(fp, "ensemble_pa_vs_pred_monthly_cpr.png"))
+ensemble_yearly <- readPNG(file.path(fp, "ensemble_pa_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
+             ncol=2)
+
+```
+
+**Figure 26.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+
+### GAM model
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r gam_actual_vs_pred_biomod_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+gam_monthly <- readPNG(file.path(fp, "gam_pa_vs_pred_monthly.png"))
+gam_yearly <- readPNG(file.path(fp, "gam_pa_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
+             ncol=2)
+
+```
+
+**Figure 27.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+#### Independent data (CPR)
+
+```{r gam_actual_vs_pred_biomod_cpr_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+gam_monthly <- readPNG(file.path(fp, "gam_pa_vs_pred_monthly_cpr.png"))
+gam_yearly <- readPNG(file.path(fp, "gam_pa_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
+             ncol=2)
+
+```
+
+**Figure 28.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+### BRT model
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r brt_actual_vs_pred_biomod_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+brt_monthly <- readPNG(file.path(fp, "brt_pa_vs_pred_monthly.png"))
+brt_yearly <- readPNG(file.path(fp, "brt_pa_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
+             ncol=2)
+
+```
+
+**Figure 29.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+#### Independent data (CPR)
+
+```{r brt_actual_vs_pred_biomod_cpr_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+brt_monthly <- readPNG(file.path(fp, "brt_pa_vs_pred_monthly_cpr.png"))
+brt_yearly <- readPNG(file.path(fp, "brt_pa_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
+             ncol=2)
+
+```
+
+**Figure 30.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+### RF model
+
+#### Training data (``r params$biomod_dataset``)
+
+```{r rf_actual_vs_pred_biomod_pa, echo=FALSE}
+
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+rf_monthly <- readPNG(file.path(fp, "rf_pa_vs_pred_monthly.png"))
+rf_yearly <- readPNG(file.path(fp, "rf_pa_vs_pred_yearly.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
+             ncol=2)
+
+```
+
+**Figure 31.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
+
+#### Independent data (CPR)
+
+```{r rf_actual_vs_pred_biomod_cpr_pa, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+# Load filenames
+files <- list.files(fp)
+
+# Load actual vs. predicted plots
+rf_monthly <- readPNG(file.path(fp, "rf_pa_vs_pred_monthly_cpr.png"))
+rf_yearly <- readPNG(file.path(fp, "rf_pa_vs_pred_yearly_cpr.png"))
+
+# Arrange grid
+grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
+             ncol=2)
+
+```
+
+**Figure 32.** Measured probability of patch versus predicted probability of patch for ``r params$species`` for a.) monthly binning and b.) inter-annual binning.
 
 ## Region plots for actual abundance
 
@@ -668,6 +847,8 @@ For each region, a plot was created comparing the actual abundance of ``r params
 ### Ensemble region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r ensemble_region_plot, echo=FALSE}
 # Initialize filepath
@@ -697,9 +878,43 @@ if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 25.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 33.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r ensemble_region_plot_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_abund_pred_yearly.png"))
+
+if ("GBK_ensemble_abund_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_abund_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_abund_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_abund_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 34.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r ensemble_region_plot_cpr, echo=FALSE}
 # Initialize filepath
@@ -729,11 +944,45 @@ if ("GBK_ensemble_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 26.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 35.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r ensemble_region_plot_cpr_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_abund_pred_yearly_cpr.png"))
+
+if ("GBK_ensemble_abund_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_abund_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_abund_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_abund_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 36.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### GAM region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_gam_region_plot, echo=FALSE}
 # Initialize filepath
@@ -763,9 +1012,43 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 27.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 37.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_gam_region_plot_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_yearly.png"))
+
+if ("GBK_gam_abund_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 38.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_gam_region_plot_cpr, echo=FALSE}
 # Initialize filepath
@@ -795,11 +1078,46 @@ if ("GBK_gam_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 28.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 39.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_gam_region_plot_cpr_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_abund_pred_yearly_cpr.png"))
+
+if ("GBK_gam_abund_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_abund_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_abund_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_gam_abund_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 40.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
 
 ### BRT region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_brt_region_plot, echo=FALSE}
 # Initialize filepath
@@ -829,9 +1147,43 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 29.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 41.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_brt_region_plot_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_yearly.png"))
+
+if ("GBK_brt_abund_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 42.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_brt_region_plot_cpr, echo=FALSE}
 # Initialize filepath
@@ -861,11 +1213,45 @@ if ("GBK_brt_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 30.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 43.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_brt_region_plot_cpr_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_abund_pred_yearly_cpr.png"))
+
+if ("GBK_brt_abund_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_abund_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_abund_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_brt_abund_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 44.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### RF region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_rf_region_plot, echo=FALSE}
 # Initialize filepath
@@ -895,9 +1281,43 @@ if ("GBK_rf_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 31.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 45.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_rf_region_plot_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_abund_pred_yearly.png"))
+
+if ("GBK_rf_abund_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_abund_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_abund_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_rf_abund_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 46.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_rf_region_plot_cpr, echo=FALSE}
 # Initialize filepath
@@ -927,7 +1347,39 @@ if ("GBK_rf_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 32.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 47.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_rf_region_plot_cpr_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_abund_pred_yearly_cpr.png"))
+
+if ("GBK_rf_abund_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_abund_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_abund_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_rf_abund_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 48.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ## Region plots for binary feeding threshold
 
@@ -936,6 +1388,8 @@ For each region, a plot was created comparing whether or not the abundance data 
 ### Ensemble region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r ensemble_region_plot_pa, echo=FALSE}
 # Initialize filepath
@@ -965,9 +1419,43 @@ if ("GBK_ensemble_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 33.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 49.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r ensemble_region_plot_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_pa_pred_yearly.png"))
+
+if ("GBK_ensemble_pa_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_pa_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_pa_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_pa_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 50.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r ensemble_region_plot_cpr_pa, echo=FALSE}
 # Initialize filepath
@@ -997,11 +1485,45 @@ if ("GBK_ensemble_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 34.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 51.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r ensemble_region_plot_cpr_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_ensemble_pa_pred_yearly_cpr.png"))
+
+if ("GBK_ensemble_pa_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_ensemble_pa_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_ensemble_pa_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_ensemble_pa_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 52.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### GAM region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_gam_region_plot_pa, echo=FALSE}
 # Initialize filepath
@@ -1031,9 +1553,43 @@ if ("GBK_gam_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 35.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 53.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_gam_region_plot_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_pa_pred_yearly.png"))
+
+if ("GBK_gam_pa_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_pa_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_pa_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_gam_pa_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 54.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_gam_region_plot_cpr_pa, echo=FALSE}
 # Initialize filepath
@@ -1063,11 +1619,45 @@ if ("GBK_gam_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 36.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 55.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_gam_region_plot_cpr_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_gam_pa_pred_yearly_cpr.png"))
+
+if ("GBK_gam_pa_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_gam_pa_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_gam_pa_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_gam_pa_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 56.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### BRT region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_brt_region_plot_pa, echo=FALSE}
 # Initialize filepath
@@ -1097,9 +1687,43 @@ if ("GBK_brt_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 37.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 57.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_brt_region_plot_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_pa_pred_yearly.png"))
+
+if ("GBK_brt_pa_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_pa_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_pa_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_brt_pa_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 58.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_brt_region_plot_cpr_pa, echo=FALSE}
 # Initialize filepath
@@ -1129,11 +1753,45 @@ if ("GBK_brt_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 38.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 59.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_brt_region_plot_cpr_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_brt_pa_pred_yearly_cpr.png"))
+
+if ("GBK_brt_pa_pred_yearly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_brt_pa_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_brt_pa_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_brt_pa_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 60.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 ### RF region plots
 
 #### Training data (``r params$biomod_dataset``)
+
+##### Climatological
 
 ```{r biomod_rf_region_plot_pa, echo=FALSE}
 # Initialize filepath
@@ -1163,9 +1821,43 @@ if ("GBK_rf_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 39.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 61.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_rf_region_plot_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_pa_pred_yearly.png"))
+
+if ("GBK_rf_pa_pred_yearly.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_pa_pred_yearly.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_pa_pred_yearly.png"))
+
+
+# Arrange grid
+if ("GBK_rf_pa_pred_yearly.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 62.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
+
+##### Climatological
 
 ```{r biomod_rf_region_plot_cpr_pa, echo=FALSE}
 # Initialize filepath
@@ -1195,7 +1887,40 @@ if ("GBK_rf_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 40.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 63.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
+##### Inter-annual
+
+```{r biomod_rf_region_plot_cpr_pa_interannual, echo=FALSE}
+# Initialize filepath
+fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots")
+
+# Load filenames
+files <- list.files(fp)
+
+# Load region plots
+mab <- readPNG(file.path(fp, "MAB_rf_pa_pred_yearly_cpr.png"))
+
+if ("GBK_rf_pa_pred_monthly_cpr.png" %in% files) {
+  gbk <- readPNG(file.path(fp, "GBK_rf_pa_pred_yearly_cpr.png"))
+}
+
+gom <- readPNG(file.path(fp, "GOM_rf_pa_pred_yearly_cpr.png"))
+
+
+# Arrange grid
+if ("GBK_rf_pa_pred_yearly_cpr.png" %in% files) {
+  grid.arrange(rasterGrob(mab), rasterGrob(gbk), rasterGrob(gom),
+               ncol=3)
+} else {
+  grid.arrange(rasterGrob(mab), rasterGrob(gom),
+               ncol=2)
+}
+
+```
+
+**Figure 64.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+
 
 
 
