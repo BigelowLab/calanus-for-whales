@@ -4,7 +4,7 @@
 
 library(yaml)
 
-DIR <- "/Users/camille/Calanus_Project/"
+DIR <- "/Users/camille/Calanus_Project"
 setwd(DIR)
 
 # ---- Source necessary scripts ----
