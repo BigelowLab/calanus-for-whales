@@ -31,7 +31,7 @@ library(gridExtra)
 
 ## Summary
 
-Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were produced using the ``r params$biomod_dataset`` dataset(s).  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^2$, which is the right whale feeding threshold selected for this model.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
+Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were produced using the ``r params$biomod_dataset`` dataset(s).  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^2$, which is the right whale feeding threshold selected for this model and is assumed to indicate the formation of a patch sufficient for right whale feeding.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
 
 The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each indiviual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region. 
 
@@ -39,7 +39,7 @@ The models were averaged into climatologies with one climatology per month.  Eva
 
 ### Ensemble Climatology
 
-The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.
+The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath
@@ -480,9 +480,9 @@ grid.arrange(rasterGrob(var_cont),
 
 **Figure 16.** Biomod RF variable contributions on a monthly time scale.
 
-## Climatological and inter-annual actual abundance vs. predicted probability of feeding
+## Climatological and inter-annual actual abundance vs. predicted probability of patch formation
 
-For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of feeding  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+For each model, the logged actual abundance of ``r params$species`` was plotted against the predicted probability of patch formation  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
 
 ### Ensemble model
 
@@ -505,7 +505,7 @@ grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
 
 ```
 
-**Figure 17.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 17.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -526,7 +526,7 @@ grid.arrange(rasterGrob(ensemble_monthly), rasterGrob(ensemble_yearly),
 
 ```
 
-**Figure 18.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 18.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 
 ### GAM model
@@ -550,7 +550,7 @@ grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
 
 ```
 
-**Figure 19.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 19.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -571,7 +571,7 @@ grid.arrange(rasterGrob(gam_monthly), rasterGrob(gam_yearly),
 
 ```
 
-**Figure 20.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 20.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### BRT model
 
@@ -594,7 +594,7 @@ grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
 
 ```
 
-**Figure 21.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 21.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -615,7 +615,7 @@ grid.arrange(rasterGrob(brt_monthly), rasterGrob(brt_yearly),
 
 ```
 
-**Figure 22.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 22.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 ### RF model
 
@@ -638,7 +638,7 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 
 ```
 
-**Figure 23.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 23.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
 #### Independent data (CPR)
 
@@ -658,11 +658,11 @@ grid.arrange(rasterGrob(rf_monthly), rasterGrob(rf_yearly),
 
 ```
 
-**Figure 24.** Actual logged abundance versus predicted probability of feeding for ``r params$species`` for a.) all 12 months and b.) all years.
+**Figure 24.** Actual logged abundance versus predicted probability of patch formation for ``r params$species`` for a.) all 12 months and b.) all years.
 
-## Climatological and inter-annual actual probability of feeding vs. predicted
+## Climatological and inter-annual actual probability of patch formation vs. predicted
 
-For each model, the actual probability of right whales feeding on ``r params$species`` was plotted against the predicted probability of feeding  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
+For each model, the actual probability of a patch of ``r params$species`` being sufficient for right whale feeding was plotted against the predicted probability of patch formation  This was done for both the training data (``r params$biomod_dataset``) and independent data (CPR). Error bars indicate the variance.  The plots are color coded by region, either Mid-Atlantic Bight (MAB), George's Bank (GBK), or the Gulf of Maine (GOM).
 
 ### Ensemble model
 
@@ -878,7 +878,7 @@ if ("GBK_ensemble_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 33.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 33.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -910,7 +910,7 @@ if ("GBK_ensemble_abund_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 34.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 34.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -944,7 +944,7 @@ if ("GBK_ensemble_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 35.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 35.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -976,7 +976,7 @@ if ("GBK_ensemble_abund_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 36.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 36.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ### GAM region plots
 
@@ -1012,7 +1012,7 @@ if ("GBK_gam_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 37.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 37.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1044,7 +1044,7 @@ if ("GBK_gam_abund_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 38.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 38.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1078,7 +1078,7 @@ if ("GBK_gam_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 39.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 39.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1110,7 +1110,7 @@ if ("GBK_gam_abund_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 40.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 40.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 
 ### BRT region plots
@@ -1147,7 +1147,7 @@ if ("GBK_brt_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 41.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 41.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1179,7 +1179,7 @@ if ("GBK_brt_abund_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 42.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 42.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1213,7 +1213,7 @@ if ("GBK_brt_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 43.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 43.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1245,7 +1245,7 @@ if ("GBK_brt_abund_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 44.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 44.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ### RF region plots
 
@@ -1281,7 +1281,7 @@ if ("GBK_rf_abund_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 45.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 45.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1313,7 +1313,7 @@ if ("GBK_rf_abund_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 46.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 46.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1347,7 +1347,7 @@ if ("GBK_rf_abund_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 47.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 47.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1379,11 +1379,11 @@ if ("GBK_rf_abund_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 48.** Plots of actual abundance vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 48.** Plots of actual abundance vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
-## Region plots for binary feeding threshold
+## Region plots for binary patch threshold
 
-For each region, a plot was created comparing whether or not the abundance data exceeded the right whale feeding threshold (1 and 0, respectively) for both the training dataset (``r params$biomod_dataset``) and an independent dataset (CPR) to the predicted probability of habitat suitability.  The shaded confidence interval represents variance.
+For each region, a plot was created comparing whether or not the abundance data exceeded the right whale feeding threshold (1 and 0, respectively), indicating the formation of a sufficient patch, for both the training dataset (``r params$biomod_dataset``) and an independent dataset (CPR) to the predicted probability of patch formation.  The shaded confidence interval represents variance.
 
 ### Ensemble region plots
 
@@ -1419,7 +1419,7 @@ if ("GBK_ensemble_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 49.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 49.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1451,7 +1451,7 @@ if ("GBK_ensemble_pa_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 50.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 50.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1485,7 +1485,7 @@ if ("GBK_ensemble_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 51.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 51.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1517,7 +1517,7 @@ if ("GBK_ensemble_pa_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 52.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 52.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ### GAM region plots
 
@@ -1553,7 +1553,7 @@ if ("GBK_gam_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 53.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 53.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1585,7 +1585,7 @@ if ("GBK_gam_pa_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 54.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 54.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1619,7 +1619,7 @@ if ("GBK_gam_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 55.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 55.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1651,7 +1651,7 @@ if ("GBK_gam_pa_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 56.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 56.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ### BRT region plots
 
@@ -1687,7 +1687,7 @@ if ("GBK_brt_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 57.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 57.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1719,7 +1719,7 @@ if ("GBK_brt_pa_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 58.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 58.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1753,7 +1753,7 @@ if ("GBK_brt_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 59.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 59.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1785,7 +1785,7 @@ if ("GBK_brt_pa_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 60.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 60.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ### RF region plots
 
@@ -1821,7 +1821,7 @@ if ("GBK_rf_pa_pred_monthly.png" %in% files) {
 
 ```
 
-**Figure 61.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 61.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1853,7 +1853,7 @@ if ("GBK_rf_pa_pred_yearly.png" %in% files) {
 
 ```
 
-**Figure 62.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 62.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 #### Independent data (CPR)
 
@@ -1887,7 +1887,7 @@ if ("GBK_rf_pa_pred_monthly_cpr.png" %in% files) {
 
 ```
 
-**Figure 63.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
+**Figure 63.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 ##### Inter-annual
 
@@ -1919,8 +1919,7 @@ if ("GBK_rf_pa_pred_yearly_cpr.png" %in% files) {
 
 ```
 
-**Figure 64.** Plots of actual binary exceeding of the feeding threshold  vs. predicted probability of exceeding the feeding threshold in different regions.
-
+**Figure 64.** Plots of actual probability of a patch exceeding the feeding threshold  vs. predicted probability of a patch exceeding the feeding threshold in different regions.
 
 
 
