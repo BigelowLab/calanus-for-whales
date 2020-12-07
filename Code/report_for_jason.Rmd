@@ -33,7 +33,7 @@ library(gridExtra)
 
 Model ``r params$version`` was created using ``r params$env_covars`` for ``r params$species``.  The models were produced using the ``r params$biomod_dataset`` dataset(s).  The models were used to project the probability of the study area of having a ``r params$species`` abundance of over ``r params$threshold`` per $m^2$, which is the right whale feeding threshold selected for this model and is assumed to indicate the formation of a patch sufficient for right whale feeding.  The models were then built using the species distribution modeling package, Biomod2, which builds presence-absence models using any of 10 different algorithms.  The algorithms selected were generalized additive models (GAMs), good explanatory models, boosted regression trees (BRTs), good predictive models, and random forests (RFs), highly accurate predictive models.  One model was built for each month, and then projected back onto the environmental data from that month for every year between 2000 and 2017.
 
-The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each indiviual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region. 
+The models were averaged into climatologies with one climatology per month.  Evaluations were compiled for each individual year and plotted by month.  Finally, the study area was divided up into three regions, the Mid-Atlantic Bight (MAB), George's Bank (GBK), and the Gulf of Maine (GOM).  Actual versus predicted abundance values were plotted for each region. 
 
 ## Climatologies
 
