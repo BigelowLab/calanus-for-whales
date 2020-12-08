@@ -39,7 +39,7 @@ The models were averaged into climatologies with one climatology per month.  Eva
 
 ### Ensemble Climatology
 
-The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding.
+The ensemble models were created using the biomod2 package in R.  The ensembles consist of BRTs, GAMs, and RFs.  The ensembles were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding according to the selected threshold.
 
 ```{r display_ensemble, echo=FALSE}
 # Initialize filepath
@@ -73,7 +73,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
 
 ### GAM Climatology
 
-The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
+The GAM models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding according to the selected threshold.
 
 ```{r display_biomod_gam, echo=FALSE}
 # Initialize filepath
@@ -107,7 +107,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
 
 ### BRT Climatology
 
-The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
+The BRT models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding according to the selected threshold.
 
 ```{r display_biomod_brt, echo=FALSE}
 # Initialize filepath
@@ -141,7 +141,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
 
 ### RF Climatology
 
-The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  
+The RF models created with biomod2 were used to model the right whale feeding threshold, with any abundance greater than ``r params$threshold`` ``r params$species`` per $m^2$ counted as a presence and anything below that threshold counted as an absence.  A presence indicates the formation of a patch that is sufficient for right whale feeding according to the selected threshold.
 
 ```{r display_biomod_rf, echo=FALSE}
 # Initialize filepath
