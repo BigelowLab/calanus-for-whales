@@ -21,6 +21,8 @@ source("./calanus_data/Code/bind_years.R")
 # -------- Main function --------
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
+#'@param threshold <numeric> right whale feeding threshold
+#'@param biomod_dataset <chr> dataset used to create biomod2 models
 #'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
 plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, species = "cfin") {
   
