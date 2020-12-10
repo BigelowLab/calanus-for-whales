@@ -64,12 +64,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              rasterGrob(ensemble4), rasterGrob(ensemble5), rasterGrob(ensemble6),
              rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
              rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
-             heights = c(250, 250, 250, 250,
-                                 250, 250, 250, 250, 
-                                 250, 250, 250, 250),
-             widths = c(250, 250, 250, 250,
-                                 250, 250, 250, 250, 
-                                 250, 250, 250, 250))
+             ncol = 4)
 
 
 ```
@@ -103,7 +98,7 @@ grid.arrange(rasterGrob(gam1), rasterGrob(gam2), rasterGrob(gam3),
              rasterGrob(gam4), rasterGrob(gam5), rasterGrob(gam6),
              rasterGrob(gam7), rasterGrob(gam8), rasterGrob(gam9),
              rasterGrob(gam10), rasterGrob(gam11), rasterGrob(gam12),
-             ncol=3)
+             ncol=4)
 
 
 ```
@@ -137,7 +132,7 @@ grid.arrange(rasterGrob(brt1), rasterGrob(brt2), rasterGrob(brt3),
              rasterGrob(brt4), rasterGrob(brt5), rasterGrob(brt6),
              rasterGrob(brt7), rasterGrob(brt8), rasterGrob(brt9),
              rasterGrob(brt10), rasterGrob(brt11), rasterGrob(brt12),
-             ncol=3)
+             ncol=4)
 
 
 ```
@@ -171,7 +166,7 @@ grid.arrange(rasterGrob(rf1), rasterGrob(rf2), rasterGrob(rf3),
              rasterGrob(rf4), rasterGrob(rf5), rasterGrob(rf6),
              rasterGrob(rf7), rasterGrob(rf8), rasterGrob(rf9),
              rasterGrob(rf10), rasterGrob(rf11), rasterGrob(rf12),
-             ncol=3)
+             ncol=4)
 
 
 ```
@@ -217,7 +212,7 @@ if ("ensemble_proj_2002_4.png" %in% files) {
                rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
                rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
                rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-               ncol=3)
+               ncol=6)
 }
 
 ```
@@ -256,8 +251,8 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
              rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
              rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
-             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-             ncol=3)
+             rasterGrob(ensemble16), rasterGrob(ensemble17), rasterGrob(ensemble18),
+             ncol=6)
 ```
 
 **Figure 6.** Ensemble projections for the month of May from 2000 to 2017.
@@ -294,8 +289,8 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              rasterGrob(ensemble7), rasterGrob(ensemble8), rasterGrob(ensemble9),
              rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
              rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
-             rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-             ncol=3)
+             rasterGrob(ensemble16), rasterGrob(ensemble17), rasterGrob(ensemble18),
+             ncol=6)
 ```
 
 **Figure 7.** Ensemble projections for the month of June from 2000 to 2017`.
@@ -333,7 +328,7 @@ grid.arrange(rasterGrob(ensemble1), rasterGrob(ensemble2), rasterGrob(ensemble3)
              rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
              rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
              rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-             ncol=3)
+             ncol=6)
 ```
 
 **Figure 8.** Ensemble projections for the month of August from 2000 to 2017.
@@ -371,7 +366,7 @@ fp <- file.path(params$fp_out, params$species, params$version, "Biomod", "Plots"
                rasterGrob(ensemble10), rasterGrob(ensemble11), rasterGrob(ensemble12),
                rasterGrob(ensemble13), rasterGrob(ensemble14), rasterGrob(ensemble15),
                rasterGrob(ensemble16), rasterGrob(ensemble17),  rasterGrob(ensemble18),
-               ncol=3)
+               ncol=6)
 
 ```
 
