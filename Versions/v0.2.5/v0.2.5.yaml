@@ -31,6 +31,6 @@ fp_md: ./calanus_data/Data/Databases/zooplankton_covar_data
 datasets: CPR
 biomod_dataset: ECOMON
 fp_covars: ./Env_Covars
-fp_out: ~/Desktop/Calanus_Project/Models
+fp_out: /Users/camille/Calanus_Project/Models
 format_data: no
 fp_zpd: ~
