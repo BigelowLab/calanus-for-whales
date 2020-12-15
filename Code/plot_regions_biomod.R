@@ -126,7 +126,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           brt_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          rf_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF", year, "_", i), paste0("proj_RF", year, "_", i, "_", species, version, ".grd"))) %>%
+          rf_proj <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           crs(ensemble_proj) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
@@ -155,7 +155,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
           brt_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_GBM_", year, "_", i), paste0("proj_GBM_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
-          rf_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF", year, "_", i), paste0("proj_RF", year, "_", i, "_", species, version, ".grd"))) %>%
+          rf_temp <- raster(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_RF_", year, "_", i), paste0("proj_RF_", year, "_", i, "_", species, version, ".grd"))) %>%
             `/`(1000)
           
           crs(ensemble_temp) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
@@ -196,6 +196,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     dplyr::summarize(mean = mean(proj, na.rm = TRUE),
                      stdev = sd(proj, na.rm = TRUE),
                      var = var(proj, na.rm = TRUE))
+  
   gam_proj_monthly <- gam_proj %>%
     dplyr::mutate(region = if_else(y <= 41 & x < -70, "MAB", 
                                    if_else(y >= 40 & x <= 42 & y >= -70 & x <= -68, "GBK", "GOM"))) %>%
@@ -285,7 +286,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -366,7 +367,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -447,7 +448,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -528,7 +529,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -587,7 +588,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -634,7 +635,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -681,7 +682,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -728,7 +729,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -805,7 +806,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -886,7 +887,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -967,7 +968,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1048,7 +1049,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2, 4, 6, 8, 10, 12)) +
       scale_color_manual(values = colors) +
       labs(x = "Month",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1077,7 +1078,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1089,7 +1090,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1103,7 +1104,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1115,7 +1116,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1129,7 +1130,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1141,7 +1142,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1155,7 +1156,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1167,7 +1168,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1181,7 +1182,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1193,7 +1194,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1207,7 +1208,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1219,7 +1220,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1233,7 +1234,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1245,7 +1246,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1259,7 +1260,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1271,7 +1272,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Climatological Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1449,7 +1450,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1530,7 +1531,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1611,7 +1612,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1692,7 +1693,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1751,7 +1752,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1798,7 +1799,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1845,7 +1846,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1892,7 +1893,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -1969,7 +1970,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -2050,7 +2051,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -2131,7 +2132,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -2212,7 +2213,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       scale_x_continuous(breaks = c(2000, 2005, 2010, 2015)) +
       scale_color_manual(values = colors) +
       labs(x = "Year",
-           y = "Probability of Patch",
+           y = "Predicted Probability of Patch",
            color = "Legend") +
       theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
             panel.background = element_blank(), axis.line = element_line(colour = "black"),
@@ -2241,7 +2242,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2253,7 +2254,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2267,7 +2268,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2279,7 +2280,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2293,7 +2294,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2305,7 +2306,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2319,7 +2320,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2331,7 +2332,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2345,7 +2346,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2357,7 +2358,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2371,7 +2372,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2383,7 +2384,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region")  +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2397,7 +2398,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2409,7 +2410,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2423,7 +2424,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.2) +
     geom_errorbarh(aes(xmin = mean.x - var.x, xmax = mean.x + var.x), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual abundance",
          color = "Region") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -2435,7 +2436,7 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
     geom_point() +
     geom_errorbar(aes(ymin = mean.y - var.y, ymax = mean.y + var.y), width=.01) +
     geom_errorbarh(aes(xmin = pa - var_pa, xmax = pa + var_pa), height = 0.025) +
-    labs(y = "Probability of Patch",
+    labs(y = "Predicted Probability of Patch",
          x = "Inter-annual Actual Probability of Patch",
          color = "Region") +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
