@@ -87,12 +87,18 @@ create_taylor_diagram <- function(version, fp_out, threshold, years, species = "
   abund_gam <- (gam_full_data %>% dplyr::select(abund))$abund
   pred_gam <- (gam_full_data %>% dplyr::select(pred))$pred
   
-  taylor.diagram(abund_gam, pred_gam)
+  taylor.diagram(abund_gam, pred_gam, pos.cor = FALSE)
   
   # ---- BRTs ----
   abund_brt <- (brt_full_data %>% dplyr::select(abund))$abund
   pred_brt <- (brt_full_data %>% dplyr::select(pred))$pred
     
-  taylor.diagram(abund_brt, pred_brt, add=TRUE,col="blue")
+  taylor.diagram(abund_brt, pred_brt, add = TRUE,col = "blue")
+  
+  # ---- Biomod ensemble ----
+  abund_ensemble <- (biomod_full_data %>% dplyr::select(abund))$abund
+  pred_ensemble <- (biomod_full_data %>% dplyr::select(pred))$pred
+  
+  taylor.diagram(abund_ensemble, pred_ensemble, add = TRUE,col = "black")
     
 }
