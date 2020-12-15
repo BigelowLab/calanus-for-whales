@@ -439,7 +439,7 @@ grid.arrange(rasterGrob(auc), rasterGrob(tss),
 
 ## Variable contribution
 
-Variable contribution was saved during each model run and then reloaded and plotted on a monthly basis and standardized so the total contribution is equal to 100%. This was only done for the individual models.
+Variable contribution was saved during each model run and then reloaded and plotted on a monthly basis and normalized so the total contribution is equal to 100%. This was only done for the individual models.
 
 ### GAM variable contribution
 
