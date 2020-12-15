@@ -60,7 +60,7 @@ run_models <- function(version) {
   plot_regions(version = config$version, fp_out = config$fp_out, datasets = config$datasets, species = config$species)
   
   # ---- Create region-specific actual vs. predicted plots for biomod ----
-  plot_regions_biomod(version = config$version, fp_out = config$fp_out, biomod_dataset = config$biomod_dataset, species = config$species)
+  plot_regions_biomod(version = config$version, fp_out = config$fp_out, threshold = config$threshold, biomod_dataset = config$biomod_dataset, species = config$species)
     
   # ---- Compile actual vs. predicted values ----
   compile_abund_vs_pred(version = config$version, fp_out = config$fp_out, threshold = config$threshold, years = config$years, species = config$species)
