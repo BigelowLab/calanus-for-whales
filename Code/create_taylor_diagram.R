@@ -84,14 +84,14 @@ create_taylor_diagram <- function(version, fp_out, threshold, years, species = "
   
   # -------- Plot Taylor diagram --------
   # ---- GAMs ----
-  abund_gam <- gam_full_data %>% dplyr::select(abund)
-  pred_gam <- gam_full_data %>% dplyr::select(pred)
+  abund_gam <- (gam_full_data %>% dplyr::select(abund))$abund
+  pred_gam <- (gam_full_data %>% dplyr::select(pred))$pred
   
-  taylor.diagram(abund_gam, pred_gam, pos.cor=FALSE)
+  taylor.diagram(abund_gam, pred_gam)
   
   # ---- BRTs ----
-  abund_brt <- brt_full_data %>% dplyr::select(abund)
-  pred_brt <- brt_full_data %>% dplyr::select(pred)
+  abund_brt <- (brt_full_data %>% dplyr::select(abund))$abund
+  pred_brt <- (brt_full_data %>% dplyr::select(pred))$pred
     
   taylor.diagram(abund_brt, pred_brt, add=TRUE,col="blue")
     
