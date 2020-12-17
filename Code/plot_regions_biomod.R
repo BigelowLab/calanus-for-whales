@@ -23,7 +23,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param fp_out <chr> file path save the data to 
 #'@param threshold <numeric> right whale feeding threshold
 #'@param biomod_dataset <chr> dataset used to create biomod2 models
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
 plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, species = "cfin") {
   
   # -------- Create output directories --------
@@ -67,12 +67,12 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
                     var = var(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pcal") {
+  } else if (species == "pseudo") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
-                    var = var(log10(`pcal_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    var = var(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -84,8 +84,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
-    } else if (species == "pcal") {
-      md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
+    } else if (species == "pseudo") {
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$pseudo_total
     }
   }
   
@@ -1314,12 +1314,12 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
                     var = var(log10(`ctyp_total` + 1), na.rm = TRUE),
                     anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
-  } else if (species == "pcal") {
+  } else if (species == "pseudo") {
     md <- md %>% dplyr::group_by(dataset) %>%
-      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
-                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
-                    var = var(log10(`pcal_total` + 1), na.rm = TRUE),
-                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
+      dplyr::mutate(mean = mean(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    var = var(log10(`pseudo_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pseudo_total` + 1) - mean) / sd) %>%
       dplyr::ungroup()
   }
   
@@ -1331,8 +1331,8 @@ plot_regions_biomod <- function(version, fp_out, threshold, biomod_dataset, spec
       md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
     } else if (species == "ctyp") {
       md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
-    } else if (species == "pcal") {
-      md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
+    } else if (species == "pseudo") {
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$pseudo_total
     }
   }
   

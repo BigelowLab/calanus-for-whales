@@ -20,7 +20,7 @@ require(raster)
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param years <vectors> years for which to run the model
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
 build_climatology <- function(version, fp_out, years, species = "cfin", anomaly = FALSE) {
   
   # -------- Create output directories --------
@@ -45,16 +45,16 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
     
     # -------- Test if projection exists --------
     for (year in years) {
-      if (paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
-          paste0("proj_", year, "_", i, ".grd") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
+      if (paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
+          paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
         if (year == 2000 & i == 1) {
-          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
-          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
+          brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
         } else {
-          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          gam_temp <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
           gam_proj <- raster::stack(gam_proj, gam_temp)
           
-          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".grd")))
+          brt_temp <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
           brt_proj <- raster::stack(brt_proj, brt_temp)
         }
       }
