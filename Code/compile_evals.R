@@ -18,7 +18,7 @@ require(tidyverse)
 #'@param version <chr> version of model
 #'@param fp_out <chr> file path save the data to 
 #'@param years <vectors> years for which to run the model
-#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pcal"
+#'@param species <chr> species to model; choices are "cfin", "ctyp", or "pseudo"
 compile_evals <- function(version, fp_out, years, species = "cfin", anomaly = FALSE) {
   
   # -------- Create output directories --------

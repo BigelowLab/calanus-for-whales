@@ -153,7 +153,7 @@ compile_var_contribution <- function(version, fp_out, years, env_covars, species
     dplyr::group_by(Month, Var, Model) %>% 
     summarise_each(list(mean = mean)) %>%
     # ---- Write to CSV ----
-  readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "compiled_var_contribution.csv"))
+    readr::write_csv(file.path(fp_out, species, version, "Biomod_Climatologies", "Evals", "compiled_var_contribution.csv"))
   
   
   # Plot GAM variable contributions

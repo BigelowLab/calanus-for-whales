@@ -34,6 +34,8 @@ build_biomod_climatology <- function(version, fp_out, years, species = "cfin") {
   # -------- Loop over months --------
   for (i in 1:12) {
     
+    print(i)
+    
     # -------- Test if projection exists --------
     for (year in years) {
       if (paste0("proj_Ensemble_", year, "_", i, "_", species, version, "_ensemble.grd") %in% list.files(file.path(fp_out, species, version, "Biomod", "Projections", paste0(species, version), paste0("proj_Ensemble_", year, "_", i))) &
