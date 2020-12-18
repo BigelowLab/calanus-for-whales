@@ -45,7 +45,7 @@ run_models <- function(version) {
   build_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species, 
                     anomaly = config$anomaly)
   
-  # ---- Build biomod2 ensemble climatology ----
+     # ---- Build biomod2 ensemble climatology ----
   build_biomod_climatology(version = config$version, fp_out = config$fp_out, years = config$years, species = config$species)
   
   # ---- Compile evaluations ----
