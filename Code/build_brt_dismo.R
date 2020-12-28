@@ -32,7 +32,7 @@ source("./projects/calanus4whales/calanus_for_whales/bind_years.R")
 #'@param fp_out <chr> file path save the data to 
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
-build_brt <- function(version, fp_md, species, fp_covars, env_covars, years, proj_year, fp_out,
+build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold, years, proj_year, fp_out,
                       format_data = FALSE, fp_zpd = NULL) {
   
   # -------- Create output directories --------
@@ -52,18 +52,61 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, years, pro
   # -------- Format model data --------
   if (format_data) {
     # Format zooplankton and environmental covariate data
-    format_model_data(fp_data = fp_zpd, fp_covars = fp_covars, fp_out = fp_md,
-                      env_covars = env_covars, years = years, lag_sst = TRUE)
+    format_model_data(fp_data = fp_zpd, fp_covars = fp_covars, env_covars = "all", years = years, fp_out = fp_md)
   }
   
   # -------- Load model data --------
   if (length(years) == 1) {
-    md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv")))
+    md <- readr::read_csv(file.path(fp_md, paste0(years[1], ".csv"))) %>% 
+      dplyr::filter(dataset %in% biomod_dataset)
   } else {
-    md <- bind_years(fp = file.path(fp_md), years = years)
+    md <- bind_years(fp = file.path(fp_md), years = years) %>%
+      dplyr::filter(dataset %in% biomod_dataset)
   }
+  
+  # -------- Compute anomaly --------
+  if (species == "cfin") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    sd = sd(log10(`cfin_CV_VI` + 1), na.rm = TRUE),
+                    anomaly = (log10(`cfin_CV_VI` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  } else if (species == "ctyp") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`ctyp_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`ctyp_total` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  } else if (species == "pcal") {
+    md <- md %>% dplyr::group_by(dataset) %>%
+      dplyr::mutate(mean = mean(log10(`pcal_total` + 1), na.rm = TRUE),
+                    sd = sd(log10(`pcal_total` + 1), na.rm = TRUE),
+                    anomaly = (log10(`pcal_total` + 1) - mean) / sd) %>%
+      dplyr::ungroup()
+  }
+  
   # -------- Take the log of count data --------
-  md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
+  if (species == "cfin") {
+    md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
+  } else if (species == "ctyp") {
+    md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
+  } else if (species == "pcal") {
+    md$abund <- as.data.frame(md[paste0(species, "_total")])$pcal_total
+  }
+  
+  # -------- Exclude NAs and select columns --------
+  md <- md %>% dplyr::select(lat, lon, year, month, abund, wind, fetch, chl, int_chl, bots, bott, sss, sst, lag_sst, uv, bat, dist, slope) %>%
+    as.data.frame() %>%
+    na.exclude() %>%
+    dplyr::mutate(season = if_else(month %in% c(1:3), 1,
+                                   if_else(month %in% c(4:6), 2,
+                                           if_else(month %in% c(7:9), 3, 4))))
+  
+  # -------- Take log of bathymetry and chlorophyll --------
+  md$chl <- log(abs(md$chl))
+  md$int_chl <- log(abs(md$int_chl))
+  md$bat <- log(abs(md$bat))
+  
   
   # -------- Zero out depths below 1000 --------
   md$wind[md$bat >= 1000] <- 0
@@ -75,17 +118,6 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, years, pro
   md$sst[md$bat >= 1000] <- 0
   md$uv[md$bat >= 1000] <- 0
   md$bat[md$bat >= 1000] <- 0
-  
-  # -------- Take log of bathymetry and chlorophyll --------
-  md$chl <- log(abs(md$chl))
-  md$bat <- log(abs(md$bat))
-  
-  # -------- Exclude NAs and select columns --------
-  md <- md %>% dplyr::select(lat, lon, month, abund, wind, fetch, chl, bots, bott, sss, sst, uv, bat) %>%
-    as.data.frame() %>%
-    stats::na.exclude() %>%
-    dplyr::mutate(latlon = paste0(lat, lon)) %>%
-    distinct(latlon, .keep_all = TRUE)
   
   # -------- Initialize brt arguments --------
   brt_args <- list(n.trees = 1000, interaction.depth = 5,
@@ -111,7 +143,8 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, years, pro
   # -------- Loop over months --------
   for (i in 4:12) {
     # -------- Isolate month data --------
-    month_md <- md %>% dplyr::filter(month == i)
+    month_md <- md %>% dplyr::filter(month == i) %>%
+      mutate(abund = if_else(abund < threshold, 0, 1))
     
     # -------- Divide into training and testing data --------
     # indices <- sample.int(n = nrow(month_md), size = floor(x = 0.7*nrow(month_md)), replace = FALSE)
@@ -119,7 +152,10 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, years, pro
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     
     # -------- Build BRT with all covariates --------
-    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = env_covars, gbm.y = 4,
+    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c(
+                                                          "bots", "bott", "sss",
+                                                           "bat", "int_chl",
+                                                          "lag_sst"), gbm.y = 5,
                                family = "gaussian", tree.complexity = 5,
                                learning.rate = 0.001, bag.fraction = 0.5,
                                n.minobsinnode = 2, nTrain = 1)
