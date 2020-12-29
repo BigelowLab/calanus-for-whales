@@ -28,12 +28,12 @@ run_models <- function(version) {
   
   # ---- Build GAM ----
   build_gam(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-            years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
+            years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold, anomaly = config$anomaly, 
             format_data = config$format_data, fp_zpd = config$fp_zpd)
   
   # ---- Build BRT ----
   build_brt(version = config$version, fp_md = config$fp_md, datasets = config$datasets, fp_covars = config$fp_covars, env_covars = config$env_covars, 
-            years = config$years, fp_out = config$fp_out, species = config$species, anomaly = config$anomaly, 
+            years = config$years, fp_out = config$fp_out, species = config$species, threshold = config$threshold, anomaly = config$anomaly, 
             format_data = config$format_data, fp_zpd = config$fp_zpd)
   
   # ---- Build Biomod2 models ----

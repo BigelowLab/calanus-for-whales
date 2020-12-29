@@ -37,7 +37,7 @@ source("./calanus_data/Code/bind_years.R")
 #'@param format_data <logical> if true, data is formatted within function; only used if model_data is NULL
 #'@param fp_zpd <chr> filepath to the zooplankton database if data is formatted within function
 build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp_out, 
-                      species = "cfin", anomaly = FALSE,
+                      species = "cfin", threshold = 10000, anomaly = FALSE,
                       format_data = FALSE, fp_zpd = NULL) {
   
   # -------- Create output directories --------
@@ -102,11 +102,11 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
     md$abund <- md$anomaly
   } else {
     if (species == "cfin") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_CV_VI")] + 1))$cfin_CV_VI
+      md$abund <- as.data.frame(md[paste0(species, "_CV_VI")])$cfin_CV_VI
     } else if (species == "ctyp") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$ctyp_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$ctyp_total
     } else if (species == "pseudo") {
-      md$abund <- as.data.frame(log10(md[paste0(species, "_total")] + 1))$pseudo_total
+      md$abund <- as.data.frame(md[paste0(species, "_total")])$pseudo_total
     }
   }
 
@@ -144,7 +144,8 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == j)
+      month_md <- md %>% dplyr::filter(month == j) %>%
+        mutate(abund = if_else(abund < threshold, 0, 1))
       
       if ((nrow(month_md) < 15) | (length(unique(month_md$abund)) == 1)) {
         print("Skipped")
