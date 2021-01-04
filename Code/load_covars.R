@@ -19,6 +19,7 @@ source("./calanus_data/Code/int_chl.R")
 load_covars <- function(fp_covars, year, month,
                         env_covars = "all",
                         as_raster = FALSE) {
+
   # -------- Initialize file paths --------
   # Wind filepath
   fp_wind <- file.path(fp_covars, "CCMP_Winds", "EC22", "wspd_monthly_5km")

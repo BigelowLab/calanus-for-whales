@@ -56,7 +56,20 @@ bots_clim <- calc(bots, fun = mean, na.rm = TRUE)
 bott_clim <- calc(bott, fun = mean, na.rm = TRUE)
 sss_clim <- calc(sss, fun = mean, na.rm = TRUE)
 
-covars_clim
+covars_clim <- stack(wind_clim, fetch_clim, chl_clim,
+                     int_chl_clim, sst_clim, lag_sst_clim, 
+                     uv_clim, bat_clim, dist_clim,
+                     slope_clim, bots_clim, bott_clim,
+                     sss_clim)
+
+names(covars_clim) <- c("wind", "fetch", "chl",
+                        "int_chl", "sst", "lag_sst",
+                        "uv", "bat", "dist",
+                        "slope", "bots", "bott",
+                        "sss")
+
+stats <- layerStats(covars_clim, 'pearson', na.rm = TRUE)
+corr_matrix <- stats$'pearson correlation coefficient'
 
 
 
