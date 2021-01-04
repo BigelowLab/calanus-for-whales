@@ -40,14 +40,14 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
                      as_raster = TRUE)
   
   # -------- Loop over months --------
-  for (i in 1:12) {
+  for (i in 2:12) {
     print(i)
     
     # -------- Test if projection exists --------
     for (year in years) {
       if (paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "GAMs", "Projections")) &
           paste0("proj_", year, "_", i, ".tif") %in% list.files(file.path(fp_out, species, version, "BRTs", "Projections"))) {
-        if (year == 2000 & i == 1) {
+        if (year == 2002) {
           gam_proj <- raster::raster(file.path(fp_out, species, version, "GAMs", "Projections", paste0("proj_", year, "_", i, ".tif")))
           brt_proj <- raster::raster(file.path(fp_out, species, version, "BRTs", "Projections", paste0("proj_", year, "_", i, ".tif")))
         } else {
@@ -61,7 +61,7 @@ build_climatology <- function(version, fp_out, years, species = "cfin", anomaly 
     }
     
     gam_clim <- raster::calc(gam_proj, fun = mean, na.rm = TRUE)
-    brt_clim <- mean(brt_proj, na.rm = TRUE)
+    brt_clim <- raster::calc(brt_proj, fun = mean, na.rm = TRUE)
       
     raster::writeRaster(x = gam_clim, filename = file.path(fp_out, species, version, "Climatologies", "Projections", paste0("gam_proj_", i, ".tif")),
                         overwrite = TRUE)
