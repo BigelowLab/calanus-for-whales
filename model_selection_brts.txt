@@ -9,7 +9,8 @@ Abundances not high enough for both presence absence model
 March:
 Abundances not high enough for both presence absence model
 
-April:
+APRIL:
+
 Run 1:
 Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
 RMSE: 0.2487228
@@ -74,3 +75,70 @@ Run 13:
 Wind
 RMSE: 0.2719203
 RSQ: 0.07055763
+
+MAY:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.2023145
+RSQ: 0.5253461
+
+Run 2:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.1946448
+RSQ: 0.5595874
+
+Run 3:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1904303
+RSQ: 0.5773115
+
+Run 4:
+Wind, uv, bat, dist, slope, bots, bott, sst, lag_sst, int_chl
+RMSE: 0.1900785
+RSQ: 0.5773684
+
+Run 5:
+Wind, uv, bat, slope, bots, bott, sst, lag_sst, int_chl
+RMSE:
+RSQ:
+
+Run 6:
+
+RMSE:
+RSQ:
+
+Run 7:
+
+RMSE:
+RSQ:
+
+Run 8:
+
+RMSE:
+RSQ:
+
+Run 9:
+
+RMSE: 
+RSQ: 
+
+Run 10:
+
+RMSE:
+RSQ:
+
+Run 11:
+
+RMSE:
+RSQ:
+
+Run 12:
+
+RMSE:
+RSQ:
+
+Run 13:
+
+RMSE:
+RSQ:

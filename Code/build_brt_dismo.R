@@ -143,7 +143,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
   # -------- Loop over months --------
   for (i in 4:12) {
     # -------- Isolate month data --------
-    month_md <- md %>% dplyr::filter(month == 4) %>%
+    month_md <- md %>% dplyr::filter(month == 5) %>%
       mutate(abund = if_else(abund < threshold, 0, 1))
     
     # -------- Divide into training and testing data --------
@@ -152,22 +152,31 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     
     # -------- Build BRT with all covariates --------
-    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c("wind", "fetch", "uv",
-                                                          "dist", "slope", "bat",
-                                                          "bots", "bott", "sss",
-                                                          "int_chl",
-                                                          "lag_sst"), gbm.y = 5,
+    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c("wind", "fetch", "uv", 
+                                                          "bat", "dist", "slope", 
+                                                          "bots", "bott", "sss", 
+                                                          "sst", "lag_sst", "chl", "int_chl"), gbm.y = 5,
                                family = "gaussian", tree.complexity = 5,
                                learning.rate = 0.001, bag.fraction = 0.5,
                                n.minobsinnode = 2, nTrain = 1)
     
-    
-    # -------- Plot results --------
-    plot(brt_sdm)
     # -------- Load summary of model --------
-    png(file.path(fp_out, species, "BRTs", version, "Plots", paste0("var_cont_", proj_year, "_", i, ".png")))
     summary(brt_sdm)
-    dev.off()
+    
+    month_md$pred <- as.data.frame(brt_sdm$fit)
+    
+    # -------- Convert NAs to zeros --------
+    month_md$pred[is.na(month_md$pred)] <- 0
+    month_md$abund[is.na(month_md$abund)] <- 0
+    
+    # -------- Get RMSE --------
+    Metrics::rmse(actual = month_md$abund, 
+                  predicted = as.numeric(unlist(month_md$pred)))
+    
+    # -------- Get r^2 --------
+    rsq <- function (x, y) cor(x, y) ^ 2
+    rsq(month_md$abund, month_md$pred)
+    
     
     # -------- Test interactions between covariates --------
     find_int <- as.data.frame(dismo::gbm.interactions(brt_sdm)$interactions) %>% 
@@ -191,7 +200,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # -------- Load environmental covariates for projection --------
     covars <- load_covars(fp_covars = fp_covars, year = proj_year, month = i,
                           env_covars = env_covars,
-                          as_raster = TRUE, lag_sst = TRUE)
+                          as_raster = TRUE)
     
     # Load bathymetry layer 
     bat <- load_covars(fp_covars = fp_covars, year = proj_year, month = i,
