@@ -1,0 +1,76 @@
+BRTs
+
+January:
+Abundances not high enough for both presence absence model
+
+February:
+Abundances not high enough for both presence absence model
+
+March:
+Abundances not high enough for both presence absence model
+
+April:
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.2487228
+RSQ: 0.3311781
+
+Run 2:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.2429463
+RSQ: 0.3576094
+
+Run 3:
+Wind, uv, bat, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.240369
+RSQ: 0.3654038
+
+Run 4:
+Wind, uv, bat, slope, bots, bott, sss, sst, chl, int_chl
+RMSE: 0.2432026
+RSQ: 0.3485685
+
+Run 5:
+Wind, bat, slope, bots, bott, sss, sst, chl, int_chl
+RMSE: 0.2470005
+RSQ: 0.3223537
+
+Run 6:
+Wind, bat, slope, bott, sss, sst, chl, int_chl
+RMSE: 0.2439949
+RSQ: 0.3345911
+
+Run 7:
+Wind, bat, slope, bott, sss, chl, int_chl
+RMSE: 0.246352
+RSQ: 0.3072917
+
+Run 8:
+Wind, bat, slope, bott, sss, int_chl
+RMSE: 0.2491043
+RSQ: 0.2841031
+
+Run 9:
+Wind, bat, slope, bott, int_chl
+RMSE: 0.2545091
+RSQ: 0.248012
+
+Run 10:
+Wind, bat, slope, bott
+RMSE: 0.2548951
+RSQ: 0.2284859
+
+Run 11:
+Wind, bat, bott
+RMSE: 0.2598906
+RSQ: 0.1838317
+
+Run 12:
+Wind, bat
+RMSE: 0.2670559
+RSQ: 0.1259974
+
+Run 13:
+Wind
+RMSE: 0.2719203
+RSQ: 0.07055763
