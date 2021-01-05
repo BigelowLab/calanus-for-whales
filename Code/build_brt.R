@@ -143,14 +143,21 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
     for (j in 1:12) {
       print(paste0("Year: ", i, ", Month: ", j))
       
+      env_covars <- c("wind", "fetch", "uv", "bat",
+                      "slope", "dist", "bots",
+                      "bott", "sss", "sst",
+                      "lag_sst", "chl", "int_chl")
+      
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == j) %>%
+      month_md <- md %>% dplyr::filter(month == 3) %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       if ((nrow(month_md) < 15) | (length(unique(month_md$abund)) == 1)) {
         print("Skipped")
         next
       }
+      
+      
     
       # -------- Build GAM with all covariates --------
       brt_sdm <- gbm::gbm(formula = stats::reformulate(env_covars, "abund"),
@@ -168,7 +175,7 @@ build_brt <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       plot(brt_sdm)
       # -------- Load summary of model --------
       # png(file.path(fp_out, species, version, "BRTs", "Plots", paste0("var_cont_", i, "_", j, ".png")))
-      # summary(brt_sdm)
+      summary(brt_sdm)
       # dev.off()
         
       # -------- Load environmental covariates for projection --------
