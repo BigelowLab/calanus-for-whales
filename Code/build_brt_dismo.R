@@ -143,7 +143,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
   # -------- Loop over months --------
   for (i in 4:12) {
     # -------- Isolate month data --------
-    month_md <- md %>% dplyr::filter(month == 4) %>%
+    month_md <- md %>% dplyr::filter(month == 5) %>%
       mutate(abund = if_else(abund < threshold, 0, 1))
     
     # -------- Divide into training and testing data --------

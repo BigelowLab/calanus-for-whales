@@ -80,65 +80,65 @@ MAY:
 
 Run 1:
 Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
-RMSE: 0.2023145
-RSQ: 0.5253461
+RMSE: 0.1983257
+RSQ: 0.5417894
 
 Run 2:
 Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
-RMSE: 0.1946448
-RSQ: 0.5595874
+RMSE: 0.2023278
+RSQ: 0.526565
 
 Run 3:
 Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
-RMSE: 0.1904303
-RSQ: 0.5773115
+RMSE: 0.19111
+RSQ: 0.5734282
 
 Run 4:
 Wind, uv, bat, dist, slope, bots, bott, sst, lag_sst, int_chl
-RMSE: 0.1900785
-RSQ: 0.5773684
+RMSE: 0.197932
+RSQ: 0.5413922
 
 Run 5:
-Wind, uv, bat, slope, bots, bott, sst, lag_sst, int_chl
-RMSE: 0.1961258
-RSQ: 0.5490158
+Wind, uv, bat, dist, slope, bots, bott, sst, int_chl
+RMSE: 0.1939641
+RSQ: 0.557597
 
 Run 6:
 Wind, uv, bat, slope, bots, bott, sst, int_chl
-RMSE: 0.2006573
-RSQ: 0.5256457
+RMSE: 0.2000138
+RSQ: 0.5279103
 
 Run 7:
-Wind, uv, bat, slope, bots, bott, sst
-RMSE: 0.200248
-RSQ: 0.5212911
+Wind, uv, bat, slope, bots, sst, int_chl
+RMSE: 0.1987472
+RSQ: 0.5328878
 
 Run 8:
 Wind, uv, bat, slope, bots, sst
-RMSE: 0.2008289
-RSQ: 0.2008289
+RMSE: 0.2016427
+RSQ: 0.5125431
 
 Run 9:
 uv, bat, slope, bots, sst
-RMSE: 0.2022244
-RSQ: 0.5067157
+RMSE: 0.2055517
+RSQ: 0.4908173
 
 Run 10:
 uv, bat, bots, sst
-RMSE: 0.214299
-RSQ: 0.4422902
+RMSE: 0.2188542
+RSQ: 0.4244984
 
 Run 11:
 bat, bots, sst
-RMSE: 0.2116415
-RSQ: 0.449422
+RMSE: 0.2170851
+RSQ: 0.4235785
 
 Run 12:
 bat, bots
-RMSE: 0.2252629
-RSQ: 0.3747187
+RMSE: 0.2231857
+RSQ: 0.3837641
 
 Run 13:
-Bat
-RMSE: 0.2389829
-RSQ: 0.2895627
+bat
+RMSE: 0.2405166
+RSQ: 0.2831531
