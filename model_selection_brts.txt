@@ -169,5 +169,89 @@ RMSE: 3.355774
 RSQ: 0.2334177
 AUC: 0.9061
 
+JUNE:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 3.198671
+RSQ: 0.4931579
+AUC: 0.9767
+
+Run 2:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 3.126533
+RSQ: 0.4732928
+AUC: 0.9684
+
+Run 3:
+fetch, uv, bat, dist, slope, bots, sss, sst, lag_sst, int_chl
+RMSE: 3.194284
+RSQ: 0.4762861
+AUC: 0.9711
+
+Run 4:
+fetch, uv, bat, dist, slope, bots, sss, sst, lag_sst, int_chl
+RMSE: 3.145824
+RSQ: 0.4639866
+AUC: 0.9674
+
+Run 5:
+uv, bat, dist, slope, bots, sss, sst, lag_sst, int_chl
+RMSE: 3.104657
+RSQ: 0.4581839
+AUC: 0.9634
+
+Run 6:
+bat, dist, slope, bots, sss, sst, lag_sst, int_chl
+RMSE: 3.187065
+RSQ: 0.4666987
+AUC: 0.9662
+
+Run 7:
+bat, dist, bots, sss, sst, lag_sst, int_chl
+RMSE: 3.182128
+RSQ: 0.4535251
+AUC: 0.9601
+
+Run 8:
+bat, dist, bots, sss, sst, lag_sst
+RMSE: 3.141483
+RSQ: 0.4351264
+AUC: 0.954
+
+Run 9:
+bat, dist, bots, sst, lag_sst
+RMSE: 3.199828
+RSQ: 0.42551
+AUC: 0.9531
+
+Run 10:
+bat, dist, sst, lag_sst
+RMSE: 3.185705
+RSQ: 0.409984
+AUC: 0.9458
+
+Run 11:
+bat, dist, sst
+RMSE: 3.182827
+RSQ: 0.3865865
+AUC: 0.9402
+
+Run 12:
+bat, sst
+RMSE: 2.870623
+RSQ: 0.2760085
+AUC: 0.8981
+
+Run 13:
+bat
+RMSE: 2.771745
+RSQ: 0.1864537
+AUC: 0.8556
+
+
+
+
+
 
 
