@@ -156,7 +156,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
                                                           "bat", "dist", "slope", 
                                                           "bots", "bott", "sss", 
                                                           "sst", "lag_sst", "chl", "int_chl"), gbm.y = 5,
-                               family = "gaussian", tree.complexity = 5,
+                               family = "bernoulli", tree.complexity = 5,
                                learning.rate = 0.001, bag.fraction = 0.5,
                                n.minobsinnode = 2, nTrain = 1)
     
@@ -176,6 +176,8 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # -------- Get r^2 --------
     rsq <- function (x, y) cor(x, y) ^ 2
     rsq(month_md$abund, month_md$pred)
+    
+    brt_sdm$self.statistics$discrimination
     
     
     # -------- Test interactions between covariates --------
