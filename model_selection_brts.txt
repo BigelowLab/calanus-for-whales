@@ -1,12 +1,12 @@
 BRTs
 
-January:
+JANUARY:
 Abundances not high enough for both presence absence model
 
-February:
+FEBRUARY:
 Abundances not high enough for both presence absence model
 
-March:
+MARCH:
 Abundances not high enough for both presence absence model
 
 APRIL:
@@ -248,6 +248,9 @@ bat
 RMSE: 2.771745
 RSQ: 0.1864537
 AUC: 0.8556
+
+JULY:
+Abundances not high enough for both presence absence model
 
 
 
