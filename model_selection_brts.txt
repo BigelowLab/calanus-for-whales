@@ -404,69 +404,81 @@ OCTOBER:
 
 Run 1:
 Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
-RMSE:
-RSQ:
-AUC:
+RMSE: 5.689048
+RSQ: 0.321332
+AUC: 0.9992
 
 Run 2:
-RMSE:
-RSQ:
-AUC:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 5.773263
+RSQ: 0.3208596
+AUC: 0.9994
 
 Run 3:
-RMSE:
-RSQ:
-AUC:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl
+RMSE: 5.776549
+RSQ: 0.3195999
+AUC: 0.9993
 
 Run 4:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl
+RMSE: 5.43172
+RSQ: 0.3109841
+AUC: 0.9985
 
 Run 5:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, dist, slope, bots, bott, sss, sst, lag_sst
+RMSE: 5.687714
+RSQ: 0.3112081
+AUC: 0.9993
 
 Run 6:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, dist, slope, bots, bott, sst, lag_sst
+RMSE: 5.654645
+RSQ: 0.3067532
+AUC: 0.9988
 
 Run 7:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, dist, bots, bott, sst, lag_sst
+RMSE: 5.864275
+RSQ: 0.2949908
+AUC: 0.9988
 
 Run 8:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, dist, bott, sst, lag_sst
+RMSE: 5.784233
+RSQ: 0.2905726
+AUC: 0.9988
 
 Run 9:
-RMSE:
-RSQ:
-AUC:
+bat, dist, bott, sst, lag_sst
+RMSE: 5.822891
+RSQ: 0.2793696
+AUC: 0.9984
 
 Run 10:
-RMSE:
-RSQ:
-AUC:
+bat, dist, bott, lag_sst
+RMSE: 5.511502
+RSQ: 0.244128
+AUC: 0.9966
 
 Run 11:
-RMSE:
-RSQ:
-AUC:
+bat, dist, bott
+RMSE: 5.873449
+RSQ: 0.2403102
+AUC: 0.9969
 
 Run 12:
-RMSE:
-RSQ:
-AUC:
+bat, bott
+RMSE: 5.963043
+RSQ: 0.1915607
+AUC: 0.9964
 
 Run 13:
-RMSE:
-RSQ:
-AUC:
+bat
+RMSE: 5.06238
+RSQ: 0.1339619
+AUC: 0.9797
 
 NOVEMBER:
 

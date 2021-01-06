@@ -143,7 +143,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
   # -------- Loop over months --------
   for (i in 4:12) {
     # -------- Isolate month data --------
-    month_md <- md %>% dplyr::filter(month == 8) %>%
+    month_md <- md %>% dplyr::filter(month == 11) %>%
       mutate(abund = if_else(abund < threshold, 0, 1))
     
     # -------- Divide into training and testing data --------
@@ -152,10 +152,10 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     
     # -------- Build BRT with all covariates --------
-    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c( 
-                                                          "bat", 
-                                                          "bott"
-                                                          ), gbm.y = 5,
+    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c("wind", "fetch", "uv", 
+                                                          "bat", "dist", "slope", 
+                                                          "bots", "bott", "sss", 
+                                                          "sst", "lag_sst", "chl", "int_chl"), gbm.y = 5,
                                family = "bernoulli", tree.complexity = 5,
                                learning.rate = 0.001, bag.fraction = 0.5,
                                n.minobsinnode = 2, nTrain = 1)
