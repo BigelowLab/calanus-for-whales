@@ -252,6 +252,313 @@ AUC: 0.8556
 JULY:
 Abundances not high enough for both presence absence model
 
+AUGUST:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 3.994499
+RSQ: 0.3197566
+AUC: 0.9704
+
+Run 2:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 4.145184
+RSQ: 0.3346791
+AUC: 0.9786
+
+Run 3:
+uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 4.064484
+RSQ: 0.3219727
+AUC: 0.9745
+
+Run 4:
+uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 4.237987
+RSQ: 0.3461633
+AUC: 0.9841
+
+Run 5:
+uv, bat, dist, slope, bots, bott, sss, sst, lag_sst
+RMSE: 4.203758
+RSQ: 0.33505
+AUC: 0.9812
+
+Run 6:
+uv, bat, dist, slope, bots, bott, sss, lag_sst
+RMSE: 4.216148
+RSQ: 0.3330374
+AUC: 0.9819
+
+Run 7:
+uv, bat, dist, bots, bott, sss, lag_sst
+RMSE: 4.133371
+RSQ: 0.3072248
+AUC: 0.9687
+
+Run 8:
+bat, dist, bots, bott, sss, lag_sst
+RMSE: 4.068321
+RSQ: 0.2782732
+AUC: 0.9597
+
+Run 9:
+bat, bots, bott, sss, lag_sst
+RMSE: 4.292125
+RSQ: 0.2935253
+AUC: 0.9642
+
+Run 10:
+bat, bots, bott, lag_sst
+RMSE: 4.312314
+RSQ: 0.2710917
+AUC: 0.9623
+
+Run 11:
+bat, bots, bott
+RMSE: 4.187296
+RSQ: 0.2194241
+AUC: 0.9474
+
+Run 12:
+bat, bott
+RMSE: 4.168762
+RSQ: 0.178269
+AUC: 0.9294
+
+Run 13:
+bat
+RMSE: 3.704135
+RSQ: 0.08998275
+AUC: 0.8607
+
+SEPTEMBER:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE:
+RSQ:
+AUC:
+
+Run 2:
+RMSE:
+RSQ:
+AUC:
+
+Run 3:
+RMSE:
+RSQ:
+AUC:
+
+Run 4:
+RMSE:
+RSQ:
+AUC:
+
+Run 5:
+RMSE:
+RSQ:
+AUC:
+
+Run 6:
+RMSE:
+RSQ:
+AUC:
+
+Run 7:
+RMSE:
+RSQ:
+AUC:
+
+Run 8:
+RMSE:
+RSQ:
+AUC:
+
+Run 9:
+RMSE:
+RSQ:
+AUC:
+
+Run 10:
+RMSE:
+RSQ:
+AUC:
+
+Run 11:
+RMSE:
+RSQ:
+AUC:
+
+Run 12:
+RMSE:
+RSQ:
+AUC:
+
+Run 13:
+RMSE:
+RSQ:
+AUC:
+
+OCTOBER:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE:
+RSQ:
+AUC:
+
+Run 2:
+RMSE:
+RSQ:
+AUC:
+
+Run 3:
+RMSE:
+RSQ:
+AUC:
+
+Run 4:
+RMSE:
+RSQ:
+AUC:
+
+Run 5:
+RMSE:
+RSQ:
+AUC:
+
+Run 6:
+RMSE:
+RSQ:
+AUC:
+
+Run 7:
+RMSE:
+RSQ:
+AUC:
+
+Run 8:
+RMSE:
+RSQ:
+AUC:
+
+Run 9:
+RMSE:
+RSQ:
+AUC:
+
+Run 10:
+RMSE:
+RSQ:
+AUC:
+
+Run 11:
+RMSE:
+RSQ:
+AUC:
+
+Run 12:
+RMSE:
+RSQ:
+AUC:
+
+Run 13:
+RMSE:
+RSQ:
+AUC:
+
+NOVEMBER:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE:
+RSQ:
+AUC:
+
+Run 2:
+RMSE:
+RSQ:
+AUC:
+
+Run 3:
+RMSE:
+RSQ:
+AUC:
+
+Run 4:
+RMSE:
+RSQ:
+AUC:
+
+Run 5:
+RMSE:
+RSQ:
+AUC:
+
+Run 6:
+RMSE:
+RSQ:
+AUC:
+
+Run 7:
+RMSE:
+RSQ:
+AUC:
+
+Run 8:
+RMSE:
+RSQ:
+AUC:
+
+Run 9:
+RMSE:
+RSQ:
+AUC:
+
+Run 10:
+RMSE:
+RSQ:
+AUC:
+
+Run 11:
+RMSE:
+RSQ:
+AUC:
+
+Run 12:
+RMSE:
+RSQ:
+AUC:
+
+Run 13:
+RMSE:
+RSQ:
+AUC:
+
+DECEMBER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
