@@ -484,72 +484,84 @@ NOVEMBER:
 
 Run 1:
 Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
-RMSE:
-RSQ:
-AUC:
+RMSE: 5.903958
+RSQ: 0.3495298
+AUC: 0.9996
 
 Run 2:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl
+RMSE: 5.639246
+RSQ: 0.3597814
+AUC: 0.9994
 
 Run 3:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, slope, bott, sss, sst, lag_sst, chl
+RMSE: 5.774737
+RSQ: 0.3492317
+AUC: 0.9995
 
 Run 4:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, slope, bott, sst, lag_sst, chl
+RMSE: 5.817796
+RSQ: 0.3582033
+AUC: 0.9996
 
 Run 5:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, bott, sst, lag_sst, chl
+RMSE: 5.868088
+RSQ: 0.3584668
+AUC: 0.9996
 
 Run 6:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, bott, sst, lag_sst
+RMSE: 6.05017
+RSQ: 0.3541623
+AUC: 0.9997
 
 Run 7:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, dist, bott, sst
+RMSE: 6.096393
+RSQ: 0.3428393
+AUC: 0.9997
 
 Run 8:
-RMSE:
-RSQ:
-AUC:
+Wind, fetch, uv, bat, bott, sst
+RMSE: 6.007387
+RSQ: 0.3339838
+AUC: 0.9994
 
 Run 9:
-RMSE:
-RSQ:
-AUC:
+Wind, uv, bat, bott, sst
+RMSE: 6.180052
+RSQ: 0.3228618
+AUC: 0.9996
 
 Run 10:
-RMSE:
-RSQ:
-AUC:
+Wind, bat, bott, sst
+RMSE: 6.028142
+RSQ: 0.2915767
+AUC: 0.9993
 
 Run 11:
-RMSE:
-RSQ:
-AUC:
+Wind, bott, sst
+RMSE: 6.326436
+RSQ: 0.273205
+AUC: 0.9993
 
 Run 12:
-RMSE:
-RSQ:
-AUC:
+bott, sst
+RMSE: 6.357086
+RSQ: 0.2351851
+AUC: 0.9982
 
 Run 13:
-RMSE:
-RSQ:
-AUC:
+bott
+RMSE: 6.32401
+RSQ: 0.1382108
+AUC: 0.9981
 
 DECEMBER:
-
+Abundances not high enough for both presence absence model
 
 
 
