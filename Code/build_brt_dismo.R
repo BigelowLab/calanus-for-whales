@@ -150,12 +150,14 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # indices <- sample.int(n = nrow(month_md), size = floor(x = 0.7*nrow(month_md)), replace = FALSE)
     # train <- month_md[indices,]
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
+    # 
+    env_covars <- c(
+                      
+                    "bott", 
+                    "sst")
     
     # -------- Build BRT with all covariates --------
-    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = c(
-                                                          
-                                                          "bott"
-                                                          ), gbm.y = 5,
+    brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = env_covars, gbm.y = 5,
                                family = "bernoulli", tree.complexity = 5,
                                learning.rate = 0.001, bag.fraction = 0.5,
                                n.minobsinnode = 2, nTrain = 1)
@@ -178,6 +180,9 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     rsq(month_md$abund, month_md$pred)
     
     brt_sdm$self.statistics$discrimination
+    
+    2*length(env_covars) - 2*log(Metrics::rmse(actual = month_md$abund, 
+                                               predicted = as.numeric(unlist(month_md$pred))))
     
     
     # -------- Test interactions between covariates --------
