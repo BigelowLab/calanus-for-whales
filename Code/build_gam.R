@@ -136,7 +136,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == j) %>%
+      month_md <- md %>% dplyr::filter(month == 5) %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       # -------- Check for unique values and number of rows --------
@@ -144,10 +144,38 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       if ((length(unique(month_md$abund)) == 1) | (nrow(month_md) < 15)) {
         next
       }
+      
+      env_covars <- c( 
+                      "bat", "slope"
+                      
+                       )
+      
+      env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
       # -------- Build GAM with all covariates --------
       gam_sdm <- mgcv::gam(stats::reformulate(env_covars_fun, "abund"),
                            data = month_md, method = "REML")
+      
+      summary(gam_sdm)
+      
+      gam_sdm$aic
+      
+      month_md$pred <- as.data.frame(gam_sdm$fitted.values)
+      
+      # -------- Convert NAs to zeros --------
+      month_md$pred[is.na(month_md$pred)] <- 0
+      month_md$abund[is.na(month_md$abund)] <- 0
+      
+      # -------- Get RMSE --------
+      Metrics::rmse(actual = month_md$abund, 
+                    predicted = as.numeric(unlist(month_md$pred)))
+      
+      # -------- Get r^2 --------
+      rsq <- function (x, y) cor(x, y) ^ 2
+      rsq(month_md$abund, month_md$pred)
+      
+      gam_sdm$aic
+      
       
       # -------- Get AIC --------
       write.table(gam_sdm$aic, file = file.path(fp_out, species, version, "GAMs", "Evals", paste0("AIC_", i, "_", j, ".csv")))
