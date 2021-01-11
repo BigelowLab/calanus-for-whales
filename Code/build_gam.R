@@ -145,10 +145,10 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
         next
       }
       
-      env_covars <- c( 
-                      "bat", "slope"
-                      
-                       )
+      env_covars <- c("wind", "fetch", "uv", 
+                      "bat", "dist", "slope", 
+                      "bots", "bott", 
+                      "sst", "lag_sst", "chl", "int_chl")
       
       env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
