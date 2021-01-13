@@ -143,7 +143,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
   # -------- Loop over months --------
   for (i in 4:12) {
     # -------- Isolate month data --------
-    month_md <- md %>% dplyr::filter(month == 4) %>%
+    month_md <- md %>% dplyr::filter(month == 8) %>%
       mutate(abund = if_else(abund < threshold, 0, 1))
     
     # -------- Divide into training and testing data --------
@@ -151,9 +151,10 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # train <- month_md[indices,]
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     # 
-    env_covars <- c("wind"
-                     
-                    )
+    env_covars <- c( 
+                    "bat", 
+                    "bots", "bott"
+                     )
     
     # -------- Build BRT with all covariates --------
     brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = env_covars, gbm.y = 5,
