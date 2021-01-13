@@ -1,4 +1,82 @@
+MARCH: 
 
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.07567179
+RSQ: 0.0242684
+AIC: -1960.81
+
+Run 2:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, chl, int_chl
+RMSE: 0.07567179
+RSQ: 0.02426819
+AIC: -1960.809
+
+Run 3:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, int_chl
+RMSE: 0.07567178
+RSQ: 0.02426828
+AIC: -1960.81
+
+Run 4:
+Wind, fetch, uv, bat, slope, bots, bott, sss, sst, int_chl
+RMSE: 0.07567178
+RSQ: 0.02426847
+AIC: -1960.81
+
+Run 5:
+Wind, fetch, uv, bat, slope, bots, bott, sst, int_chl
+RMSE: 0.07567179
+RSQ: 0.02426832
+AIC: -1960.81
+
+Run 6:
+Wind, fetch, uv, bat, slope, bott, sst, int_chl
+RMSE: 0.07567178
+RSQ: 0.02426839
+AIC: -1960.81
+
+Run 7:
+Wind, uv, slope, bat, bott, sst, int_chl
+RMSE: 0.07567179
+RSQ: 0.02426803
+AIC: -1960.81
+
+Run 8:
+Wind, uv, slope, bott, sst, int_chl
+RMSE: 0.07567177
+RSQ: 0.02426837
+AIC: -1960.809
+
+Run 9:
+Wind, uv, slope, bott, sst
+RMSE: 0.0756718
+RSQ: 0.02426818
+AIC: -1960.811
+
+Run 10:
+uv, slope, bott, sst
+RMSE: 0.07565296
+RSQ: 0.02464917
+AIC: -1961.245
+
+Run 11:
+slope, bott, sst
+RMSE: 0.0757941
+RSQ: 0.02074688
+AIC: -1959.406
+
+Run 12:
+slope, sst
+RMSE: 0.0761528
+RSQ: 0.0106116
+AIC: -1955.006
+
+Run 13:
+slope
+RMSE: 0.07634261
+RSQ: 0.005123833
+AIC: -1952.815
 
 MAY:
 
