@@ -145,10 +145,10 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
         next
       }
       
-      env_covars <- c("wind", "fetch", "uv", 
+      env_covars <- c("wind", "uv", 
                       "bat", "dist", "slope", 
-                      "bots", "bott", 
-                      "sst", "lag_sst", "chl", "int_chl")
+                      "bots", "bott", "sss",
+                      "sst", "chl", "int_chl")
       
       env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
@@ -157,8 +157,6 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
                            data = month_md, method = "REML")
       
       summary(gam_sdm)
-      
-      gam_sdm$aic
       
       month_md$pred <- as.data.frame(gam_sdm$fitted.values)
       
