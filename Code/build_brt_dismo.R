@@ -152,8 +152,7 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     # 
     env_covars <- c( 
-                    "bat", 
-                    "bots", "bott"
+                    "bat"
                      )
     
     # -------- Build BRT with all covariates --------
