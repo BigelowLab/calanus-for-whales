@@ -136,7 +136,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == 2) %>%
+      month_md <- md %>% dplyr::filter(month == 6) %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       # -------- Check for unique values and number of rows --------
@@ -179,7 +179,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       write.table(gam_sdm$aic, file = file.path(fp_out, species, version, "GAMs", "Evals", paste0("AIC_", i, "_", j, ".csv")))
 
       # -------- Load environmental covariates for projection --------
-      covars <- load_covars(fp_covars = fp_covars, year = i, month = j,
+      covars <- load_covars(fp_covars = fp_covars, year = 2000, month = 6,
                             env_covars = env_covars,
                             as_raster = TRUE)
       
@@ -213,7 +213,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
         min_val <- -7
       } else {
         color_scale <- inferno(500)
-        max_val <- max(md$abund, na.rm = TRUE) + 4
+        max_val <- max(month_md$abund, na.rm = TRUE) + 4
         min_val <- -2
         # Zero out negative values
         proj[proj < 0] <- 0
