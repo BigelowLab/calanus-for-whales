@@ -1,3 +1,84 @@
+FEBRUARY: 
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.02960444
+RSQ: 0.001084139
+AIC: -4786.029
+
+Run 2:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sst, lag_sst, chl, int_chl
+RMSE: 0.02960444
+RSQ: 0.001068885
+AIC: -4786.029
+
+Run 3:
+Wind, fetch, uv, bat, dist, slope, bott, sst, lag_sst, chl, int_chl
+RMSE: 0.02960443
+RSQ: 0.0007448803
+AIC: -4786.029
+
+Run 4:
+Wind, fetch, uv, bat, dist, slope, bott, sst, lag_sst, int_chl
+RMSE: 0.02960444
+RSQ: 0.0008160143
+AIC: -4786.03
+
+Run 5:
+Wind, fetch, uv, bat, dist, slope, bott, sst, int_chl
+RMSE: 0.02960444
+RSQ: 0.0008529939
+AIC: -4786.03
+
+Run 6:
+fetch, uv, bat, dist, slope, bott, sst, int_chl
+RMSE: 0.02960444
+RSQ: 0.0006208473
+AIC: -4786.031
+
+Run 7:
+fetch, uv, bat, dist, bott, sst, int_chl
+RMSE: 0.02960443
+RSQ: 0.0004781621
+AIC: -4786.03
+
+Run 8:
+fetch, bat, dist, bott, sst, int_chl
+RMSE: 0.02960444
+RSQ: 0.0004218643
+AIC: -4786.031
+
+Run 9:
+bat, dist, bott, sst, int_chl
+RMSE: 0.02960442
+RSQ: 0.000551065
+AIC: -4786.028
+
+Run 10:
+bat, dist, bott, sst
+RMSE: 0.02960443
+RSQ: 0.0005038131
+AIC: -4786.031
+
+Run 11:
+dist, bott, sst
+RMSE: 0.0761528
+RSQ: 0.0005006186
+AIC: -4786.029
+
+Run 12:
+dist, bott
+RMSE: 0.02960442
+RSQ: 0.0004775544
+AIC: -4786.029
+
+Run 13:
+bott
+RMSE: 0.02960445
+RSQ: 0.0003115514
+AIC: -4786.033
+
+
 MARCH: 
 
 Run 1:
@@ -397,6 +478,8 @@ AUC:
 AIC:
 
 OCTOBER:
+
+Won't run, need to debug
 
 Run 1:
 Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
