@@ -136,7 +136,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == 1) %>%
+      month_md <- md %>% dplyr::filter(month == 2) %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       # -------- Check for unique values and number of rows --------
