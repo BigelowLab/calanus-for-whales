@@ -21,3 +21,4 @@ Estimating a max and min layer thickness will give us an upper and lower bound f
 In the literature review, it looks like numbers are pretty much always reported in Ϙ/m3. Let's start by making a histogram of those numbers. 
 Then we can do upper/lower bound estimates from there.
 
+_Note: Ϙ = copepods_
