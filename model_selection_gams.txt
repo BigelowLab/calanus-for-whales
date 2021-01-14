@@ -642,6 +642,81 @@ AIC: -3613.29
 DECEMBER:
 Abundances not high enough for both presence absence model
 
+FULL YEAR:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.1741591
+RSQ: 0.1154147
+AIC: -6597.88
+
+Run 2:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1741683
+RSQ: 0.1153188
+AIC: -6597.6
+
+Run 3:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1741818
+RSQ: 0.1151782
+AIC: -6597.029
+
+Run 4:
+Wind, uv, bat, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1742326
+RSQ: 0.1146596
+AIC: -6591.941
+
+Run 5:
+Wind, bat, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1744054
+RSQ: 0.1128843
+AIC: -6577.901
+
+Run 6:
+bat, slope, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.1745165
+RSQ: 0.1117365
+AIC: -6570.8
+
+Run 7:
+bat, bots, bott, sss, sst, lag_sst, int_chl
+RMSE: 0.174611
+RSQ: 0.1107706
+AIC: -6561.311
+
+Run 8:
+bat, bots, bott, sst, lag_sst, int_chl
+RMSE: 0.1749315
+RSQ: 0.1074796
+AIC: -6533.369
+
+Run 9:
+RMSE:
+RSQ:
+AIC:
+
+Run 10:
+RMSE:
+RSQ:
+AIC:
+
+Run 11:
+RMSE:
+RSQ:
+AIC:
+
+Run 12:
+RMSE:
+RSQ:
+AIC:
+
+Run 13:
+RMSE:
+RSQ:
+AIC:
+
 
 
 

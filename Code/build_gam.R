@@ -136,7 +136,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% dplyr::filter(month == 6) %>%
+      month_md <- md %>% #dplyr::filter(month == 6) %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       # -------- Check for unique values and number of rows --------
@@ -148,7 +148,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       env_covars <- c("wind", "fetch", "uv", 
                       "bat", "dist", "slope", 
                       "bots", "bott", "sss", 
-                      "sst", "lag_sst", "chl", "int_chl")
+                      "sst", "lag_sst", "int_chl")
       
       env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
