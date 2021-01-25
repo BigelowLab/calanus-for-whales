@@ -1,0 +1,609 @@
+MARCH: 
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.08418799
+RSQ: 0.008827569
+AIC: -272.9703
+
+Run 2:
+Wind, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.08434462
+RSQ: 0.01022941
+AIC: -288.502
+
+Run 3:
+Wind, uv, bat, dist, slope, bots, bott, sss, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.08434456
+RSQ: 0.01023391
+AIC: -288.5018
+
+Run 4:
+Wind, uv, bat, dist, bots, bott, sss, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.08434459
+RSQ: 0.01023137
+AIC: -288.5019
+
+Run 5:
+Wind, uv, bat, dist, bots, sss, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.0843446
+RSQ: 0.01023046
+AIC: -288.502
+
+Run 6:
+Wind, uv, bat, dist, bots, sss, sst_grad, chl, int_chl
+RMSE: 0.08434458
+RSQ: 0.01023229
+AIC: -288.502
+
+Run 7:
+Wind, uv, dist, bots, sss, sst_grad, chl, int_chl
+RMSE: 0.08434459
+RSQ: 0.01023149
+AIC: -288.502
+
+Run 8:
+Wind, uv, dist, bots, sst_grad, chl, int_chl
+RMSE: 0.08434459
+RSQ: 0.01023145
+AIC: -288.502
+
+Run 9:
+Wind, uv, dist, bots, sst_grad, chl
+RMSE: 0.08434452
+RSQ: 0.01023772
+AIC: -288.5019
+
+Run 10:
+Wind, uv, bots, sst_grad, chl
+RMSE: 0.08434455
+RSQ: 0.01023515
+AIC: -288.5019
+
+Run 11:
+Wind, uv, sst_grad, chl
+RMSE: 0.08434454
+RSQ: 0.01023576
+AIC: -288.5019
+
+Run 12:
+Wind, uv, sst_grad
+RMSE: 0.0843445
+RSQ: 0.01023877
+AIC: -288.5019
+
+Run 13:
+uv, sst_grad
+RMSE: 0.08434445
+RSQ: 0.01024239
+AIC: -288.5019
+
+Run 14:
+sst_grad
+RMSE: 0.08434405
+RSQ: 0.01022851
+AIC: -288.5022
+
+
+APRIL:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2323092
+RSQ: 0.03873114
+AIC: 7.523281
+
+Run 2:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl, int_chl
+RMSE: 0.2323091
+RSQ: 0.03873132
+AIC: 7.5233
+
+Run 3:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl
+RMSE: 0.2323092
+RSQ: 0.03873096
+AIC: 7.523277
+
+Run 4:
+Wind, fetch, bat, dist, slope, bots, bott, sss, sst, lag_sst, chl
+RMSE: 0.2323092
+RSQ: 0.03873073
+AIC: 7.523269
+
+Run 5:
+Wind, fetch, bat, dist, slope, bott, sss, sst, lag_sst, chl
+RMSE: 0.2323092
+RSQ: 0.03873071
+AIC: 7.523266
+
+Run 6:
+Wind, fetch, bat, dist, slope, bott, sst, lag_sst, chl
+RMSE: 0.2323092
+RSQ: 0.03873071
+AIC: 7.52327
+
+Run 7:
+Wind, bat, dist, slope, bott, sst, lag_sst, chl
+RMSE: 0.232096
+RSQ: 0.04894411
+AIC: -3.907304
+
+Run 8:
+Wind, bat, dist, slope, bott, lag_sst, chl
+RMSE: 0.232096
+RSQ: 0.04894411
+AIC: -3.907305
+
+Run 9:
+Wind, dist, slope, bott, lag_sst, chl
+RMSE: 0.232096
+RSQ: 0.04894411
+AIC: -3.907304
+
+Run 10:
+Wind, dist, slope, lag_sst, chl
+RMSE: 0.232096
+RSQ: 0.04894412
+AIC: -3.907303
+
+Run 11:
+Wind, dist, slope, chl
+RMSE: 0.232096
+RSQ: 0.04894411
+AIC: -3.907304
+
+Run 12:
+Wind, slope, chl
+RMSE: 0.232096
+RSQ: 0.04894412
+AIC: -3.907304
+
+Run 13:
+Wind, chl
+RMSE: 0.232096
+RSQ: 0.04894413
+AIC: -3.907304
+
+Run 14:
+Wind
+RMSE: 0.232096
+RSQ: 0.0489441
+AIC: -3.907308
+
+MAY:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+AUGUST:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+
+SEPTEMBER:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+OCTOBER:
+
+Won't run, need to debug
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+NOVEMBER:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+DECEMBER:
+Abundances not high enough for both presence absence model
+
+FULL YEAR:
+
+Run 1:
+Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE:
+RSQ:
+AIC: 
+
+Run 2:
+RMSE:
+RSQ:
+AIC: 
+
+Run 3:
+RMSE:
+RSQ:
+AIC: 
+
+Run 4:
+RMSE:
+RSQ:
+AIC: 
+
+Run 5:
+RMSE:
+RSQ:
+AIC: 
+
+Run 6:
+RMSE:
+RSQ:
+AIC: 
+
+Run 7:
+RMSE:
+RSQ:
+AIC: 
+
+Run 8:
+RMSE:
+RSQ:
+AIC: 
+
+Run 9:
+RMSE:
+RSQ:
+AIC: 
+
+Run 10:
+RMSE:
+RSQ:
+AIC: 
+
+Run 11:
+RMSE:
+RSQ:
+AIC: 
+
+Run 12:
+RMSE:
+RSQ:
+AIC: 
+
+Run 13:
+RMSE:
+RSQ:
+AIC: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
