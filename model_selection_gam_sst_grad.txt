@@ -520,70 +520,88 @@ Abundances not high enough for both presence absence model
 FULL YEAR:
 
 Run 1:
-Wind, fetch, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2280968
+RSQ: 0.2025702
+AIC: -118.4217
 
 Run 2:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, dist, slope, bots, sss, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2280968
+RSQ: 0.2025702
+AIC: -118.4216
 
 Run 3:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, dist, slope, bots, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2280968
+RSQ: 0.2025702
+AIC: -118.4217
 
 Run 4:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, slope, bots, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2280967
+RSQ: 0.2025705
+AIC: -118.4219
 
 Run 5:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, bots, sst, lag_sst, sst_grad, chl, int_chl
+RMSE: 0.2281186
+RSQ: 0.2024075
+AIC: -118.3492 
 
 Run 6:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bat, bots, sst, lag_sst, chl, int_chl
+RMSE: 0.2281505
+RSQ: 0.202161
+AIC: -118.4291
 
 Run 7:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, uv, bots, sst, lag_sst, chl, int_chl
+RMSE: 0.2285922
+RSQ: 0.1989258
+AIC: -116.0417
 
 Run 8:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, bots, sst, lag_sst, chl, int_chl
+RMSE: 0.2289191
+RSQ: 0.1965376
+AIC: -114.1451
 
 Run 9:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, bots, sst, lag_sst, chl
+RMSE: 0.2295791
+RSQ: 0.1917448
+AIC: -109.6548
 
 Run 10:
-RMSE:
-RSQ:
-AIC: 
+Wind, jday, bots, sst, lag_sst
+RMSE: 0.2297062
+RSQ: 0.190807
+AIC: -109.1156
 
 Run 11:
-RMSE:
-RSQ:
-AIC: 
+jday, bots, sst, lag_sst
+RMSE: 0.2305467
+RSQ: 0.1847622
+AIC: -101.7397
 
 Run 12:
-RMSE:
-RSQ:
-AIC: 
+jday, bots, lag_sst
+RMSE: 0.2329449
+RSQ: 0.1673272
+AIC: -83.87796
 
 Run 13:
-RMSE:
-RSQ:
-AIC: 
+jday, bots
+RMSE: 0.2340588
+RSQ: 0.1592312
+AIC: -74.60584
+
+Run 13:
+jday
+RMSE: 0.2359656
+RSQ: 0.1453814
+AIC: -55.58062
 
 
 

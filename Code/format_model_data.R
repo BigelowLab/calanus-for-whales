@@ -62,14 +62,16 @@ format_model_data <- function(fp_data, fp_covars, fp_out,
           # Add presence absence values
           dplyr::mutate(cfin_pa = dplyr::if_else(is.na(cfin_total), 0, 1),
                         ctyp_pa = dplyr::if_else(is.na(ctyp_total), 0, 1),
-                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1))
+                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1),
+                        jday = lubridate::yday(as.Date((paste0(year, "-", month, "-", day)))))
       } else {
         # Join zooplankton data and covariates
         temp_data <- dplyr::left_join(month_data, covars, by  = c("lon", "lat")) %>%
           # Add presence absence values
           dplyr::mutate(cfin_pa = dplyr::if_else(is.na(cfin_total), 0, 1),
                         ctyp_pa = dplyr::if_else(is.na(ctyp_total), 0, 1),
-                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1))
+                        pseudo_pa = dplyr::if_else(is.na(pseudo_total), 0, 1),
+                        jday = lubridate::yday(as.Date((paste0(year, "-", month, "-", day)))))
         # Bind temporary and full dataframes
         full_data <- rbind(full_data, temp_data)
       }

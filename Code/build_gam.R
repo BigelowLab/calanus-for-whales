@@ -104,7 +104,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
   }
   
   # -------- Exclude NAs and select columns --------
-  md <- md %>% dplyr::select(lat, lon, year, month, abund, wind, fetch, chl, int_chl, bots, bott, sss, sst, lag_sst, uv, bat, dist, slope) %>%
+  md <- md %>% dplyr::select(lat, lon, year, month, jday, abund, wind, fetch, chl, int_chl, bots, bott, sss, sst, lag_sst, sst_grad, uv, bat, dist, slope) %>%
     as.data.frame() %>%
     na.exclude() %>%
     dplyr::mutate(season = if_else(month %in% c(1:3), 1,
@@ -115,6 +115,8 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
   md$chl <- log(abs(md$chl))
   md$int_chl <- log(abs(md$int_chl))
   md$bat <- log(abs(md$bat))
+  
+  md[is.na(md$sst_grad)] <- 0
   
   # -------- Load world map data --------
   worldmap <- ggplot2::map_data("world")
@@ -136,7 +138,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       print(paste0("Year: ", i, ", Month: ", j))
       
       # -------- Isolate month data --------
-      month_md <- md %>% #dplyr::filter(month == 6) %>%
+      month_md <- md %>%
         mutate(abund = if_else(abund < threshold, 0, 1))
       
       # -------- Check for unique values and number of rows --------
@@ -145,10 +147,10 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       #   next
       # }
       
-      env_covars <- c("wind", "fetch", "uv", 
-                      "bat", "dist", "slope", 
-                      "bots", "bott", "sss", 
-                      "sst", "lag_sst", "int_chl")
+      env_covars <- c("wind", 
+                     
+                      "bots", "jday",
+                      "sst", "lag_sst")
       
       env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
