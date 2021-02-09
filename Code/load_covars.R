@@ -100,9 +100,10 @@ load_covars <- function(fp_covars, year, month,
   # ---- Load bathymetric slope data ----
   slope <- raster::raster(file.path(fp_bat, "EC22_Slope_1km_mean_5km.img"))
   
-  jday <- slope 
-  
-  jday[slope != 0]<- lubridate::yday(as.Date(paste0(year, "-", month, "-1")))
+  if (as_raster) {
+    jday <- slope 
+    jday[slope != 0]<- lubridate::yday(as.Date(paste0(year, "-", month, "-15")))
+  }
 
   # -------- Initialize new projection --------
   new_proj <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
@@ -112,12 +113,19 @@ load_covars <- function(fp_covars, year, month,
     env_covars <- c("wind", "fetch", "chl", "int_chl",
                     "bots", "bott", "sss",
                     "sst", "lag_sst", "sst_grad", "uv", "bat", 
-                    "dist", "slope", "jday")
+                    "dist", "slope")
   }
   
   # -------- Organize data as a data frame or rasters depending on to_raster argument --------
   # ---- Organize as raster ----
   if (as_raster) {
+    
+    if ("all" %in% env_covars) {
+      env_covars <- c("wind", "fetch", "chl", "int_chl",
+                      "bots", "bott", "sss",
+                      "sst", "lag_sst", "sst_grad", "uv", "bat", 
+                      "dist", "slope", "jday")
+    }
     # Create raster stack of selected covariates
     covars <- raster::stack(wind, fetch, chl, int_chl,
                             bots, bott, sss,

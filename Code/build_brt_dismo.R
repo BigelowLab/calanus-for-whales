@@ -151,9 +151,10 @@ build_brt <- function(version, fp_md, species, fp_covars, env_covars, threshold,
     # train <- month_md[indices,]
     # test <- month_md[!duplicated(rbind(train, month_md))[-(1:nrow(train))],]
     # 
-    env_covars <- c( 
-                    "bat"
-                     )
+    env_covars <- c("wind", "fetch", "uv", 
+                    "bat", "dist", "slope", 
+                    "bots", "bott", "sss", 
+                    "sst", "lag_sst", "chl", "int_chl")
     
     # -------- Build BRT with all covariates --------
     brt_sdm <- dismo::gbm.step(data = month_md, gbm.x = env_covars, gbm.y = 5,

@@ -16,6 +16,8 @@ library(rgdal)
 source("./calanus-for-whales/Code/format_model_data.R")
 # Source covariate loading function
 source("./calanus-for-whales/Code/load_covars.R")
+# Source climatology loading function
+source("./calanus-for-whales/Code/get_climatology.R")
 # Source data binding function
 source("./calanus_data/Code/bind_years.R")
 
@@ -147,10 +149,11 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       #   next
       # }
       
-      env_covars <- c("wind", 
-                     
-                      "bots", "jday",
-                      "sst", "lag_sst")
+      env_covars <- c("wind", "jday", "bat", "dist",
+                       "bots",
+                      
+                      "lag_sst", "chl")
+                      
       
       env_covars_fun <- paste0("s(", env_covars, ", k = gam_args[['k']], bs = gam_args[['bs']])")
         
@@ -181,9 +184,11 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
       write.table(gam_sdm$aic, file = file.path(fp_out, species, version, "GAMs", "Evals", paste0("AIC_", i, "_", j, ".csv")))
 
       # -------- Load environmental covariates for projection --------
-      covars <- load_covars(fp_covars = fp_covars, year = 2000, month = 6,
-                            env_covars = env_covars,
-                            as_raster = TRUE)
+      # covars <- load_covars(fp_covars = fp_covars, year = 2000, month = j,
+      #                       env_covars = env_covars,
+      #                       as_raster = TRUE)
+      
+      covars <- get_climatology(fp_covars = fp_covars, env_covars = env_covars, month = j)
       
       # -------- Log chlorophyll and bathymetry --------
       if ("chl" %in% env_covars) {
@@ -215,10 +220,10 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
         min_val <- -7
       } else {
         color_scale <- inferno(500)
-        max_val <- max(month_md$abund, na.rm = TRUE) + 4
-        min_val <- -2
+        max_val <- 1
+        min_val <- 0
         # Zero out negative values
-        proj[proj < 0] <- 0
+        proj_df$pred[proj_df$pred < 0] <- 0
       }
       
       
@@ -230,6 +235,7 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
         scale_fill_gradientn(colors = color_scale, limits = c(min_val, max_val), na.value = "white") +
         labs(x = "", 
              y = "") +
+        ggtitle(months[j]) +
         # geom_point(data = month_md, aes(lon, lat, color = abund)) +
         # scale_color_gradientn(colors = inferno(500), limits = c(min(md$abund, na.rm = TRUE), max(md$abund, na.rm = TRUE)), na.value = "white") +
         # Add world map data
@@ -239,9 +245,9 @@ build_gam <- function(version, fp_md, datasets, fp_covars, env_covars, years, fp
                        expand = TRUE) +
         #Remove grid lines
         theme_bw() +
-        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) #+
         #Save plot to hard drive
-        ggsave(filename = file.path(fp_out, species, version, "GAMs", "Plots", paste0("proj_", i, "_", j, ".png")), width = 7, height = 7)
+        #ggsave(filename = file.path(fp_out, species, version, "GAMs", "Plots", paste0("proj_", i, "_", j, ".png")), width = 7, height = 7)
         
       # -------- Extract predicted values at locations of original data --------
       month_md$pred <- as.data.frame(gam_sdm$fitted.values)

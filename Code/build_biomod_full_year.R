@@ -22,6 +22,8 @@ library(rgdal)
 source("./calanus-for-whales/Code/format_model_data.R")
 # Source covariate loading function
 source("./calanus-for-whales/Code/load_covars.R")
+# Source covariate loading function
+source("./calanus-for-whales/Code/get_climatology.R")
 # Source data binding function
 source("./calanus_data/Code/bind_years.R")
 
@@ -250,7 +252,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
     ensemble_proj_df <- as.data.frame(ensemble_proj_raster, xy = TRUE, na.rm = TRUE)
     
     # Assign column names
-    names(ensemble_proj_df) <- c('x', 'y', 'pred')
+    names(ensemble_proj_df) <- c('pred', 'x', 'y')
     
     # -------- Plot projection --------
     ggplot() + 
@@ -320,7 +322,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
     gam_proj_df <- as.data.frame(gam_proj_raster, xy = TRUE, na.rm = TRUE)
     
     # Assign column names
-    names(gam_proj_df) <- c('x', 'y', 'pred')
+    names(gam_proj_df) <- c('pred', 'x', 'y')
     
     # -------- Plot projection --------
     ggplot() + 
@@ -388,7 +390,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
     brt_proj_df <- as.data.frame(brt_proj_raster, xy = TRUE, na.rm = TRUE)
       
     # Assign column names
-    names(brt_proj_df) <- c('x', 'y', 'pred')
+    names(brt_proj_df) <- c('pred', 'x', 'y')
       
     # -------- Plot projection --------
     ggplot() + 
@@ -456,7 +458,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
     rf_proj_df <- as.data.frame(rf_proj_raster, xy = TRUE, na.rm = TRUE)
     
     # Assign column names
-    names(rf_proj_df) <- c('x', 'y', 'pred')
+    names(rf_proj_df) <- c('pred', 'x', 'y')
     
     # -------- Plot projection --------
     ggplot() + 

@@ -518,90 +518,89 @@ DECEMBER:
 Abundances not high enough for both presence absence model
 
 FULL YEAR:
+Threshold = 1,000
 
 Run 1:
 Wind, jday, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl, int_chl
-RMSE: 0.2280968
-RSQ: 0.2025702
-AIC: -118.4217
+RMSE: 0.4348636
+RSQ: 0.1802345
+AIC: 1801.131
 
 Run 2:
-Wind, jday, uv, bat, dist, slope, bots, sss, sst, lag_sst, sst_grad, chl, int_chl
-RMSE: 0.2280968
-RSQ: 0.2025702
-AIC: -118.4216
+Wind, jday, uv, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl
+RMSE: 0.4348637
+RSQ: 0.180234
+AIC: 1801.134
 
 Run 3:
-Wind, jday, uv, bat, dist, slope, bots, sst, lag_sst, sst_grad, chl, int_chl
-RMSE: 0.2280968
-RSQ: 0.2025702
-AIC: -118.4217
+Wind, jday, bat, dist, slope, bots, bott, sss, sst, lag_sst, sst_grad, chl
+RMSE: 0.4348641
+RSQ: 0.1802328
+AIC: 1801.131
 
 Run 4:
-Wind, jday, uv, bat, slope, bots, sst, lag_sst, sst_grad, chl, int_chl
-RMSE: 0.2280967
-RSQ: 0.2025705
-AIC: -118.4219
+Wind, jday, bat, dist, slope, bots, sss, sst, lag_sst, sst_grad, chl
+RMSE: 0.4349469
+RSQ: 0.1799049
+AIC: 1801.287
 
 Run 5:
-Wind, jday, uv, bat, bots, sst, lag_sst, sst_grad, chl, int_chl
-RMSE: 0.2281186
-RSQ: 0.2024075
-AIC: -118.3492 
+Wind, jday, bat, dist, slope, bots, sss, sst, lag_sst, chl
+RMSE: 0.4350158
+RSQ: 0.1796219
+AIC: 1801.162
 
 Run 6:
-Wind, jday, uv, bat, bots, sst, lag_sst, chl, int_chl
-RMSE: 0.2281505
-RSQ: 0.202161
-AIC: -118.4291
+Wind, jday, bat, dist, bots, sss, sst, lag_sst, chl
+RMSE: 0.436452
+RSQ: 0.1740764
+AIC: 1807.309
 
 Run 7:
-Wind, jday, uv, bots, sst, lag_sst, chl, int_chl
-RMSE: 0.2285922
-RSQ: 0.1989258
-AIC: -116.0417
+Wind, jday, bat, dist, bots, sss, lag_sst, chl
+RMSE: 0.4367055
+RSQ: 0.1730244
+AIC: 1806.398
 
 Run 8:
-Wind, jday, bots, sst, lag_sst, chl, int_chl
-RMSE: 0.2289191
-RSQ: 0.1965376
-AIC: -114.1451
+Wind, jday, bat, dist, bots, lag_sst, chl
+RMSE: 0.4367053
+RSQ: 0.173025
+AIC: 1806.396
 
 Run 9:
-Wind, jday, bots, sst, lag_sst, chl
-RMSE: 0.2295791
-RSQ: 0.1917448
-AIC: -109.6548
+Wind, bat, dist, bots, lag_sst, chl
+RMSE: 0.4371696
+RSQ: 0.1712471
+AIC: 1808.833
 
 Run 10:
-Wind, jday, bots, sst, lag_sst
-RMSE: 0.2297062
-RSQ: 0.190807
-AIC: -109.1156
+Wind, bat, bots, lag_sst, chl
+RMSE: 0.4400576
+RSQ: 0.1600627
+AIC: 1821.095
 
 Run 11:
-jday, bots, sst, lag_sst
-RMSE: 0.2305467
-RSQ: 0.1847622
-AIC: -101.7397
+Wind, bat, bots, lag_sst
+RMSE: 0.4402468
+RSQ: 0.1593141
+AIC: 1821.346
 
 Run 12:
-jday, bots, lag_sst
-RMSE: 0.2329449
-RSQ: 0.1673272
-AIC: -83.87796
+Wind, bots, lag_sst
+RMSE: 0.441078
+RSQ: 0.1560598
+AIC: 1823.621
 
 Run 13:
-jday, bots
-RMSE: 0.2340588
-RSQ: 0.1592312
-AIC: -74.60584
+RMSE:
+RSQ:
+AIC:
 
-Run 13:
-jday
-RMSE: 0.2359656
-RSQ: 0.1453814
-AIC: -55.58062
+Run 14:
+RMSE:
+RSQ:
+AIC: 
 
 
 
