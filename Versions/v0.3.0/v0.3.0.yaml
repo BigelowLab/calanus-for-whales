@@ -1,15 +1,22 @@
-version: v0.2.8
+version: v0.3.0
 species: cfin
 env_covars:
 - wind
 - jday
+- uv
 - bat
+- slope
 - dist
 - bots
+- bott
+- sss
+- sst
+- sst_grad
 - lag_sst
 - chl
+- int_chl
 anomaly: no
-threshold: 1000.0
+threshold: 10000.0
 years:
 - 2000
 - 2001
@@ -35,4 +42,4 @@ biomod_dataset: ECOMON
 fp_covars: ./Env_Covars
 fp_out: /Users/camille/Calanus_Project/Models
 format_data: no
-fp_zpd: ~/Calanus_Project/calanus_data/Data/Databases/zooplankton_database.csv
+fp_zpd: ~
