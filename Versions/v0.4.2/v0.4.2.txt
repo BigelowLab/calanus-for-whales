@@ -1,0 +1,3 @@
+Full year method
+Select covariates
+40,000 threshold

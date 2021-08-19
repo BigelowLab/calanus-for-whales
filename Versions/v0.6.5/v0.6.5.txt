@@ -1,0 +1,6 @@
+v0.6.5
+Threshold 1,000
+Subset of covariates based on correlation matrices (full year)
+Wind, int_chl, sst, jday, sst_grad, uv_grad, bat, slope, bots, bott
+Full year method
+Full dataset

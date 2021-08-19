@@ -1,0 +1,3 @@
+Threshold 1,000
+Subset covariates
+Full year method

@@ -45,6 +45,9 @@ get_climatology <- function(fp_covars, env_covars, month) {
   if ("uv" %in% env_covars) {
     uv <- clim$uv
   }
+  if ("uv_grad" %in% env_covars) {
+    uv_grad <- clim$uv_grad
+  }
   if ("bat" %in% env_covars) {
     bat <- clim$bat
   }
@@ -96,6 +99,9 @@ get_climatology <- function(fp_covars, env_covars, month) {
     if ("uv" %in% env_covars) {
       uv <- raster::stack(clim$uv, uv)
     }
+    if ("uv_grad" %in% env_covars) {
+      uv_grad <- raster::stack(clim$uv_grad, uv_grad)
+    }
     if ("bat" %in% env_covars) {
       bat <- raster::stack(clim$bat, bat)
     }
@@ -144,6 +150,9 @@ get_climatology <- function(fp_covars, env_covars, month) {
   if ("uv" %in% env_covars) {
     uv <- raster::calc(uv, fun = mean, na.rm = TRUE)
   }
+  if ("uv_grad" %in% env_covars) {
+    uv_grad <- raster::calc(uv_grad, fun = mean, na.rm = TRUE)
+  }
   if ("bat" %in% env_covars) {
     bat <- raster::calc(bat, fun = mean, na.rm = TRUE)
   }
@@ -168,6 +177,7 @@ get_climatology <- function(fp_covars, env_covars, month) {
                         if ("lag_sst" %in% env_covars) {lag_sst}, 
                         if ("sst_grad" %in% env_covars) {sst_grad},
                         if ("uv" %in% env_covars) {uv}, 
+                        if ("uv_grad" %in% env_covars) {uv_grad}, 
                         if ("bat" %in% env_covars) {bat}, 
                         if ("dist" %in% env_covars) {dist}, 
                         if ("slope" %in% env_covars) {slope}, 
@@ -184,11 +194,22 @@ get_climatology <- function(fp_covars, env_covars, month) {
                    if ("lag_sst" %in% env_covars) {"lag_sst"}, 
                    if ("sst_grad" %in% env_covars) {"sst_grad"},
                    if ("uv" %in% env_covars) {"uv"}, 
+                   if ("uv_grad" %in% env_covars) {"uv_grad"}, 
                    if ("bat" %in% env_covars) {"bat"}, 
                    if ("dist" %in% env_covars) {"dist"}, 
                    if ("slope" %in% env_covars) {"slope"}, 
                    if ("jday" %in% env_covars) {"jday"})
   
   return(clim)
+  
+}
+
+for (month in 1:12) {
+  
+  print(month)
+  
+  clim <- get_climatology(fp_covars, env_covars, month)
+
+  writeRaster(clim, filename = file.path("Env_Covars/Climatology", paste0("climatology_all_covars_", month, ".grd")), overwrite = TRUE)
   
 }

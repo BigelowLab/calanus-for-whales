@@ -1,0 +1,4 @@
+Threshold 4,000
+All covariates
+Monthly method
+Original unstaged EcoMon data

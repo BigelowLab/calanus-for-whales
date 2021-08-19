@@ -91,6 +91,9 @@ load_covars <- function(fp_covars, year, month,
                                                      dplyr::if_else(month < 10, paste0(0, month), as.character(month)),
                                                      "_mean.img")))
   
+  # -- Compute current speed gradient
+  uv_grad <- raster::terrain(uv)
+  
   # ---- Load bathymetric data ----
   bat <- raster::raster(file.path(fp_bat, "EC22_Depth_1km_mean_5km.img"))
   
@@ -112,7 +115,7 @@ load_covars <- function(fp_covars, year, month,
   if ("all" %in% env_covars) {
     env_covars <- c("wind", "fetch", "chl", "int_chl",
                     "bots", "bott", "sss",
-                    "sst", "lag_sst", "sst_grad", "uv", "bat", 
+                    "sst", "lag_sst", "sst_grad", "uv", "uv_grad", "bat", 
                     "dist", "slope")
   }
   
@@ -123,18 +126,18 @@ load_covars <- function(fp_covars, year, month,
     if ("all" %in% env_covars) {
       env_covars <- c("wind", "fetch", "chl", "int_chl",
                       "bots", "bott", "sss",
-                      "sst", "lag_sst", "sst_grad", "uv", "bat", 
+                      "sst", "lag_sst", "sst_grad", "uv", "uv_grad", "bat", 
                       "dist", "slope", "jday")
     }
     # Create raster stack of selected covariates
     covars <- raster::stack(wind, fetch, chl, int_chl,
                             bots, bott, sss,
-                            sst, lag_sst, sst_grad, uv, bat,
+                            sst, lag_sst, sst_grad, uv, uv_grad, bat,
                             dist, slope, jday)
     # Set names of raster brick
     names(covars) <- c("wind", "fetch", "chl", "int_chl",
                        "bots", "bott", "sss",
-                       "sst", "lag_sst", "sst_grad", "uv", "bat",
+                       "sst", "lag_sst", "sst_grad", "uv", "uv_grad","bat",
                        "dist", "slope", "jday")
     # Project covariates
     covars <- raster::projectRaster(covars, crs=new_proj)
@@ -161,6 +164,7 @@ load_covars <- function(fp_covars, year, month,
     lag_sst <- as.data.frame(lag_sst, xy = TRUE)
     sst_grad <- as.data.frame(sst_grad, xy = TRUE)
     uv <- as.data.frame(uv, xy = TRUE)
+    uv_grad <- as.data.frame(uv_grad, xy = TRUE)
     bat <- as.data.frame(bat, xy = TRUE)
     dist <- as.data.frame(dist, xy = TRUE)
     slope <- as.data.frame(slope, xy = TRUE)
@@ -168,7 +172,7 @@ load_covars <- function(fp_covars, year, month,
     covars <- list("wind" = wind, "fetch" = fetch, "chl" = chl, 
                    "int_chl" = int_chl, "bots" = bots, "bott" = bott, 
                    "sss" = sss, "sst" = sst, "lag_sst" = lag_sst, "sst_grad" = sst_grad, "uv" = uv, 
-                   "bat" = bat, "dist" = dist, "slope" = slope)
+                   "uv_grad" = uv_grad, "bat" = bat, "dist" = dist, "slope" = slope)
     # Merge dataframes into comprehensive dataframe of selected covariates
     covars <- Reduce(function(x,y) dplyr::inner_join(x = x, y = y, by = c("x", "y")), 
                      covars[env_covars])

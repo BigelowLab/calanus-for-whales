@@ -20,14 +20,14 @@ library(yaml)
 #'@param biomod_dataset <chr> datasets to use for biomod models
 #'@param format_data <logical> whether or not to format sightings and covar data
 #'@param fp_zpd <filepath> filepath to zooplankton data if format_data is TRUE
-write_config <- function(version = "v0.3.1", 
-                         species = "cfin", 
-                         env_covars = c("wind", "jday", "uv", "bat",
-                         "slope", "dist", "bots",
-                         "bott", "sss", "sst", "sst_grad",
-                         "lag_sst", "chl", "int_chl"), 
+write_config <- function(version = "v0.7.5", 
+                         species = "pseudo", 
+                         #env_covars = c("wind", "bat", "jday",
+                                        #"bott", "lag_sst"),
+                         env_covars = c("wind", "int_chl", "sst", "sst_grad", "jday",
+                                        "uv_grad", "bat", "slope", "bots", "bott"), 
                          anomaly = FALSE,
-                         threshold = 1000, 
+                         threshold = 10000, 
                          years = 2000:2017, 
                          fp_md = "./calanus_data/Data/Databases/zooplankton_covar_data", 
                          fp_covars = "./Env_Covars",
@@ -43,7 +43,7 @@ write_config <- function(version = "v0.3.1",
            fp_out = fp_out, format_data = format_data, fp_zpd = fp_zpd)
   
   # ---- Create directory ----
-  dir.create(file.path("./calanus-for-whales/Versions/", version))
+  dir.create(file.path("./calanus-for-whales/Versions", version))
   
   # ---- Write yaml ----
   write_yaml(x, file.path("./calanus-for-whales/Versions", version, paste0(version, ".yaml")))

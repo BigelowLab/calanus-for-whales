@@ -1,0 +1,6 @@
+Threshold 40,000
+All covariates
+Monthly method
+New data from Harvey
+Doesn't work, threshold too high
+CIV through CVI
