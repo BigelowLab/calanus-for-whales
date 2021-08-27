@@ -20,14 +20,14 @@ library(yaml)
 #'@param biomod_dataset <chr> datasets to use for biomod models
 #'@param format_data <logical> whether or not to format sightings and covar data
 #'@param fp_zpd <filepath> filepath to zooplankton data if format_data is TRUE
-write_config <- function(version = "v0.7.5", 
-                         species = "pseudo", 
+write_config <- function(version = "v0.7.6", 
+                         species = "cfin", 
                          #env_covars = c("wind", "bat", "jday",
                                         #"bott", "lag_sst"),
                          env_covars = c("wind", "int_chl", "sst", "sst_grad", "jday",
                                         "uv_grad", "bat", "slope", "bots", "bott"), 
                          anomaly = FALSE,
-                         threshold = 10000, 
+                         threshold = 1000, 
                          years = 2000:2017, 
                          fp_md = "./calanus_data/Data/Databases/zooplankton_covar_data", 
                          fp_covars = "./Env_Covars",

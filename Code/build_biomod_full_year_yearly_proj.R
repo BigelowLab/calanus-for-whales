@@ -148,7 +148,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   
   # ---------------------- BUILD MODELS ----------------------
   modelOut <- BIOMOD_Modeling(data = biomodData,
-                              models = c("GAM", "GBM", "RF"),
+                              models = c("RF"),
                               models.options = modelOptions,
                               NbRunEval = 10,
                               DataSplit = 70,
@@ -205,28 +205,28 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
   #                data_species = get_formal_data(modelOut,'resp.var'))
   # 
   #---------------------- BUILD ENSEMBLE MODEL ----------------------
-  biomodEM <- BIOMOD_EnsembleModeling(
-    modeling.output = modelOut,
-    chosen.models = 'all',
-    em.by = 'all',
-    eval.metric = c('ROC'),
-    eval.metric.quality.threshold = c(0.7),
-    prob.mean = TRUE,
-    prob.cv = TRUE,
-    prob.ci = TRUE,
-    prob.ci.alpha = 0.05,
-    prob.median = TRUE,
-    committee.averaging = TRUE,
-    prob.mean.weight = TRUE,
-    prob.mean.weight.decay = 'proportional')
-  
-  #Retrieves ensemble model evaluations
-  ensembleEvals <- get_evaluations(obj = biomodEM, as.data.frame = TRUE)
-  # Saves ensemble model evaluations to a csv file in the results directory
-  # Allows for easy analysis
-  write.csv(ensembleEvals, file = file.path(fp_out, species, version, "Biomod", "Evals", paste0("ensemble_evals_", i, "_", j, ".csv")), row.names = TRUE)
-  
-  
+  # biomodEM <- BIOMOD_EnsembleModeling(
+  #   modeling.output = modelOut,
+  #   chosen.models = 'all',
+  #   em.by = 'all',
+  #   eval.metric = c('ROC'),
+  #   eval.metric.quality.threshold = c(0.7),
+  #   prob.mean = TRUE,
+  #   prob.cv = TRUE,
+  #   prob.ci = TRUE,
+  #   prob.ci.alpha = 0.05,
+  #   prob.median = TRUE,
+  #   committee.averaging = TRUE,
+  #   prob.mean.weight = TRUE,
+  #   prob.mean.weight.decay = 'proportional')
+  # 
+  # #Retrieves ensemble model evaluations
+  # ensembleEvals <- get_evaluations(obj = biomodEM, as.data.frame = TRUE)
+  # # Saves ensemble model evaluations to a csv file in the results directory
+  # # Allows for easy analysis
+  # write.csv(ensembleEvals, file = file.path(fp_out, species, version, "Biomod", "Evals", paste0("ensemble_evals_", i, "_", j, ".csv")), row.names = TRUE)
+  # 
+  # 
   # ------- Loop over months --------
   for (j in 1:12) {
     for (i in years) {
@@ -245,214 +245,214 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
                                             build.clamping.mask = FALSE,
                                             output.format = '.grd')
       
-      # Build ensemble forecast
-      myBiomodEF <- BIOMOD_EnsembleForecasting(EM.output = biomodEM,
-                                               projection.output = biomodProjFuture,
-                                               proj.name = paste0("Ensemble_", i, "_", j))
-      
-      # Load ensemble forecast as raster
-      # Divide by 1000 to convert probabilities to percentages
-      ensemble_proj_raster <- raster(file.path(paste0(species, version), paste0("proj_Ensemble_",  i, "_", j), paste0("proj_Ensemble_",  i, "_", j, "_", species, version, "_ensemble.grd"))) %>%
-        `/`(1000)
-      
-      crs(ensemble_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
-      
-      # Save projection raster as data frame with xy coords and no NAs
-      ensemble_proj_df <- as.data.frame(ensemble_proj_raster, xy = TRUE, na.rm = TRUE)
-      
-      # Assign column names
-      names(ensemble_proj_df) <- c('pred', 'x', 'y')
-      
-      # -------- Plot projection --------
-      ggplot() + 
-        # Add projection data
-        geom_tile(data = ensemble_proj_df, aes(x, y, fill = pred)) +
-        # Add projection color gradient and label
-        scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
-        labs(x = "", 
-             y = "") +
-        ggtitle(paste0(months[j], ", ", i)) +
-        # Add world map data
-        geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(ensemble_proj_df$x)), round(max(ensemble_proj_df$x))), 
-                       ylim = c(round(min(ensemble_proj_df$y)), round(max(ensemble_proj_df$y))),
-                       expand = TRUE) +
-        # Remove grid lines
-        theme_bw() +
-        theme(panel.grid.major = element_blank(), 
-              panel.grid.minor = element_blank(),
-              legend.position = "none",
-              legend.title = element_blank(),
-              plot.title = element_text(size=22)) +
-        # Save plot to hard drive
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_proj_",  i, "_", j, ".png")), width = 7, height = 7)
-      
-      
-      # -------- Extract predicted values --------
-      month_md$ensemble_pred <- raster::extract(ensemble_proj_raster, month_md$abund)
-      
-      # -------- Convert NAs to zeros --------
-      month_md$ensemble_pred[is.na(month_md$ensemble_pred)] <- 0
-      month_md$abund[is.na(month_md$abund)] <- 0
-      
-      # -------- Unlist variables --------
-      month_md$abund <- unlist(month_md$abund)
-      month_md$ensemble_pred <- unlist(month_md$ensemble_pred)
-      
-      readr::write_csv(month_md %>% dplyr::select(abund, ensemble_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("ensemble_abund_vs_pred_", i, "_", j, ".csv")))
-      
-      # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = ensemble_pred)) +
-        geom_point() +
-        ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_actualvspred_",  i, "_", j, ".png")))
-      
-      # ------- Project GAMS -------
-      # Create vector all runs of model algorithm for projection
-      select_models <- c()
-      for (k in 1:10) {
-        select_models[k] <- paste0(species, version, "_AllData_RUN", k, "_GAM")
-      }
-      
-      gamProj <- BIOMOD_Projection(modeling.output = modelOut,
-                                   new.env = covars,
-                                   proj.name = paste0("GAM_",  i, "_", j),
-                                   selected.models = select_models,
-                                   binary.meth = 'ROC',
-                                   compress = 'xz',
-                                   build.clamping.mask = TRUE,
-                                   output.format = '.grd')
-      
-      
-      # Load ensemble forecast as raster
-      # Divide by 1000 to convert probabilities to percentages
-      gam_proj_raster <- raster(file.path(paste0(species, version), paste0("proj_GAM_",  i, "_", j), paste0('proj_GAM_',  i, "_", j, "_", species, version, '.grd'))) %>%
-        `/`(1000)
-      
-      crs(gam_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
-      
-      # Save projection raster as data frame with xy coords and no NAs
-      gam_proj_df <- as.data.frame(gam_proj_raster, xy = TRUE, na.rm = TRUE)
-      
-      # Assign column names
-      names(gam_proj_df) <- c('pred', 'x', 'y')
-      
-      # -------- Plot projection --------
-      ggplot() + 
-        # Add projection data
-        geom_tile(data = gam_proj_df, aes(x, y, fill = pred)) +
-        # Add projection color gradient and label
-        scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
-        labs(x = "", 
-             y = "") +
-        ggtitle(paste0(months[j], ", ", i)) +
-        # Add world map data
-        geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(gam_proj_df$x)), round(max(gam_proj_df$x))), 
-                       ylim = c(round(min(gam_proj_df$y)), round(max(gam_proj_df$y))),
-                       expand = TRUE) +
-        # Remove grid lines
-        theme_bw() +
-        theme(panel.grid.major = element_blank(), 
-              panel.grid.minor = element_blank(),
-              legend.position = "none",
-              legend.title = element_blank(),
-              plot.title = element_text(size=22)) + 
-        # Save plot to hard drive
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("gam_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
-      
-      # -------- Extract predicted values --------
-      month_md$gam_pred <- raster::extract(gam_proj_raster, month_md$abund)
-      
-      # -------- Convert NAs to zeros --------
-      month_md$gam_pred[is.na(month_md$gam_pred)] <- 0
-      month_md$abund[is.na(month_md$abund)] <- 0
-      
-      # -------- Unlist variables --------
-      month_md$abund <- unlist(month_md$abund)
-      month_md$gam_pred <- unlist(month_md$gam_pred)
-      
-      readr::write_csv(month_md %>% dplyr::select(abund, gam_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("gam_abund_vs_pred_",  i, "_", j, ".csv")))
-      
-      # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = gam_pred)) +
-        geom_point() +
-        ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("gam_actualvspred_", i, "_", j, ".png")))
-      
-      # ------- Project BRT -------
-      # Create vector all runs of model algorithm for projection
-      select_models <- c()
-      for (k in 1:10) {
-        select_models[k] <- paste0(species, version, "_AllData_RUN", k, "_GBM")
-      }
-      
-      brtProj <- BIOMOD_Projection(modeling.output = modelOut,
-                                   new.env = covars,
-                                   proj.name = paste0("GBM_",  i, "_", j),
-                                   selected.models = select_models,
-                                   binary.meth = 'ROC',
-                                   compress = 'xz',
-                                   build.clamping.mask = TRUE,
-                                   output.format = '.grd')
-      
-      
-      # Load ensemble forecast as raster
-      # Divide by 1000 to convert probabilities to percentages
-      brt_proj_raster <- raster(file.path(paste0(species, version), paste0('proj_GBM_',  i, "_", j), paste0('proj_GBM_',  i, "_", j, "_", species, version, '.grd'))) %>%
-        `/`(1000)
-      
-      crs(brt_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
-      
-      # Save projection raster as data frame with xy coords and no NAs
-      brt_proj_df <- as.data.frame(brt_proj_raster, xy = TRUE, na.rm = TRUE)
-      
-      # Assign column names
-      names(brt_proj_df) <- c('pred', 'x', 'y')
-      
-      # -------- Plot projection --------
-      ggplot() + 
-        # Add projection data
-        geom_tile(data = brt_proj_df, aes(x, y, fill = pred)) +
-        # Add projection color gradient and label
-        scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
-        labs(x = "", 
-             y = "") +
-        ggtitle(paste0(months[j], ", ", i)) +
-        # Add world map data
-        geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
-        coord_quickmap(xlim = c(round(min(brt_proj_df$x)), round(max(brt_proj_df$x))), 
-                       ylim = c(round(min(brt_proj_df$y)), round(max(brt_proj_df$y))),
-                       expand = TRUE) +
-        # Remove grid lines
-        theme_bw() +
-        theme(panel.grid.major = element_blank(), 
-              panel.grid.minor = element_blank(),
-              legend.position = "none",
-              legend.title = element_blank(),
-              plot.title = element_text(size=22)) +
-        # Save plot to hard drive
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("brt_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
-      
-      # -------- Extract predicted values --------
-      month_md$brt_pred <- raster::extract(brt_proj_raster, month_md$abund)
-      
-      # -------- Convert NAs to zeros --------
-      month_md$brt_pred[is.na(month_md$brt_pred)] <- 0
-      month_md$abund[is.na(month_md$abund)] <- 0
-      
-      # -------- Unlist variables --------
-      month_md$abund <- unlist(month_md$abund)
-      month_md$brt_pred <- unlist(month_md$brt_pred)
-      
-      readr::write_csv(month_md %>% dplyr::select(abund, brt_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("brt_abund_vs_pred_", i, "_", j, ".csv")))
-      
-      # -------- Plot actual vs. predicted values --------
-      ggplot(data = month_md, aes(x = log10(abund + 1), y = brt_pred)) +
-        geom_point() +
-        ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("brt_actualvspred_",  i, "_", j, ".png")))
-      
+      # # Build ensemble forecast
+      # myBiomodEF <- BIOMOD_EnsembleForecasting(EM.output = biomodEM,
+      #                                          projection.output = biomodProjFuture,
+      #                                          proj.name = paste0("Ensemble_", i, "_", j))
+      # 
+      # # Load ensemble forecast as raster
+      # # Divide by 1000 to convert probabilities to percentages
+      # ensemble_proj_raster <- raster(file.path(paste0(species, version), paste0("proj_Ensemble_",  i, "_", j), paste0("proj_Ensemble_",  i, "_", j, "_", species, version, "_ensemble.grd"))) %>%
+      #   `/`(1000)
+      # 
+      # crs(ensemble_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
+      # 
+      # # Save projection raster as data frame with xy coords and no NAs
+      # ensemble_proj_df <- as.data.frame(ensemble_proj_raster, xy = TRUE, na.rm = TRUE)
+      # 
+      # # Assign column names
+      # names(ensemble_proj_df) <- c('pred', 'x', 'y')
+      # 
+      # # -------- Plot projection --------
+      # ggplot() + 
+      #   # Add projection data
+      #   geom_tile(data = ensemble_proj_df, aes(x, y, fill = pred)) +
+      #   # Add projection color gradient and label
+      #   scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
+      #   labs(x = "", 
+      #        y = "") +
+      #   ggtitle(paste0(months[j], ", ", i)) +
+      #   # Add world map data
+      #   geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
+      #   coord_quickmap(xlim = c(round(min(ensemble_proj_df$x)), round(max(ensemble_proj_df$x))), 
+      #                  ylim = c(round(min(ensemble_proj_df$y)), round(max(ensemble_proj_df$y))),
+      #                  expand = TRUE) +
+      #   # Remove grid lines
+      #   theme_bw() +
+      #   theme(panel.grid.major = element_blank(), 
+      #         panel.grid.minor = element_blank(),
+      #         legend.position = "none",
+      #         legend.title = element_blank(),
+      #         plot.title = element_text(size=22)) +
+      #   # Save plot to hard drive
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_proj_",  i, "_", j, ".png")), width = 7, height = 7)
+      # 
+      # 
+      # # -------- Extract predicted values --------
+      # month_md$ensemble_pred <- raster::extract(ensemble_proj_raster, month_md$abund)
+      # 
+      # # -------- Convert NAs to zeros --------
+      # month_md$ensemble_pred[is.na(month_md$ensemble_pred)] <- 0
+      # month_md$abund[is.na(month_md$abund)] <- 0
+      # 
+      # # -------- Unlist variables --------
+      # month_md$abund <- unlist(month_md$abund)
+      # month_md$ensemble_pred <- unlist(month_md$ensemble_pred)
+      # 
+      # readr::write_csv(month_md %>% dplyr::select(abund, ensemble_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("ensemble_abund_vs_pred_", i, "_", j, ".csv")))
+      # 
+      # # -------- Plot actual vs. predicted values --------
+      # ggplot(data = month_md, aes(x = log10(abund + 1), y = ensemble_pred)) +
+      #   geom_point() +
+      #   ylim(c(0, 1)) +
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("ensemble_actualvspred_",  i, "_", j, ".png")))
+      # 
+      # # ------- Project GAMS -------
+      # # Create vector all runs of model algorithm for projection
+      # select_models <- c()
+      # for (k in 1:10) {
+      #   select_models[k] <- paste0(species, version, "_AllData_RUN", k, "_GAM")
+      # }
+      # 
+      # gamProj <- BIOMOD_Projection(modeling.output = modelOut,
+      #                              new.env = covars,
+      #                              proj.name = paste0("GAM_",  i, "_", j),
+      #                              selected.models = select_models,
+      #                              binary.meth = 'ROC',
+      #                              compress = 'xz',
+      #                              build.clamping.mask = TRUE,
+      #                              output.format = '.grd')
+      # 
+      # 
+      # # Load ensemble forecast as raster
+      # # Divide by 1000 to convert probabilities to percentages
+      # gam_proj_raster <- raster(file.path(paste0(species, version), paste0("proj_GAM_",  i, "_", j), paste0('proj_GAM_',  i, "_", j, "_", species, version, '.grd'))) %>%
+      #   `/`(1000)
+      # 
+      # crs(gam_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
+      # 
+      # # Save projection raster as data frame with xy coords and no NAs
+      # gam_proj_df <- as.data.frame(gam_proj_raster, xy = TRUE, na.rm = TRUE)
+      # 
+      # # Assign column names
+      # names(gam_proj_df) <- c('pred', 'x', 'y')
+      # 
+      # # -------- Plot projection --------
+      # ggplot() + 
+      #   # Add projection data
+      #   geom_tile(data = gam_proj_df, aes(x, y, fill = pred)) +
+      #   # Add projection color gradient and label
+      #   scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
+      #   labs(x = "", 
+      #        y = "") +
+      #   ggtitle(paste0(months[j], ", ", i)) +
+      #   # Add world map data
+      #   geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
+      #   coord_quickmap(xlim = c(round(min(gam_proj_df$x)), round(max(gam_proj_df$x))), 
+      #                  ylim = c(round(min(gam_proj_df$y)), round(max(gam_proj_df$y))),
+      #                  expand = TRUE) +
+      #   # Remove grid lines
+      #   theme_bw() +
+      #   theme(panel.grid.major = element_blank(), 
+      #         panel.grid.minor = element_blank(),
+      #         legend.position = "none",
+      #         legend.title = element_blank(),
+      #         plot.title = element_text(size=22)) + 
+      #   # Save plot to hard drive
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("gam_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
+      # 
+      # # -------- Extract predicted values --------
+      # month_md$gam_pred <- raster::extract(gam_proj_raster, month_md$abund)
+      # 
+      # # -------- Convert NAs to zeros --------
+      # month_md$gam_pred[is.na(month_md$gam_pred)] <- 0
+      # month_md$abund[is.na(month_md$abund)] <- 0
+      # 
+      # # -------- Unlist variables --------
+      # month_md$abund <- unlist(month_md$abund)
+      # month_md$gam_pred <- unlist(month_md$gam_pred)
+      # 
+      # readr::write_csv(month_md %>% dplyr::select(abund, gam_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("gam_abund_vs_pred_",  i, "_", j, ".csv")))
+      # 
+      # # -------- Plot actual vs. predicted values --------
+      # ggplot(data = month_md, aes(x = log10(abund + 1), y = gam_pred)) +
+      #   geom_point() +
+      #   ylim(c(0, 1)) +
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("gam_actualvspred_", i, "_", j, ".png")))
+      # 
+      # # ------- Project BRT -------
+      # # Create vector all runs of model algorithm for projection
+      # select_models <- c()
+      # for (k in 1:10) {
+      #   select_models[k] <- paste0(species, version, "_AllData_RUN", k, "_GBM")
+      # }
+      # 
+      # brtProj <- BIOMOD_Projection(modeling.output = modelOut,
+      #                              new.env = covars,
+      #                              proj.name = paste0("GBM_",  i, "_", j),
+      #                              selected.models = select_models,
+      #                              binary.meth = 'ROC',
+      #                              compress = 'xz',
+      #                              build.clamping.mask = TRUE,
+      #                              output.format = '.grd')
+      # 
+      # 
+      # # Load ensemble forecast as raster
+      # # Divide by 1000 to convert probabilities to percentages
+      # brt_proj_raster <- raster(file.path(paste0(species, version), paste0('proj_GBM_',  i, "_", j), paste0('proj_GBM_',  i, "_", j, "_", species, version, '.grd'))) %>%
+      #   `/`(1000)
+      # 
+      # crs(brt_proj_raster) <- '+init=epsg:4121 +proj=longlat +ellps=GRS80 +datum=GGRS87 +no_defs +towgs84=-199.87,74.79,246.62'
+      # 
+      # # Save projection raster as data frame with xy coords and no NAs
+      # brt_proj_df <- as.data.frame(brt_proj_raster, xy = TRUE, na.rm = TRUE)
+      # 
+      # # Assign column names
+      # names(brt_proj_df) <- c('pred', 'x', 'y')
+      # 
+      # # -------- Plot projection --------
+      # ggplot() + 
+      #   # Add projection data
+      #   geom_tile(data = brt_proj_df, aes(x, y, fill = pred)) +
+      #   # Add projection color gradient and label
+      #   scale_fill_gradientn(colors = inferno(500), limits = c(0,1), na.value = "white") +
+      #   labs(x = "", 
+      #        y = "") +
+      #   ggtitle(paste0(months[j], ", ", i)) +
+      #   # Add world map data
+      #   geom_polygon(data = worldmap, aes(long, lat, group = group), fill = NA, colour = "gray43") +
+      #   coord_quickmap(xlim = c(round(min(brt_proj_df$x)), round(max(brt_proj_df$x))), 
+      #                  ylim = c(round(min(brt_proj_df$y)), round(max(brt_proj_df$y))),
+      #                  expand = TRUE) +
+      #   # Remove grid lines
+      #   theme_bw() +
+      #   theme(panel.grid.major = element_blank(), 
+      #         panel.grid.minor = element_blank(),
+      #         legend.position = "none",
+      #         legend.title = element_blank(),
+      #         plot.title = element_text(size=22)) +
+      #   # Save plot to hard drive
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("brt_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
+      # 
+      # # -------- Extract predicted values --------
+      # month_md$brt_pred <- raster::extract(brt_proj_raster, month_md$abund)
+      # 
+      # # -------- Convert NAs to zeros --------
+      # month_md$brt_pred[is.na(month_md$brt_pred)] <- 0
+      # month_md$abund[is.na(month_md$abund)] <- 0
+      # 
+      # # -------- Unlist variables --------
+      # month_md$abund <- unlist(month_md$abund)
+      # month_md$brt_pred <- unlist(month_md$brt_pred)
+      # 
+      # readr::write_csv(month_md %>% dplyr::select(abund, brt_pred), file.path(fp_out, species, version, "Biomod", "Projections", paste0("brt_abund_vs_pred_", i, "_", j, ".csv")))
+      # 
+      # # -------- Plot actual vs. predicted values --------
+      # ggplot(data = month_md, aes(x = log10(abund + 1), y = brt_pred)) +
+      #   geom_point() +
+      #   ylim(c(0, 1)) +
+      #   ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("brt_actualvspred_",  i, "_", j, ".png")))
+      # 
       # ------- Project RF -------
       # Create vector all runs of model algorithm for projection
       select_models <- c()
@@ -481,7 +481,7 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       rf_proj_df <- as.data.frame(rf_proj_raster, xy = TRUE, na.rm = TRUE)
       
       # Assign column names
-      names(rf_proj_df) <- c('pred', 'x', 'y')
+      names(rf_proj_df) <- c('x', 'y', 'pred')
       
       # -------- Plot projection --------
       ggplot() + 
@@ -503,9 +503,10 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
               panel.grid.minor = element_blank(),
               legend.position = "none",
               legend.title = element_blank(),
-              plot.title = element_text(size=22)) +
+              plot.title = element_text(size=22))
         # Save plot to hard drive
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("rf_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
+      
+      ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("rf_proj_",  i, "_", j, ".png")), width = 7, height = 7)    
       
       
       # -------- Extract predicted values --------

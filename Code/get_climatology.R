@@ -204,12 +204,12 @@ get_climatology <- function(fp_covars, env_covars, month) {
   
 }
 
-for (month in 1:12) {
-  
-  print(month)
-  
-  clim <- get_climatology(fp_covars, env_covars, month)
-
-  writeRaster(clim, filename = file.path("Env_Covars/Climatology", paste0("climatology_all_covars_", month, ".grd")), overwrite = TRUE)
-  
-}
+# for (month in 1:12) {
+#   
+#   print(month)
+#   
+#   clim <- get_climatology(fp_covars, env_covars, month)
+# 
+#   writeRaster(clim, filename = file.path("Env_Covars/Climatology", paste0("climatology_all_covars_", month, ".grd")), overwrite = TRUE)
+#   
+# }
