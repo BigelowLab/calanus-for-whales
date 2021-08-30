@@ -525,8 +525,9 @@ build_biomod <- function(version, fp_md, biomod_dataset, fp_covars, env_covars,
       # -------- Plot actual vs. predicted values --------
       ggplot(data = month_md, aes(x = log10(abund + 1), y = rf_pred)) +
         geom_point() +
-        ylim(c(0, 1)) +
-        ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("rf_actualvspred_",  i, "_", j, ".png")))
+        ylim(c(0, 1))
+      
+      ggsave(filename = file.path(fp_out, species, version, "Biomod", "Plots", paste0("rf_actualvspred_",  i, "_", j, ".png")))
       
     }
   }
